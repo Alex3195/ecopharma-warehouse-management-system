@@ -10,3 +10,8 @@ spring:
     show-sql: true
   liquibase:
     default-schema: public
+
+api:
+  url: http://localhost:10001
+  connection-timeout: 5000
+  read-timeout: 10000
