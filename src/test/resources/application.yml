@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: EcoPharmWarehouse
+  messages:
+    basename: "messages,config.i18n.messages"
+    fallback-to-system-locale: false
+    encoding: UTF-8
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:test}
+  jpa:
+    database: postgresql
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        default_schema: ${spring.liquibase.default-schema}
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+logging:
+  config: classpath:log4j2.xml

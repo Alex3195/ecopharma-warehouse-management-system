@@ -1,0 +1,150 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'org.springframework.boot' version '3.3.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'org.springdoc.openapi-gradle-plugin' version '1.9.0'
+    id 'org.liquibase.gradle' version '2.1.1'
+}
+apply plugin: 'io.spring.dependency-management'
+
+group = 'uz.duol'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    configureEach {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'ch.qos.logback', module: 'logback-core'
+        exclude group: 'ch.qos.logback', module: 'logback-classic'
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+ext {
+    springCloudVersion = '2023.0.3'
+    liquibaseVersion = '4.27.0'
+    lombokVersion = '1.18.34'
+    postgresVersion = '42.7.4'
+    mapstructVersion = '1.6.2'
+    sentryStarterVersion = '7.15.0'
+    jacksonVersion = '2.17.0'
+    slf4j2Version = '2.0.16'
+    log4j2Version = '2.24.1'
+    shedlockSpringVersion = '5.16.0'
+    openApiVersion = '2.6.0'
+    testContainerVersion = '1.20.2'
+    wiremockVersion = '3.0.1'
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+
+    implementation "io.sentry:sentry-spring-boot-starter-jakarta:${sentryStarterVersion}"
+    implementation 'io.github.openfeign:feign-jackson'
+    implementation 'io.github.openfeign:feign-micrometer'
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+
+    implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    implementation "org.postgresql:postgresql:${postgresVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    // mapstruct
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+    implementation "org.slf4j:slf4j-api:${slf4j2Version}"
+    implementation "org.apache.logging.log4j:log4j-slf4j2-impl:${log4j2Version}"
+    implementation "org.apache.logging.log4j:log4j-core:${log4j2Version}"
+    implementation "org.apache.logging.log4j:log4j-api:${log4j2Version}"
+
+
+    implementation "net.javacrumbs.shedlock:shedlock-provider-jdbc-template:${shedlockSpringVersion}"
+    implementation "net.javacrumbs.shedlock:shedlock-spring:${shedlockSpringVersion}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${openApiVersion}"
+
+    implementation "org.springdoc:springdoc-openapi-ui:1.6.11"
+    implementation 'io.swagger.core.v3:swagger-annotations'
+    implementation 'io.swagger.core.v3:swagger-models'
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0"
+    implementation "io.swagger.core.v3:swagger-annotations:2.2.15"
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.junit.platform:junit-platform-commons'
+    testImplementation "org.testcontainers:testcontainers:${testContainerVersion}"
+    testImplementation "org.testcontainers:junit-jupiter:${testContainerVersion}"
+    testImplementation "org.testcontainers:postgresql:${testContainerVersion}"
+    testImplementation "com.github.tomakehurst:wiremock-standalone:${wiremockVersion}"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.testcontainers:testcontainers-bom:${testContainerVersion}"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+    reports {
+        xml.required = true
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir("jacocoHtml").get().asFile
+        xml.outputLocation = layout.buildDirectory.file("jacoco/jacoco.xml").get().asFile
+    }
+    doLast {
+        println("JaCoCo report: " + layout.buildDirectory.file("jacocoHtml/index.html").get().asFile.absolutePath)
+    }
+}
+
+tasks.withType(JavaCompile)
+        .configureEach {
+            options.encoding = 'UTF-8'
+        }
+
+tasks.withType(Javadoc)
+        .configureEach {
+            options.encoding = 'UTF-8'
+        }
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+
+    maxHeapSize = '1G'
+
+    testLogging {
+        events "passed", "skipped", "failed"
+
+        showExceptions true
+        exceptionFormat "full"
+        showCauses true
+        showStackTraces true
+
+        showStandardStreams = false
+    }
+}
