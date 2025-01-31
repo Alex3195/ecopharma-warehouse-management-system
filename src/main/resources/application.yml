@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: EcoPharmWarehouse
+  messages:
+    basename: "messages,config.i18n.messages"
+    fallback-to-system-locale: false
+    encoding: UTF-8
+  jpa:
+    database: postgresql
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        default_schema: ${spring.liquibase.default-schema}
+        jdbc:
+          batch_size: 30
+        order_updates: true
+        order_insert: true
+        generate_statistics: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 5000
+            read-timeout: 5000
+            logger-level: full
+
+logging:
+  config: classpath:log4j2.xml
+

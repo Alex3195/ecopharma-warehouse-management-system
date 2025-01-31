@@ -1,0 +1,17 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+  liquibase:
+    default-schema: public
+
+api:
+  url: http://localhost:10001
+  connection-timeout: 5000
+  read-timeout: 10000
