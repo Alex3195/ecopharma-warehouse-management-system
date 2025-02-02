@@ -11,18 +11,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uz.duol.ecopharmwarehouse.enums.Status;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Getter
 @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
-
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "base_seq_gen")
-    private Long id;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -44,16 +38,4 @@ public abstract class BaseEntity {
     @Column(name = "updated_by")
     private Long updatedBy;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BaseEntity that = (BaseEntity) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }
