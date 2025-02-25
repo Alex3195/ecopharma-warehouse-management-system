@@ -16,10 +16,10 @@ public class UserEntity extends BaseEntity {
     @SequenceGenerator(name = "user_seq_gen", sequenceName = "user_seq", allocationSize = 1)
     private Long id;
 
+    @Column(name = "name")
     private String name;
-    private String contactName;
-    private String contactEmail;
-    private String contactPhone;
-    private String address;
-    private String country;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "phone")
+    private String phone;
 }

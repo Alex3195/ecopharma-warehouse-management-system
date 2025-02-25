@@ -25,5 +25,12 @@ public class TableNamesConstant {
         public static final String AUDIT_TRAIL = "audit-trail";
         public static final String USER = "user";
 
+        public static final String SECTOR = "sector";
+        public static final String UNIT = "unit";
+        public static final String CHARACTERISTIC = "characteristic";
+        public static final String SECTOR_CHARACTERISTIC = "sector-characteristic";
+        public static final String RACKS = "racks";
+        public static final String FLOOR = "floor";
+        public static final String CELL = "cell";
     }
 }
