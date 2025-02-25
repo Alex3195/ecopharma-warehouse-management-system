@@ -4,8 +4,6 @@ CREATE SEQUENCE IF NOT EXISTS cell_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS characteristics_seq START WITH 1 INCREMENT BY 1;
 
-CREATE SEQUENCE IF NOT EXISTS employee_seq START WITH 1 INCREMENT BY 1;
-
 CREATE SEQUENCE IF NOT EXISTS floor_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS inbound_receipt_seq START WITH 1 INCREMENT BY 1;
@@ -32,8 +30,6 @@ CREATE SEQUENCE IF NOT EXISTS sector_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS settings_seq START WITH 1 INCREMENT BY 1;
 
-CREATE SEQUENCE IF NOT EXISTS storage_condition_seq START WITH 1 INCREMENT BY 1;
-
 CREATE SEQUENCE IF NOT EXISTS task_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS transport_label_seq START WITH 1 INCREMENT BY 1;
@@ -42,7 +38,7 @@ CREATE SEQUENCE IF NOT EXISTS unit_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS user_seq START WITH 1 INCREMENT BY 1;
 
-CREATE TABLE "audit-trail"
+CREATE TABLE audit_trail
 (
     id           BIGINT                      NOT NULL,
     created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -57,7 +53,7 @@ CREATE TABLE "audit-trail"
     new_value    VARCHAR(255),
     performed_by BIGINT,
     action_time  TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT "pk_audit-trail" PRIMARY KEY (id)
+    CONSTRAINT pk_audit_trail PRIMARY KEY (id)
 );
 
 CREATE TABLE cell
@@ -87,19 +83,6 @@ CREATE TABLE characteristic
     CONSTRAINT pk_characteristic PRIMARY KEY (id)
 );
 
-CREATE TABLE employee
-(
-    id         BIGINT                      NOT NULL,
-    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    status     VARCHAR(255)                NOT NULL,
-    created_by BIGINT,
-    updated_by BIGINT,
-    name       VARCHAR(255),
-    role       VARCHAR(255),
-    CONSTRAINT pk_employee PRIMARY KEY (id)
-);
-
 CREATE TABLE floor
 (
     id         BIGINT                      NOT NULL,
@@ -114,7 +97,7 @@ CREATE TABLE floor
     CONSTRAINT pk_floor PRIMARY KEY (id)
 );
 
-CREATE TABLE "inbound-receipt"
+CREATE TABLE inbound_receipt
 (
     id           BIGINT                      NOT NULL,
     created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -126,10 +109,10 @@ CREATE TABLE "inbound-receipt"
     receipt_type VARCHAR(255),
     quantity     INTEGER,
     supplier_id  BIGINT,
-    CONSTRAINT "pk_inbound-receipt" PRIMARY KEY (id)
+    CONSTRAINT pk_inbound_receipt PRIMARY KEY (id)
 );
 
-CREATE TABLE "inventory-audit"
+CREATE TABLE inventory_audit
 (
     id         BIGINT                      NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -144,10 +127,10 @@ CREATE TABLE "inventory-audit"
     floor      VARCHAR(255),
     quantity   INTEGER,
     audit_time TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT "pk_inventory-audit" PRIMARY KEY (id)
+    CONSTRAINT pk_inventory_audit PRIMARY KEY (id)
 );
 
-CREATE TABLE "inventory-snapshot"
+CREATE TABLE inventory_snapshot
 (
     id            BIGINT                      NOT NULL,
     created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -159,7 +142,7 @@ CREATE TABLE "inventory-snapshot"
     location_id   BIGINT,
     quantity      INTEGER,
     snapshot_time TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT "pk_inventory-snapshot" PRIMARY KEY (id)
+    CONSTRAINT pk_inventory_snapshot PRIMARY KEY (id)
 );
 
 CREATE TABLE location
@@ -177,7 +160,7 @@ CREATE TABLE location
     CONSTRAINT pk_location PRIMARY KEY (id)
 );
 
-CREATE TABLE "outbound-shipment"
+CREATE TABLE outbound_shipment
 (
     id            BIGINT                      NOT NULL,
     created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -189,7 +172,7 @@ CREATE TABLE "outbound-shipment"
     shipment_type VARCHAR(255),
     quantity      INTEGER,
     customer_id   BIGINT,
-    CONSTRAINT "pk_outbound-shipment" PRIMARY KEY (id)
+    CONSTRAINT pk_outbound_shipment PRIMARY KEY (id)
 );
 
 CREATE TABLE product
@@ -207,7 +190,7 @@ CREATE TABLE product
     CONSTRAINT pk_product PRIMARY KEY (id)
 );
 
-CREATE TABLE "product-meta-data"
+CREATE TABLE product_meta_data
 (
     id            BIGINT                      NOT NULL,
     created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -219,10 +202,10 @@ CREATE TABLE "product-meta-data"
     batch_number  VARCHAR(255),
     expiry_date   date,
     serial_number VARCHAR(255),
-    CONSTRAINT "pk_product-meta-data" PRIMARY KEY (id)
+    CONSTRAINT pk_product_meta_data PRIMARY KEY (id)
 );
 
-CREATE TABLE "product-output-algorithm"
+CREATE TABLE product_output_algorithm
 (
     id             BIGINT                      NOT NULL,
     created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -232,10 +215,10 @@ CREATE TABLE "product-output-algorithm"
     updated_by     BIGINT,
     algorithm_type VARCHAR(255),
     description    VARCHAR(255),
-    CONSTRAINT "pk_product-output-algorithm" PRIMARY KEY (id)
+    CONSTRAINT pk_product_output_algorithm PRIMARY KEY (id)
 );
 
-CREATE TABLE "product-return"
+CREATE TABLE product_return
 (
     id            BIGINT                      NOT NULL,
     created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -246,7 +229,7 @@ CREATE TABLE "product-return"
     product_id    BIGINT,
     return_reason VARCHAR(255),
     quantity      INTEGER,
-    CONSTRAINT "pk_product-return" PRIMARY KEY (id)
+    CONSTRAINT pk_product_return PRIMARY KEY (id)
 );
 
 CREATE TABLE racks
@@ -279,7 +262,7 @@ CREATE TABLE sector
     CONSTRAINT pk_sector PRIMARY KEY (id)
 );
 
-CREATE TABLE "sector-characteristic"
+CREATE TABLE sector_characteristic
 (
     id                BIGINT                      NOT NULL,
     created_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -290,7 +273,7 @@ CREATE TABLE "sector-characteristic"
     sector_id         BIGINT                      NOT NULL,
     characteristic_id BIGINT                      NOT NULL,
     value             VARCHAR(255)                NOT NULL,
-    CONSTRAINT "pk_sector-characteristic" PRIMARY KEY (id)
+    CONSTRAINT pk_sector_characteristic PRIMARY KEY (id)
 );
 
 CREATE TABLE settings_entity
@@ -304,20 +287,6 @@ CREATE TABLE settings_entity
     setting_name  VARCHAR(255),
     setting_value VARCHAR(255),
     CONSTRAINT pk_settingsentity PRIMARY KEY (id)
-);
-
-CREATE TABLE "storage-condition"
-(
-    id              BIGINT                      NOT NULL,
-    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at      TIMESTAMP WITHOUT TIME ZONE,
-    status          VARCHAR(255)                NOT NULL,
-    created_by      BIGINT,
-    updated_by      BIGINT,
-    location_id     BIGINT,
-    condition_type  VARCHAR(255),
-    condition_value VARCHAR(255),
-    CONSTRAINT "pk_storage-condition" PRIMARY KEY (id)
 );
 
 CREATE TABLE task
@@ -337,7 +306,7 @@ CREATE TABLE task
     CONSTRAINT pk_task PRIMARY KEY (id)
 );
 
-CREATE TABLE "transport-label"
+CREATE TABLE transport_label
 (
     id          BIGINT                      NOT NULL,
     created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -348,7 +317,7 @@ CREATE TABLE "transport-label"
     product_id  BIGINT,
     shipment_id BIGINT,
     label       VARCHAR(255),
-    CONSTRAINT "pk_transport-label" PRIMARY KEY (id)
+    CONSTRAINT pk_transport_label PRIMARY KEY (id)
 );
 
 CREATE TABLE unit
@@ -376,11 +345,12 @@ CREATE TABLE "user"
     name       VARCHAR(255),
     email      VARCHAR(255),
     phone      VARCHAR(255),
+    role       VARCHAR(255),
     CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
-ALTER TABLE "audit-trail"
-    ADD CONSTRAINT "FK_AUDIT-TRAIL_ON_PERFORMED_BY" FOREIGN KEY (performed_by) REFERENCES employee (id);
+ALTER TABLE audit_trail
+    ADD CONSTRAINT FK_AUDIT_TRAIL_ON_PERFORMED_BY FOREIGN KEY (performed_by) REFERENCES "user" (id);
 
 ALTER TABLE cell
     ADD CONSTRAINT FK_CELL_ON_FLOOR FOREIGN KEY (floor_id) REFERENCES floor (id);
@@ -388,50 +358,47 @@ ALTER TABLE cell
 ALTER TABLE floor
     ADD CONSTRAINT FK_FLOOR_ON_RACK FOREIGN KEY (rack_id) REFERENCES racks (id);
 
-ALTER TABLE "inbound-receipt"
-    ADD CONSTRAINT "FK_INBOUND-RECEIPT_ON_PRODUCT" FOREIGN KEY (product_id) REFERENCES product (id);
+ALTER TABLE inbound_receipt
+    ADD CONSTRAINT FK_INBOUND_RECEIPT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
-ALTER TABLE "inbound-receipt"
-    ADD CONSTRAINT "FK_INBOUND-RECEIPT_ON_SUPPLIER" FOREIGN KEY (supplier_id) REFERENCES "user" (id);
+ALTER TABLE inbound_receipt
+    ADD CONSTRAINT FK_INBOUND_RECEIPT_ON_SUPPLIER FOREIGN KEY (supplier_id) REFERENCES "user" (id);
 
-ALTER TABLE "inventory-audit"
-    ADD CONSTRAINT "FK_INVENTORY-AUDIT_ON_PRODUCT" FOREIGN KEY (product_id) REFERENCES product (id);
+ALTER TABLE inventory_audit
+    ADD CONSTRAINT FK_INVENTORY_AUDIT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
-ALTER TABLE "inventory-snapshot"
-    ADD CONSTRAINT "FK_INVENTORY-SNAPSHOT_ON_LOCATION" FOREIGN KEY (location_id) REFERENCES location (id);
+ALTER TABLE inventory_snapshot
+    ADD CONSTRAINT FK_INVENTORY_SNAPSHOT_ON_LOCATION FOREIGN KEY (location_id) REFERENCES location (id);
 
-ALTER TABLE "inventory-snapshot"
-    ADD CONSTRAINT "FK_INVENTORY-SNAPSHOT_ON_PRODUCT" FOREIGN KEY (product_id) REFERENCES product (id);
+ALTER TABLE inventory_snapshot
+    ADD CONSTRAINT FK_INVENTORY_SNAPSHOT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
 ALTER TABLE location
     ADD CONSTRAINT FK_LOCATION_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
-ALTER TABLE "outbound-shipment"
-    ADD CONSTRAINT "FK_OUTBOUND-SHIPMENT_ON_CUSTOMER" FOREIGN KEY (customer_id) REFERENCES "user" (id);
+ALTER TABLE outbound_shipment
+    ADD CONSTRAINT FK_OUTBOUND_SHIPMENT_ON_CUSTOMER FOREIGN KEY (customer_id) REFERENCES "user" (id);
 
-ALTER TABLE "outbound-shipment"
-    ADD CONSTRAINT "FK_OUTBOUND-SHIPMENT_ON_PRODUCT" FOREIGN KEY (product_id) REFERENCES product (id);
+ALTER TABLE outbound_shipment
+    ADD CONSTRAINT FK_OUTBOUND_SHIPMENT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
-ALTER TABLE "product-meta-data"
-    ADD CONSTRAINT "FK_PRODUCT-META-DATA_ON_PRODUCT" FOREIGN KEY (product_id) REFERENCES product (id);
+ALTER TABLE product_meta_data
+    ADD CONSTRAINT FK_PRODUCT_META_DATA_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
-ALTER TABLE "product-return"
-    ADD CONSTRAINT "FK_PRODUCT-RETURN_ON_PRODUCT" FOREIGN KEY (product_id) REFERENCES product (id);
+ALTER TABLE product_return
+    ADD CONSTRAINT FK_PRODUCT_RETURN_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
 ALTER TABLE racks
     ADD CONSTRAINT FK_RACKS_ON_SECTOR FOREIGN KEY (sector_id) REFERENCES sector (id);
 
-ALTER TABLE "sector-characteristic"
-    ADD CONSTRAINT "FK_SECTOR-CHARACTERISTIC_ON_CHARACTERISTIC" FOREIGN KEY (characteristic_id) REFERENCES characteristic (id);
+ALTER TABLE sector_characteristic
+    ADD CONSTRAINT FK_SECTOR_CHARACTERISTIC_ON_CHARACTERISTIC FOREIGN KEY (characteristic_id) REFERENCES characteristic (id);
 
-ALTER TABLE "sector-characteristic"
-    ADD CONSTRAINT "FK_SECTOR-CHARACTERISTIC_ON_SECTOR" FOREIGN KEY (sector_id) REFERENCES sector (id);
-
-ALTER TABLE "storage-condition"
-    ADD CONSTRAINT "FK_STORAGE-CONDITION_ON_LOCATION" FOREIGN KEY (location_id) REFERENCES location (id);
+ALTER TABLE sector_characteristic
+    ADD CONSTRAINT FK_SECTOR_CHARACTERISTIC_ON_SECTOR FOREIGN KEY (sector_id) REFERENCES sector (id);
 
 ALTER TABLE task
-    ADD CONSTRAINT FK_TASK_ON_ASSIGNED_TO FOREIGN KEY (assigned_to) REFERENCES employee (id);
+    ADD CONSTRAINT FK_TASK_ON_ASSIGNED_TO FOREIGN KEY (assigned_to) REFERENCES "user" (id);
 
 ALTER TABLE task
     ADD CONSTRAINT FK_TASK_ON_LOCATION FOREIGN KEY (location_id) REFERENCES location (id);
@@ -439,8 +406,8 @@ ALTER TABLE task
 ALTER TABLE task
     ADD CONSTRAINT FK_TASK_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
-ALTER TABLE "transport-label"
-    ADD CONSTRAINT "FK_TRANSPORT-LABEL_ON_PRODUCT" FOREIGN KEY (product_id) REFERENCES product (id);
+ALTER TABLE transport_label
+    ADD CONSTRAINT FK_TRANSPORT_LABEL_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
-ALTER TABLE "transport-label"
-    ADD CONSTRAINT "FK_TRANSPORT-LABEL_ON_SHIPMENT" FOREIGN KEY (shipment_id) REFERENCES "outbound-shipment" (id);
+ALTER TABLE transport_label
+    ADD CONSTRAINT FK_TRANSPORT_LABEL_ON_SHIPMENT FOREIGN KEY (shipment_id) REFERENCES outbound_shipment (id);

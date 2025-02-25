@@ -26,7 +26,7 @@ public class AuditTrailEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "performed_by")
-    private EmployeeEntity performedBy;
+    private UserEntity performedBy;
 
     private LocalDateTime actionTime;
 

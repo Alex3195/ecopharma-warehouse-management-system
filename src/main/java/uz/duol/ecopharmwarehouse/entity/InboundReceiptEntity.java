@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import uz.duol.ecopharmwarehouse.enums.ReceiptTypeEnum;
 import uz.duol.ecopharmwarehouse.enums.TableNamesConstant;
 
 @Entity
@@ -21,7 +22,9 @@ public class InboundReceiptEntity extends BaseEntity {
     @JoinColumn(name = "product_id")
     private ProductEntity product;
 
-    private String receiptType; // inbound from supplier, return from customer, etc.
+    @Column(name = "receipt_type")
+    @Enumerated(EnumType.STRING)
+    private ReceiptTypeEnum receiptType; // inbound from supplier, return from customer, etc.
     private Integer quantity;
 
     @ManyToOne

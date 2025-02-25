@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import uz.duol.ecopharmwarehouse.enums.TableNamesConstant;
 
-import java.util.List;
-
 @Entity
 @Table(name = TableNamesConstant.Tables.LOCATION)
 @Setter
@@ -25,7 +23,4 @@ public class LocationEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
-
-    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<StorageConditionEntity> storageConditions;
 }

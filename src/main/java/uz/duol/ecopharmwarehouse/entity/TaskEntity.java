@@ -23,7 +23,7 @@ public class TaskEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "assigned_to")
-    private EmployeeEntity assignedTo;
+    private UserEntity assignedTo;
 
     private LocalDateTime dueDate;
 

@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import uz.duol.ecopharmwarehouse.enums.ShipmentTypeEnum;
 import uz.duol.ecopharmwarehouse.enums.TableNamesConstant;
 
 @Entity
@@ -19,8 +20,11 @@ public class OutboundShipmentEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
+    @Column(name = "shipment_type")
+    @Enumerated(EnumType.STRING)
+    private ShipmentTypeEnum shipmentType; // shipment to customer, return to supplier, etc.
 
-    private String shipmentType; // shipment to customer, return to supplier, etc.
+    @Column(name = "quantity")
     private Integer quantity;
 
     @ManyToOne

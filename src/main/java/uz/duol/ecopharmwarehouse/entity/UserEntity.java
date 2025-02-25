@@ -3,7 +3,10 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import uz.duol.ecopharmwarehouse.enums.RoleEnum;
 import uz.duol.ecopharmwarehouse.enums.TableNamesConstant;
+
+import java.util.List;
 
 @Entity
 @Table(name = TableNamesConstant.Tables.USER)
@@ -18,8 +21,16 @@ public class UserEntity extends BaseEntity {
 
     @Column(name = "name")
     private String name;
+
     @Column(name = "email")
     private String email;
+
     @Column(name = "phone")
     private String phone;
+
+    @Enumerated(EnumType.STRING)
+    private RoleEnum role;
+
+    @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TaskEntity> tasks;
 }
