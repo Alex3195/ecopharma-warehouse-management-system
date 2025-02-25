@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.duol.ecopharmwarehouse.enums.ReceiptTypeEnum;
-import uz.duol.ecopharmwarehouse.enums.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 
 @Entity
 @Table(name = TableNamesConstant.Tables.INBOUND_RECEIPT)

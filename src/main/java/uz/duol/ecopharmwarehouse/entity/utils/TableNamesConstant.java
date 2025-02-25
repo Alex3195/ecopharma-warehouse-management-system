@@ -1,4 +1,4 @@
-package uz.duol.ecopharmwarehouse.enums;
+package uz.duol.ecopharmwarehouse.entity.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
