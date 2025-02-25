@@ -1,6 +1,12 @@
 CREATE SEQUENCE IF NOT EXISTS audit_trail_seq START WITH 1 INCREMENT BY 1;
 
+CREATE SEQUENCE IF NOT EXISTS cell_seq START WITH 1 INCREMENT BY 1;
+
+CREATE SEQUENCE IF NOT EXISTS characteristics_seq START WITH 1 INCREMENT BY 1;
+
 CREATE SEQUENCE IF NOT EXISTS employee_seq START WITH 1 INCREMENT BY 1;
+
+CREATE SEQUENCE IF NOT EXISTS floor_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS inbound_receipt_seq START WITH 1 INCREMENT BY 1;
 
@@ -18,6 +24,12 @@ CREATE SEQUENCE IF NOT EXISTS product_return_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS product_seq START WITH 1 INCREMENT BY 1;
 
+CREATE SEQUENCE IF NOT EXISTS rack_seq START WITH 1 INCREMENT BY 1;
+
+CREATE SEQUENCE IF NOT EXISTS sector_characteristics_seq START WITH 1 INCREMENT BY 1;
+
+CREATE SEQUENCE IF NOT EXISTS sector_seq START WITH 1 INCREMENT BY 1;
+
 CREATE SEQUENCE IF NOT EXISTS settings_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS storage_condition_seq START WITH 1 INCREMENT BY 1;
@@ -25,6 +37,8 @@ CREATE SEQUENCE IF NOT EXISTS storage_condition_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE IF NOT EXISTS task_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS transport_label_seq START WITH 1 INCREMENT BY 1;
+
+CREATE SEQUENCE IF NOT EXISTS unit_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS user_seq START WITH 1 INCREMENT BY 1;
 
@@ -46,6 +60,33 @@ CREATE TABLE "audit-trail"
     CONSTRAINT "pk_audit-trail" PRIMARY KEY (id)
 );
 
+CREATE TABLE cell
+(
+    id         BIGINT           NOT NULL,
+    code       VARCHAR(255)     NOT NULL,
+    width      DOUBLE PRECISION NOT NULL,
+    depth      DOUBLE PRECISION NOT NULL,
+    height     DOUBLE PRECISION NOT NULL,
+    max_weight DOUBLE PRECISION NOT NULL,
+    max_volume DOUBLE PRECISION NOT NULL,
+    floor_id   BIGINT           NOT NULL,
+    CONSTRAINT pk_cell PRIMARY KEY (id)
+);
+
+CREATE TABLE characteristic
+(
+    id          BIGINT                      NOT NULL,
+    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at  TIMESTAMP WITHOUT TIME ZONE,
+    status      VARCHAR(255)                NOT NULL,
+    created_by  BIGINT,
+    updated_by  BIGINT,
+    name        VARCHAR(255),
+    description VARCHAR(255),
+    type        VARCHAR(255)                NOT NULL,
+    CONSTRAINT pk_characteristic PRIMARY KEY (id)
+);
+
 CREATE TABLE employee
 (
     id         BIGINT                      NOT NULL,
@@ -57,6 +98,20 @@ CREATE TABLE employee
     name       VARCHAR(255),
     role       VARCHAR(255),
     CONSTRAINT pk_employee PRIMARY KEY (id)
+);
+
+CREATE TABLE floor
+(
+    id         BIGINT                      NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    status     VARCHAR(255)                NOT NULL,
+    created_by BIGINT,
+    updated_by BIGINT,
+    level      INTEGER                     NOT NULL,
+    height     DOUBLE PRECISION            NOT NULL,
+    rack_id    BIGINT                      NOT NULL,
+    CONSTRAINT pk_floor PRIMARY KEY (id)
 );
 
 CREATE TABLE "inbound-receipt"
@@ -194,6 +249,50 @@ CREATE TABLE "product-return"
     CONSTRAINT "pk_product-return" PRIMARY KEY (id)
 );
 
+CREATE TABLE racks
+(
+    id         BIGINT                      NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    status     VARCHAR(255)                NOT NULL,
+    created_by BIGINT,
+    updated_by BIGINT,
+    name       VARCHAR(255)                NOT NULL,
+    type       VARCHAR(255)                NOT NULL,
+    height     DOUBLE PRECISION            NOT NULL,
+    width      DOUBLE PRECISION            NOT NULL,
+    depth      DOUBLE PRECISION            NOT NULL,
+    sector_id  BIGINT                      NOT NULL,
+    CONSTRAINT pk_racks PRIMARY KEY (id)
+);
+
+CREATE TABLE sector
+(
+    id          BIGINT                      NOT NULL,
+    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at  TIMESTAMP WITHOUT TIME ZONE,
+    status      VARCHAR(255)                NOT NULL,
+    created_by  BIGINT,
+    updated_by  BIGINT,
+    name        VARCHAR(255),
+    description VARCHAR(255),
+    CONSTRAINT pk_sector PRIMARY KEY (id)
+);
+
+CREATE TABLE "sector-characteristic"
+(
+    id                BIGINT                      NOT NULL,
+    created_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at        TIMESTAMP WITHOUT TIME ZONE,
+    status            VARCHAR(255)                NOT NULL,
+    created_by        BIGINT,
+    updated_by        BIGINT,
+    sector_id         BIGINT                      NOT NULL,
+    characteristic_id BIGINT                      NOT NULL,
+    value             VARCHAR(255)                NOT NULL,
+    CONSTRAINT "pk_sector-characteristic" PRIMARY KEY (id)
+);
+
 CREATE TABLE settings_entity
 (
     id            BIGINT                      NOT NULL,
@@ -252,25 +351,42 @@ CREATE TABLE "transport-label"
     CONSTRAINT "pk_transport-label" PRIMARY KEY (id)
 );
 
+CREATE TABLE unit
+(
+    id          BIGINT                      NOT NULL,
+    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at  TIMESTAMP WITHOUT TIME ZONE,
+    status      VARCHAR(255)                NOT NULL,
+    created_by  BIGINT,
+    updated_by  BIGINT,
+    name        VARCHAR(255),
+    symbol      VARCHAR(255),
+    description VARCHAR(255),
+    CONSTRAINT pk_unit PRIMARY KEY (id)
+);
+
 CREATE TABLE "user"
 (
-    id            BIGINT                      NOT NULL,
-    created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at    TIMESTAMP WITHOUT TIME ZONE,
-    status        VARCHAR(255)                NOT NULL,
-    created_by    BIGINT,
-    updated_by    BIGINT,
-    name          VARCHAR(255),
-    contact_name  VARCHAR(255),
-    contact_email VARCHAR(255),
-    contact_phone VARCHAR(255),
-    address       VARCHAR(255),
-    country       VARCHAR(255),
+    id         BIGINT                      NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    status     VARCHAR(255)                NOT NULL,
+    created_by BIGINT,
+    updated_by BIGINT,
+    name       VARCHAR(255),
+    email      VARCHAR(255),
+    phone      VARCHAR(255),
     CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
 ALTER TABLE "audit-trail"
     ADD CONSTRAINT "FK_AUDIT-TRAIL_ON_PERFORMED_BY" FOREIGN KEY (performed_by) REFERENCES employee (id);
+
+ALTER TABLE cell
+    ADD CONSTRAINT FK_CELL_ON_FLOOR FOREIGN KEY (floor_id) REFERENCES floor (id);
+
+ALTER TABLE floor
+    ADD CONSTRAINT FK_FLOOR_ON_RACK FOREIGN KEY (rack_id) REFERENCES racks (id);
 
 ALTER TABLE "inbound-receipt"
     ADD CONSTRAINT "FK_INBOUND-RECEIPT_ON_PRODUCT" FOREIGN KEY (product_id) REFERENCES product (id);
@@ -301,6 +417,15 @@ ALTER TABLE "product-meta-data"
 
 ALTER TABLE "product-return"
     ADD CONSTRAINT "FK_PRODUCT-RETURN_ON_PRODUCT" FOREIGN KEY (product_id) REFERENCES product (id);
+
+ALTER TABLE racks
+    ADD CONSTRAINT FK_RACKS_ON_SECTOR FOREIGN KEY (sector_id) REFERENCES sector (id);
+
+ALTER TABLE "sector-characteristic"
+    ADD CONSTRAINT "FK_SECTOR-CHARACTERISTIC_ON_CHARACTERISTIC" FOREIGN KEY (characteristic_id) REFERENCES characteristic (id);
+
+ALTER TABLE "sector-characteristic"
+    ADD CONSTRAINT "FK_SECTOR-CHARACTERISTIC_ON_SECTOR" FOREIGN KEY (sector_id) REFERENCES sector (id);
 
 ALTER TABLE "storage-condition"
     ADD CONSTRAINT "FK_STORAGE-CONDITION_ON_LOCATION" FOREIGN KEY (location_id) REFERENCES location (id);
