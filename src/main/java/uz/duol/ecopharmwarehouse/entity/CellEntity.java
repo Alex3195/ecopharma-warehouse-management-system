@@ -33,7 +33,10 @@ public class CellEntity {
     @Column(nullable = false)
     private Double maxVolume;
 
-    @ManyToOne
-    @JoinColumn(name = "floor_id", nullable = false)
+    @Column(name = "floor_id")
+    private Long floorId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "floor_id", referencedColumnName = "id", insertable = false, updatable = false)
     private FloorEntity floor;
 }

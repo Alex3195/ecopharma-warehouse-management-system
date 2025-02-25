@@ -65,7 +65,7 @@ CREATE TABLE cell
     height     DOUBLE PRECISION NOT NULL,
     max_weight DOUBLE PRECISION NOT NULL,
     max_volume DOUBLE PRECISION NOT NULL,
-    floor_id   BIGINT           NOT NULL,
+    floor_id   BIGINT,
     CONSTRAINT pk_cell PRIMARY KEY (id)
 );
 
@@ -93,7 +93,7 @@ CREATE TABLE floor
     updated_by BIGINT,
     level      INTEGER                     NOT NULL,
     height     DOUBLE PRECISION            NOT NULL,
-    rack_id    BIGINT                      NOT NULL,
+    rack_id    BIGINT,
     CONSTRAINT pk_floor PRIMARY KEY (id)
 );
 
@@ -122,9 +122,9 @@ CREATE TABLE inventory_audit
     updated_by BIGINT,
     audit_type VARCHAR(255),
     product_id BIGINT,
-    sector     VARCHAR(255),
-    shelf      VARCHAR(255),
-    floor      VARCHAR(255),
+    sector_id  BIGINT,
+    rack_id    BIGINT,
+    floor_id   BIGINT,
     quantity   INTEGER,
     audit_time TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_inventory_audit PRIMARY KEY (id)
@@ -245,7 +245,7 @@ CREATE TABLE racks
     height     DOUBLE PRECISION            NOT NULL,
     width      DOUBLE PRECISION            NOT NULL,
     depth      DOUBLE PRECISION            NOT NULL,
-    sector_id  BIGINT                      NOT NULL,
+    sector_id  BIGINT,
     CONSTRAINT pk_racks PRIMARY KEY (id)
 );
 
@@ -297,7 +297,7 @@ CREATE TABLE task
     status      VARCHAR(255)                NOT NULL,
     created_by  BIGINT,
     updated_by  BIGINT,
-    task_type   VARCHAR(255),
+    task_type   SMALLINT,
     task_status VARCHAR(255),
     assigned_to BIGINT,
     due_date    TIMESTAMP WITHOUT TIME ZONE,

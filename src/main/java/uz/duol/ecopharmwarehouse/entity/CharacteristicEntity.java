@@ -24,6 +24,6 @@ public class CharacteristicEntity extends BaseEntity {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name="type",nullable = false)
     private CharacteristicType type;
 }

@@ -14,7 +14,8 @@ public class SettingsEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "settings_seq_gen")
     @SequenceGenerator(name = "settings_seq_gen", sequenceName = "settings_seq", allocationSize = 1)
     private Long id;
-
+    @Column(name = "setting_name")
     private String settingName;
+    @Column(name = "setting_value")
     private String settingValue;
 }

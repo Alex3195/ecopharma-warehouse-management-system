@@ -21,9 +21,11 @@ public class ProductMetadataEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
-
+    @Column(name = "batch_number")
     private String batchNumber;
+    @Column(name = "expiry_date")
     private LocalDate expiryDate;
+    @Column(name = "serial_number")
     private String serialNumber;
 
 }

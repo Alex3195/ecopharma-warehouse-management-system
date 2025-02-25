@@ -18,7 +18,7 @@ public class FloorEntity extends BaseEntity {
     @SequenceGenerator(name = "floor_seq_gen", sequenceName = "floor_seq", allocationSize = 1)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "level", nullable = false)
     private Integer level;
 
     @Column(name = "height", nullable = false)
@@ -27,8 +27,11 @@ public class FloorEntity extends BaseEntity {
     @OneToMany(mappedBy = "floor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CellEntity> cells;
 
-    @ManyToOne
-    @JoinColumn(name = "rack_id", nullable = false)
+    @Column(name = "rack_id")
+    private Long rackId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "rack_id", referencedColumnName = "id", insertable = false, updatable = false)
     private RackEntity rack;
 
 }

@@ -17,10 +17,13 @@ public class ProductEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq_gen")
     @SequenceGenerator(name = "product_seq_gen", sequenceName = "product_seq", allocationSize = 1)
     private Long id;
-
+    @Column(name = "name")
     private String name;
+    @Column(name = "description")
     private String description;
+    @Column(name = "product_type")
     private String productType; // bulk, box, unit, etc.
+    @Column(name = "quantity")
     private Integer quantity = 0; // stock count
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

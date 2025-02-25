@@ -37,7 +37,10 @@ public class RackEntity extends BaseEntity {
     @OneToMany(mappedBy = "rack", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FloorEntity> floors;
 
-    @ManyToOne
-    @JoinColumn(name = "sector_id", nullable = false)
+    @Column(name = "sector_id")
+    private Long sectorId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "sector_id",referencedColumnName = "id", insertable = false, updatable = false)
     private SectorEntity sector;
 }

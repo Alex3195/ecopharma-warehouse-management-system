@@ -18,17 +18,24 @@ public class InventorySnapshotEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inventory_snapshot_seq_gen")
     @SequenceGenerator(name = "inventory_snapshot_seq_gen", sequenceName = "inventory_snapshot_seq", allocationSize = 1)
     private Long id;
+    @Column(name = "product_id")
+    private Long productId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
     private ProductEntity product;
 
-    @ManyToOne
-    @JoinColumn(name = "location_id")
+    @Column(name = "location_id")
+    private Long locationId;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id",referencedColumnName = "id", insertable = false, updatable = false)
     private LocationEntity location;
 
+    @Column(name = "quantity")
     private Integer quantity;
 
+    @Column(name = "snapshot_time")
     private LocalDateTime snapshotTime;
 
 }

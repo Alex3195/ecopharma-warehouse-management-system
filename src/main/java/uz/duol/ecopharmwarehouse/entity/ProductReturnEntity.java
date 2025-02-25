@@ -22,9 +22,10 @@ public class ProductReturnEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
-
+    @Column(name = "return_reason")
     private String returnReason;
+    @Column(name = "quantity")
     private Integer quantity;
-
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 }

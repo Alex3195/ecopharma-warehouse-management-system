@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.enums.TaskTypeEnum;
 
 import java.time.LocalDateTime;
 
@@ -17,21 +18,30 @@ public class TaskEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_seq_gen")
     @SequenceGenerator(name = "task_seq_gen", sequenceName = "task_seq", allocationSize = 1)
     private Long id;
-
-    private String taskType; // e.g., receive, pick, ship
+    @Column(name = "task_type")
+    private TaskTypeEnum taskType; // e.g., receive, pick, ship
+    @Column(name = "task_status")
     private String taskStatus; // pending, in-progress, completed
+    @Column(name = "assigned_to")
+    private Long assignedToId;
 
-    @ManyToOne
-    @JoinColumn(name = "assigned_to")
-    private UserEntity assignedTo;
-
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "assigned_to", referencedColumnName = "id", insertable = false, updatable = false)
+    private UserEntity assignedToUser;
+    @Column(name = "due_date")
     private LocalDateTime dueDate;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @Column(name = "product_id")
+    private Long productId;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ProductEntity product;
 
-    @ManyToOne
-    @JoinColumn(name = "location_id")
+    @Column(name = "location_id")
+    private Long locationId;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "id", insertable = false, updatable = false)
     private LocationEntity location;
 }

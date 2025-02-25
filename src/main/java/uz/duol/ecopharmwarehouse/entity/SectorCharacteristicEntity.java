@@ -16,12 +16,18 @@ public class SectorCharacteristicEntity extends BaseEntity {
     @SequenceGenerator(name = "sector_characteristics_seq_gen", sequenceName = "sector_characteristics_seq", allocationSize = 1)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "sector_id", nullable = false)
+    @Column(name = "sector_id", nullable = false)
+    private Long sectorId;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "sector_id",referencedColumnName = "id", insertable = false, updatable = false)
     private SectorEntity sector;
 
-    @ManyToOne
-    @JoinColumn(name = "characteristic_id", nullable = false)
+    @Column(name = "characteristic_id", nullable = false)
+    private Long characteristicId;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "characteristic_id",referencedColumnName = "id", insertable = false, updatable = false)
     private CharacteristicEntity characteristic;
 
     @Column(nullable = false)

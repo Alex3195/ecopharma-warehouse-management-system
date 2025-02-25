@@ -17,17 +17,23 @@ public class InboundReceiptEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inbound_receipt_seq_gen")
     @SequenceGenerator(name = "inbound_receipt_seq_gen", sequenceName = "inbound_receipt_seq", allocationSize = 1)
     private Long id;
+    @Column(name = "product_id")
+    private Long productId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ProductEntity product;
 
     @Column(name = "receipt_type")
     @Enumerated(EnumType.STRING)
     private ReceiptTypeEnum receiptType; // inbound from supplier, return from customer, etc.
-    private Integer quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
+    @Column(name = "quantity")
+    private Integer quantity;
+    @Column(name = "supplier_id")
+    private Long supplierId;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id", insertable = false, updatable = false)
     private UserEntity supplier; // Assuming a Supplier entity exists
 }

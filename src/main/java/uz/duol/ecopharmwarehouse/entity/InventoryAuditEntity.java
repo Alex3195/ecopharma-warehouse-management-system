@@ -23,11 +23,14 @@ public class InventoryAuditEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
-
-    private String sector;
-    private String shelf;
-    private String floor;
+    @Column(name = "sector_id")
+    private Long sectorId;
+    @Column(name = "rack_id")
+    private Long rackId;
+    @Column(name = "floor_id")
+    private Long floorId;
+    @Column(name = "quantity")
     private Integer quantity;
-
+    @Column(name = "audit_time")
     private LocalDateTime auditTime;
 }

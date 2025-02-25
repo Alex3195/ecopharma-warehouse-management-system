@@ -20,7 +20,10 @@ public class LocationEntity extends BaseEntity {
     private String shelf;
     private String floor;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @Column(name = "product_id")
+    private Long productId;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id",referencedColumnName = "id", insertable = false, updatable = false)
     private ProductEntity product;
 }

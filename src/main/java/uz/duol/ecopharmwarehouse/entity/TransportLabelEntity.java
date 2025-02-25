@@ -16,14 +16,18 @@ public class TransportLabelEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transport_label_seq_gen")
     @SequenceGenerator(name = "transport_label_seq_gen", sequenceName = "transport_label_seq", allocationSize = 1)
     private Long id;
+    @Column(name = "product_id")
+    private Long productId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ProductEntity product;
+    @Column(name = "shipment_id")
+    private Long shipmentId;
 
-    @ManyToOne
-    @JoinColumn(name = "shipment_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "shipment_id", referencedColumnName = "id", insertable = false, updatable = false)
     private OutboundShipmentEntity shipment;
-
+    @Column(name = "label")
     private String label; // Barcode or QR code label data
 }
