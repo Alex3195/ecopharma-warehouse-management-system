@@ -1,8 +1,12 @@
+CREATE SEQUENCE IF NOT EXISTS address_seq START WITH 1 INCREMENT BY 1;
+
 CREATE SEQUENCE IF NOT EXISTS audit_trail_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS cell_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS characteristics_seq START WITH 1 INCREMENT BY 1;
+
+CREATE SEQUENCE IF NOT EXISTS cross_docking_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS floor_seq START WITH 1 INCREMENT BY 1;
 
@@ -37,6 +41,27 @@ CREATE SEQUENCE IF NOT EXISTS transport_label_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE IF NOT EXISTS unit_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS user_seq START WITH 1 INCREMENT BY 1;
+
+CREATE SEQUENCE IF NOT EXISTS warehouse_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE address
+(
+    id              BIGINT                      NOT NULL,
+    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at      TIMESTAMP WITHOUT TIME ZONE,
+    status          VARCHAR(255)                NOT NULL,
+    created_by      BIGINT,
+    updated_by      BIGINT,
+    street          VARCHAR(255),
+    city            VARCHAR(255),
+    state           VARCHAR(255),
+    postal_code     VARCHAR(255),
+    country         VARCHAR(255),
+    latitude        DOUBLE PRECISION,
+    longitude       DOUBLE PRECISION,
+    additional_info VARCHAR(255),
+    CONSTRAINT pk_address PRIMARY KEY (id)
+);
 
 CREATE TABLE audit_trail
 (
@@ -83,6 +108,21 @@ CREATE TABLE characteristic
     CONSTRAINT pk_characteristic PRIMARY KEY (id)
 );
 
+CREATE TABLE cross_docking
+(
+    id                   BIGINT                      NOT NULL,
+    created_at           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at           TIMESTAMP WITHOUT TIME ZONE,
+    status               VARCHAR(255)                NOT NULL,
+    created_by           BIGINT,
+    updated_by           BIGINT,
+    inbound_receipt_id   BIGINT,
+    outbound_shipment_id BIGINT,
+    cross_dock_type      VARCHAR(255),
+    processing_time      TIMESTAMP WITHOUT TIME ZONE,
+    CONSTRAINT pk_cross_docking PRIMARY KEY (id)
+);
+
 CREATE TABLE floor
 (
     id         BIGINT                      NOT NULL,
@@ -99,16 +139,17 @@ CREATE TABLE floor
 
 CREATE TABLE inbound_receipt
 (
-    id           BIGINT                      NOT NULL,
-    created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at   TIMESTAMP WITHOUT TIME ZONE,
-    status       VARCHAR(255)                NOT NULL,
-    created_by   BIGINT,
-    updated_by   BIGINT,
-    product_id   BIGINT,
-    receipt_type VARCHAR(255),
-    quantity     INTEGER,
-    supplier_id  BIGINT,
+    id             BIGINT                      NOT NULL,
+    created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at     TIMESTAMP WITHOUT TIME ZONE,
+    status         VARCHAR(255)                NOT NULL,
+    created_by     BIGINT,
+    updated_by     BIGINT,
+    product_id     BIGINT,
+    receipt_type   VARCHAR(255),
+    quantity       INTEGER,
+    supplier_id    BIGINT,
+    receipt_status VARCHAR(255),
     CONSTRAINT pk_inbound_receipt PRIMARY KEY (id)
 );
 
@@ -153,25 +194,28 @@ CREATE TABLE location
     status     VARCHAR(255)                NOT NULL,
     created_by BIGINT,
     updated_by BIGINT,
-    sector     VARCHAR(255),
-    shelf      VARCHAR(255),
-    floor      VARCHAR(255),
+    sector     BIGINT,
+    rack       BIGINT,
+    floor      BIGINT,
+    cell       BIGINT,
     product_id BIGINT,
     CONSTRAINT pk_location PRIMARY KEY (id)
 );
 
 CREATE TABLE outbound_shipment
 (
-    id            BIGINT                      NOT NULL,
-    created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at    TIMESTAMP WITHOUT TIME ZONE,
-    status        VARCHAR(255)                NOT NULL,
-    created_by    BIGINT,
-    updated_by    BIGINT,
-    product_id    BIGINT,
-    shipment_type VARCHAR(255),
-    quantity      INTEGER,
-    customer_id   BIGINT,
+    id              BIGINT                      NOT NULL,
+    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at      TIMESTAMP WITHOUT TIME ZONE,
+    status          VARCHAR(255)                NOT NULL,
+    created_by      BIGINT,
+    updated_by      BIGINT,
+    product_id      BIGINT,
+    shipment_type   VARCHAR(255),
+    quantity        INTEGER,
+    customer_id     BIGINT,
+    scheduled_for   TIMESTAMP WITHOUT TIME ZONE,
+    shipment_status VARCHAR(255),
     CONSTRAINT pk_outbound_shipment PRIMARY KEY (id)
 );
 
@@ -276,17 +320,17 @@ CREATE TABLE sector_characteristic
     CONSTRAINT pk_sector_characteristic PRIMARY KEY (id)
 );
 
-CREATE TABLE settings_entity
+CREATE TABLE settings
 (
-    id            BIGINT                      NOT NULL,
-    created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at    TIMESTAMP WITHOUT TIME ZONE,
-    status        VARCHAR(255)                NOT NULL,
-    created_by    BIGINT,
-    updated_by    BIGINT,
-    setting_name  VARCHAR(255),
-    setting_value VARCHAR(255),
-    CONSTRAINT pk_settingsentity PRIMARY KEY (id)
+    id         BIGINT                      NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    status     VARCHAR(255)                NOT NULL,
+    created_by BIGINT,
+    updated_by BIGINT,
+    name       VARCHAR(255),
+    value      VARCHAR(255),
+    CONSTRAINT pk_settings PRIMARY KEY (id)
 );
 
 CREATE TABLE task
@@ -349,11 +393,31 @@ CREATE TABLE "user"
     CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
+CREATE TABLE warehouse
+(
+    id          BIGINT                      NOT NULL,
+    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at  TIMESTAMP WITHOUT TIME ZONE,
+    status      VARCHAR(255)                NOT NULL,
+    created_by  BIGINT,
+    updated_by  BIGINT,
+    name        VARCHAR(255),
+    description VARCHAR(255),
+    address_id  BIGINT,
+    CONSTRAINT pk_warehouse PRIMARY KEY (id)
+);
+
 ALTER TABLE audit_trail
     ADD CONSTRAINT FK_AUDIT_TRAIL_ON_PERFORMED_BY FOREIGN KEY (performed_by) REFERENCES "user" (id);
 
 ALTER TABLE cell
     ADD CONSTRAINT FK_CELL_ON_FLOOR FOREIGN KEY (floor_id) REFERENCES floor (id);
+
+ALTER TABLE cross_docking
+    ADD CONSTRAINT FK_CROSS_DOCKING_ON_INBOUND_RECEIPT FOREIGN KEY (inbound_receipt_id) REFERENCES inbound_receipt (id);
+
+ALTER TABLE cross_docking
+    ADD CONSTRAINT FK_CROSS_DOCKING_ON_OUTBOUND_SHIPMENT FOREIGN KEY (outbound_shipment_id) REFERENCES outbound_shipment (id);
 
 ALTER TABLE floor
     ADD CONSTRAINT FK_FLOOR_ON_RACK FOREIGN KEY (rack_id) REFERENCES racks (id);
@@ -411,3 +475,6 @@ ALTER TABLE transport_label
 
 ALTER TABLE transport_label
     ADD CONSTRAINT FK_TRANSPORT_LABEL_ON_SHIPMENT FOREIGN KEY (shipment_id) REFERENCES outbound_shipment (id);
+
+ALTER TABLE warehouse
+    ADD CONSTRAINT FK_WAREHOUSE_ON_ADDRESS FOREIGN KEY (address_id) REFERENCES address (id);

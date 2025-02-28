@@ -22,12 +22,14 @@ public class TransportLabelEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ProductEntity product;
+
     @Column(name = "shipment_id")
     private Long shipmentId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "shipment_id", referencedColumnName = "id", insertable = false, updatable = false)
     private OutboundShipmentEntity shipment;
+
     @Column(name = "label")
     private String label; // Barcode or QR code label data
 }

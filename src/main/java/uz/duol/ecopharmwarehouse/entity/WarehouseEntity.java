@@ -1,0 +1,31 @@
+package uz.duol.ecopharmwarehouse.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+
+@Entity
+@Table(name = TableNamesConstant.Tables.WAREHOUSE)
+@Setter
+@Getter
+public class WarehouseEntity extends BaseEntity {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "warehouse_seq_gen")
+    @SequenceGenerator(name = "warehouse_seq_gen", sequenceName = "warehouse_seq", allocationSize = 1)
+    private Long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "address_id")
+    private Long addressId;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private AddressEntity address;
+}

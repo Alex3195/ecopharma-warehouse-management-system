@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.enums.AuditTypeEnum;
 
 import java.time.LocalDateTime;
 
@@ -17,20 +18,29 @@ public class InventoryAuditEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inventory_audit_seq_gen")
     @SequenceGenerator(name = "inventory_audit_seq_gen", sequenceName = "inventory_audit_seq", allocationSize = 1)
     private Long id;
+    @Column(name = "audit_type")
+    @Enumerated(EnumType.STRING)
+    private AuditTypeEnum auditType; // e.g., sector, product type, etc.
 
-    private String auditType; // e.g., sector, product type, etc.
+    @Column(name = "product_id")
+    private Long productId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id",referencedColumnName = "id", insertable = false, updatable = false)
     private ProductEntity product;
+
     @Column(name = "sector_id")
     private Long sectorId;
+
     @Column(name = "rack_id")
     private Long rackId;
+
     @Column(name = "floor_id")
     private Long floorId;
+
     @Column(name = "quantity")
     private Integer quantity;
+
     @Column(name = "audit_time")
     private LocalDateTime auditTime;
 }

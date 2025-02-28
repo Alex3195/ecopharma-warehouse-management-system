@@ -30,5 +30,9 @@ public class TableNamesConstant {
         public static final String RACKS = "racks";
         public static final String FLOOR = "floor";
         public static final String CELL = "cell";
+        public static final String WAREHOUSE="warehouse";
+        public static final String ADDRESS = "address";
+        public static final String SETTINGS = "settings";
+        public static final String CROSS_DOCKING = "cross_docking";
     }
 }

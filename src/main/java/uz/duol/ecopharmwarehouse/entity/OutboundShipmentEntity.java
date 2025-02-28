@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.enums.ShipmentStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ShipmentTypeEnum;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = TableNamesConstant.Tables.OUTBOUND_SHIPMENT)
@@ -30,11 +33,18 @@ public class OutboundShipmentEntity extends BaseEntity {
 
     @Column(name = "quantity")
     private Integer quantity;
+
     @Column(name = "customer_id")
     private Long customerId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id",referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", insertable = false, updatable = false)
     private UserEntity customer; // Assuming a Customer entity exists
 
+    @Column(name = "scheduled_for")
+    private LocalDateTime scheduledFor;
+
+    @Column(name = "shipment_status")
+    @Enumerated(EnumType.STRING)
+    private ShipmentStatusEnum shipmentStatus;
 }

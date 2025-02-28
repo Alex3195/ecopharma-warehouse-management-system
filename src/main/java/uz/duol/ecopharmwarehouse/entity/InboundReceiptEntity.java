@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import uz.duol.ecopharmwarehouse.enums.ReceiptStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ReceiptTypeEnum;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 
@@ -30,10 +31,15 @@ public class InboundReceiptEntity extends BaseEntity {
 
     @Column(name = "quantity")
     private Integer quantity;
+
     @Column(name = "supplier_id")
     private Long supplierId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "supplier_id", referencedColumnName = "id", insertable = false, updatable = false)
     private UserEntity supplier; // Assuming a Supplier entity exists
+
+    @Column(name = "receipt_status")
+    @Enumerated(EnumType.STRING)
+    private ReceiptStatusEnum receiptStatus;
 }

@@ -23,11 +23,12 @@ public class TaskEntity extends BaseEntity {
     @Column(name = "task_status")
     private String taskStatus; // pending, in-progress, completed
     @Column(name = "assigned_to")
-    private Long assignedToId;
+    private Long assignedTo;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "assigned_to", referencedColumnName = "id", insertable = false, updatable = false)
     private UserEntity assignedToUser;
+
     @Column(name = "due_date")
     private LocalDateTime dueDate;
 

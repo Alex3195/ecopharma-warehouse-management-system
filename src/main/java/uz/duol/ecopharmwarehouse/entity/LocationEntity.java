@@ -16,14 +16,15 @@ public class LocationEntity extends BaseEntity {
     @SequenceGenerator(name = "location_seq_gen", sequenceName = "location_seq", allocationSize = 1)
     private Long id;
 
-    private String sector;
-    private String shelf;
-    private String floor;
+    private Long sector;
+    private Long rack;
+    private Long floor;
+    private Long cell;
 
     @Column(name = "product_id")
     private Long productId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id",referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ProductEntity product;
 }
