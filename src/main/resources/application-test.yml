@@ -11,15 +11,11 @@ spring:
   liquibase:
     default-schema: public
 
-springdoc:
-  api-docs:
-    enabled: true
-    path: /api-docs
-  swagger-ui:
-    filter: true
-    path: /swagger-ui
-    try-it-out-enabled: true
-    operations-sorter: method
+keycloak:
+  realm: eco-pharma
+  auth-server-url: https://keycloack.duol.uz
+  client-id: eco-pharma-warehouse
+  client-secret: 5YlYZNXDm4SWuvW6rSnk7qMRyU8nVnDf
 
 api:
   url: http://localhost:10001

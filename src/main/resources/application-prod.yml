@@ -11,15 +11,12 @@ spring:
   liquibase:
     default-schema: ${LIQUIBASE_DEFAULT_SCHEMA}
 
-springdoc:
-  api-docs:
-    enabled: true
-    path: /api-docs
-  swagger-ui:
-    filter: true
-    path: /swagger-ui
-    try-it-out-enabled: true
-    operations-sorter: method
+
+keycloak:
+  realm: ${KEYCLOAK_REALM}
+  auth-server-url: ${KEYCLOAK_URL}
+  client-id: ${KEYCLOAK_CLIENT_ID}
+  client-secret: ${KEYCLOAK_CLIENT_SECRET}
 
 api:
   url: ${API_URL}
