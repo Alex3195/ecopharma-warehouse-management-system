@@ -31,7 +31,19 @@ spring:
             connect-timeout: 5000
             read-timeout: 5000
             logger-level: full
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8088/realms/eco-pharma
+          jwk-set-uri: http://localhost:8088/realms/eco-pharma/protocol/openid-connect/certs
 
 logging:
   config: classpath:log4j2.xml
+
+keycloak:
+  realm: eco-pharma
+  auth-server-url: http://localhost:8088
+  client-id: eco-pharma-warehouse
+  client-secret: Pc62wFsEm9b1hyffcoMX0o5bhTvSXuqQ
 
