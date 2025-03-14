@@ -18,10 +18,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableJpaRepositories(basePackages = "uz.duol.ecopharmwarehouse")
 @EnableJpaAuditing
 @EnableFeignClients
-public class EcoPharmWarehouseApplication {
+public class EcoPharmaWarehouseApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(EcoPharmWarehouseApplication.class, args);
+        SpringApplication.run(EcoPharmaWarehouseApplication.class, args);
     }
 
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.enums.TaskStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.TaskTypeEnum;
 
 import java.time.LocalDateTime;
@@ -18,10 +19,18 @@ public class TaskEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_seq_gen")
     @SequenceGenerator(name = "task_seq_gen", sequenceName = "task_seq", allocationSize = 1)
     private Long id;
+
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "task_type")
+    @Enumerated(EnumType.STRING)
     private TaskTypeEnum taskType; // e.g., receive, pick, ship
+
     @Column(name = "task_status")
-    private String taskStatus; // pending, in-progress, completed
+    @Enumerated(EnumType.STRING)
+    private TaskStatusEnum taskStatus; // pending, in-progress, completed
+
     @Column(name = "assigned_to")
     private Long assignedTo;
 
