@@ -9,7 +9,7 @@ import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 @Table(name = TableNamesConstant.Tables.CELL)
 @Setter
 @Getter
-public class CellEntity {
+public class CellEntity extends BaseEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cell_seq_gen")

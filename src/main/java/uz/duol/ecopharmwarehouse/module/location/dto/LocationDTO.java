@@ -6,7 +6,7 @@ import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
 @Data
 public class LocationDTO {
     private Long id;
-
+    private String name;
     private Long sector;
     private Long rack;
     private Long floor;
