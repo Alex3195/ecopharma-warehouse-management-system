@@ -103,7 +103,7 @@ public class AddressController {
     )
     @PreAuthorize("hasAuthority('ADDRESS_GET')")
     @GetMapping("/list")
-    public Page<AddressDTO> getAddresses(@RequestParam(value = "search", required = false) String search,
+    public Page<AddressDTO> getAll(@RequestParam(value = "search", required = false) String search,
                                          @PageableDefault Pageable pageable) {
         return addressService.findAll(search, pageable);
     }
