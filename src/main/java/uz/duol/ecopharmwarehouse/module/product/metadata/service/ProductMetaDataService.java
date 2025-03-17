@@ -25,4 +25,18 @@ public class ProductMetaDataService {
                 .orElseThrow(() -> new ProductMetadataNotFoundException("Metadata not found"));
         return mapper.toDto(e);
     }
+
+    public ProductMetadataDTO update(Long id, ProductMetadataDTO dto) {
+        findById(id);
+        ProductMetadataEntity e = mapper.toEntity(dto);
+        e.setId(id);
+        return mapper.toDto(repository.save(e));
+    }
+
+    public void delete(Long id) {
+        ProductMetadataDTO dto = findById(id);
+        ProductMetadataEntity e = mapper.toEntity(dto);
+        e.setStatus(Status.DELETED);
+        repository.save(e);
+    }
 }
