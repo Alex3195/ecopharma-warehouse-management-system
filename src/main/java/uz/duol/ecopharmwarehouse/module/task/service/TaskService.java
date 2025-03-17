@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.TaskEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.task.dto.TaskDTO;
@@ -19,16 +20,19 @@ public class TaskService {
     private final TaskRepository repository;
     private final TaskMapper mapper;
 
+    @Transactional
     public TaskDTO create(TaskDTO taskDTO) {
         TaskEntity e = mapper.toEntity(taskDTO);
         return mapper.toDto(repository.save(e));
     }
 
+    @Transactional(readOnly = true)
     public TaskDTO findById(Long id) {
         TaskEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED).orElseThrow(() -> new TaskNotFoundException("Task not found"));
         return mapper.toDto(e);
     }
 
+    @Transactional
     public TaskDTO update(Long id, TaskDTO taskDTO) {
         findById(id);
         TaskEntity e = mapper.toEntity(taskDTO);
@@ -36,6 +40,7 @@ public class TaskService {
         return mapper.toDto(repository.save(e));
     }
 
+    @Transactional
     public void delete(Long id) {
         TaskDTO dto = findById(id);
         TaskEntity e = mapper.toEntity(dto);
@@ -43,6 +48,7 @@ public class TaskService {
         repository.save(e);
     }
 
+    @Transactional(readOnly = true)
     public Page<TaskDTO> findAll(String search, Pageable pageable) {
         Specification<TaskEntity> spec = Specification.where(TaskSpecification.isActive());
         if (search != null) {

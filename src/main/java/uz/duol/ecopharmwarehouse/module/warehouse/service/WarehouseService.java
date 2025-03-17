@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.WarehouseEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.warehouse.dto.WarehouseDTO;
@@ -19,17 +20,20 @@ public class WarehouseService {
     private final WarehouseRepository repository;
     private final WarehouseMapper mapper;
 
+    @Transactional
     public WarehouseDTO create(WarehouseDTO dto) {
         WarehouseEntity e = mapper.toEntity(dto);
         return mapper.toDto(repository.save(e));
     }
 
+    @Transactional(readOnly = true)
     public WarehouseDTO findById(Long id) {
         WarehouseEntity entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found"));
         return mapper.toDto(entity);
     }
 
+    @Transactional
     public WarehouseDTO update(Long id, WarehouseDTO dto) {
         findById(id);
         WarehouseEntity e = mapper.toEntity(dto);
@@ -37,6 +41,7 @@ public class WarehouseService {
         return mapper.toDto(repository.save(e));
     }
 
+    @Transactional
     public void delete(Long id) {
         WarehouseDTO dto = findById(id);
         WarehouseEntity e = mapper.toEntity(dto);
@@ -44,6 +49,7 @@ public class WarehouseService {
         repository.save(e);
     }
 
+    @Transactional(readOnly = true)
     public Page<WarehouseDTO> findAll(String search, Pageable pageable) {
         Specification<WarehouseEntity> spec = Specification.where(WarehouseSpecification.isActive());
         if (search != null && !search.isEmpty()) {

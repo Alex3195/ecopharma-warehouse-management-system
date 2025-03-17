@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.RackEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
@@ -19,17 +20,20 @@ public class RackService {
     private final RackRepository repository;
     private final RackMapper mapper;
 
+    @Transactional
     public RackDTO create(RackDTO rackDTO) {
         RackEntity rackEntity = mapper.toEntity(rackDTO);
         return mapper.toDTO(repository.save(rackEntity));
     }
 
+    @Transactional(readOnly = true)
     public RackDTO findById(Long id) {
         RackEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new RackNotFoundException("Rack not found"));
         return mapper.toDTO(e);
     }
 
+    @Transactional
     public RackDTO update(Long id, RackDTO rackDTO) {
         findById(id);
         RackEntity e = mapper.toEntity(rackDTO);
@@ -37,6 +41,7 @@ public class RackService {
         return mapper.toDTO(repository.save(e));
     }
 
+    @Transactional
     public void delete(Long id) {
         RackDTO dto = findById(id);
         RackEntity e = mapper.toEntity(dto);
@@ -44,6 +49,7 @@ public class RackService {
         repository.save(e);
     }
 
+    @Transactional(readOnly = true)
     public Page<RackDTO> findAll(String search, Pageable pageable) {
         Specification<RackEntity> spec = Specification.where(RackSpecification.isActive());
         if (search != null && !search.isEmpty()) {
