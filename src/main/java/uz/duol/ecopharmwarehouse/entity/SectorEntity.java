@@ -25,7 +25,6 @@ public class SectorEntity extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "characteristics")
     @OneToMany(mappedBy = "sector", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SectorCharacteristicEntity> characteristics = new ArrayList<>();
 
