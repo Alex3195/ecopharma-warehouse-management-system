@@ -4,9 +4,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import uz.duol.ecopharmwarehouse.entity.FloorEntity;
+import uz.duol.ecopharmwarehouse.module.cells.mapper.CellsMapper;
 import uz.duol.ecopharmwarehouse.module.floor.dto.FloorDTO;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR, uses = {CellsMapper.class})
 public interface FloorMapper {
     FloorDTO toDto(FloorEntity entity);
 
@@ -15,5 +16,6 @@ public interface FloorMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "rack", ignore = true)
     FloorEntity toEntity(FloorDTO dto);
 }

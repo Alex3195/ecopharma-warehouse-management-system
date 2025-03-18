@@ -15,5 +15,6 @@ public interface LocationMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "product",ignore = true)
     LocationEntity toEntity(LocationDTO dto);
 }

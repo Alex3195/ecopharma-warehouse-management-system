@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
+import uz.duol.ecopharmwarehouse.module.rack.dto.RackRequest;
 import uz.duol.ecopharmwarehouse.module.rack.service.RackService;
 
 @RestController
@@ -36,8 +37,8 @@ public class RackController {
     @PreAuthorize("hasAuthority('RACK_CREATE')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RackDTO create(@Valid @RequestBody RackDTO rackDTO) {
-        return service.create(rackDTO);
+    public RackDTO create(@Valid @RequestBody RackRequest request) {
+        return service.create(request);
     }
 
     @Operation(

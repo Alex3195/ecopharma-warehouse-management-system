@@ -4,9 +4,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import uz.duol.ecopharmwarehouse.entity.UserEntity;
+import uz.duol.ecopharmwarehouse.module.task.mapper.TaskMapper;
 import uz.duol.ecopharmwarehouse.module.users.dto.UserDTO;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR,uses = {TaskMapper.class})
 public interface UserMapper {
     UserDTO toDto(UserEntity userEntity);
 

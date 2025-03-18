@@ -33,6 +33,9 @@ public class CellEntity extends BaseEntity {
     @Column(nullable = false)
     private Double maxVolume;
 
+    @Column(name = "is_empty")
+    private Boolean isEmpty = true;
+
     @Column(name = "floor_id")
     private Long floorId;
 

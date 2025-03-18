@@ -1,6 +1,7 @@
 package uz.duol.ecopharmwarehouse.module.address.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,6 +18,7 @@ import uz.duol.ecopharmwarehouse.repositories.AddressRepository;
 @RequiredArgsConstructor
 public class AddressService {
     private final AddressRepository repository;
+    @Qualifier("addressMapper")
     private final AddressMapper mapper;
 
     public AddressDTO create(AddressDTO dto) {

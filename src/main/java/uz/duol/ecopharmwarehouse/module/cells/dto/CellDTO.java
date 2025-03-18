@@ -20,5 +20,8 @@ public class CellDTO {
 
     private Long floorId;
 
+    private Boolean isEmpty;
+
+
     private FloorDTO floor;
 }

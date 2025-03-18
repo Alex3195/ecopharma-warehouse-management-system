@@ -83,13 +83,19 @@ CREATE TABLE audit_trail
 
 CREATE TABLE cell
 (
-    id         BIGINT           NOT NULL,
-    code       VARCHAR(255)     NOT NULL,
-    width      DOUBLE PRECISION NOT NULL,
-    depth      DOUBLE PRECISION NOT NULL,
-    height     DOUBLE PRECISION NOT NULL,
-    max_weight DOUBLE PRECISION NOT NULL,
-    max_volume DOUBLE PRECISION NOT NULL,
+    id         BIGINT                      NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    status     VARCHAR(255)                NOT NULL,
+    created_by BIGINT,
+    updated_by BIGINT,
+    code       VARCHAR(255)                NOT NULL,
+    width      DOUBLE PRECISION            NOT NULL,
+    depth      DOUBLE PRECISION            NOT NULL,
+    height     DOUBLE PRECISION            NOT NULL,
+    max_weight DOUBLE PRECISION            NOT NULL,
+    max_volume DOUBLE PRECISION            NOT NULL,
+    is_empty   BOOLEAN,
     floor_id   BIGINT,
     CONSTRAINT pk_cell PRIMARY KEY (id)
 );

@@ -5,8 +5,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import uz.duol.ecopharmwarehouse.entity.CellEntity;
 import uz.duol.ecopharmwarehouse.module.cells.dto.CellDTO;
+import uz.duol.ecopharmwarehouse.module.floor.mapper.FloorMapper;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR,uses = {FloorMapper.class})
 public interface CellsMapper {
     CellDTO toDto(CellEntity cellEntity);
 

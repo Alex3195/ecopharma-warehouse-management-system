@@ -4,9 +4,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import uz.duol.ecopharmwarehouse.entity.SectorEntity;
+import uz.duol.ecopharmwarehouse.module.sector.characteristics.mapper.SectorCharacteristicsMapper;
 import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR, uses = {SectorCharacteristicsMapper.class})
 public interface SectorMapper {
 
     @Mapping(target = "updatedBy", ignore = true)
