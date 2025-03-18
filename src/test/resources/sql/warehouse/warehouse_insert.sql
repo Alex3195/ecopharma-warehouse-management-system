@@ -1,0 +1,22 @@
+INSERT INTO warehouse (id, created_at, updated_at, status, created_by, updated_by, name, description, address_id)
+VALUES
+    (20001, NOW(), NOW(), 'CREATED', 1, 1, 'Main Warehouse', 'Primary storage facility', 30001),
+    (20002, NOW(), NOW(), 'CREATED', 1, 1, 'East Warehouse', 'Handles eastern region logistics', 30002),
+    (20003, NOW(), NOW(), 'DELETED', 1, 1, 'West Storage', 'Temporary closure due to maintenance', 30003),
+    (20004, NOW(), NOW(), 'CREATED', 1, 1, 'North Depot', 'Serves northern distribution centers', 30004),
+    (20005, NOW(), NOW(), 'CREATED', 1, 1, 'South Hub', 'Central hub for southern operations', 30005),
+    (20006, NOW(), NOW(), 'CREATED', 1, 1, 'Central Stockroom', 'Midpoint inventory storage', 30006),
+    (20007, NOW(), NOW(), 'CREATED', 1, 1, 'Urban Warehouse', 'Located in downtown area', 30007),
+    (20008, NOW(), NOW(), 'CREATED', 1, 1, 'Rural Storage', 'Facility in rural outskirts', 30008),
+    (20009, NOW(), NOW(), 'CREATED', 1, 1, 'Distribution Center A', 'High-capacity distribution point', 30009),
+    (20010, NOW(), NOW(), 'CREATED', 1, 1, 'Distribution Center B', 'Secondary distribution center', 30010),
+    (20011, NOW(), NOW(), 'CREATED', 1, 1, 'Cold Storage Unit', 'Temperature-controlled facility', 30011),
+    (20012, NOW(), NOW(), 'CREATED', 1, 1, 'Hazardous Goods Depot', 'Storage for hazardous materials', 30012),
+    (20013, NOW(), NOW(), 'CREATED', 1, 1, 'Perishable Goods Hub', 'Specialized for perishable items', 30013),
+    (20014, NOW(), NOW(), 'CREATED', 1, 1, 'Bulk Storage Facility', 'Large-scale storage solution', 30014),
+    (20015, NOW(), NOW(), 'CREATED', 1, 1, 'Eco-Friendly Warehouse', 'Green-certified storage', 30015),
+    (20016, NOW(), NOW(), 'CREATED', 1, 1, 'Regional Hub 1', 'First regional hub', 30016),
+    (20017, NOW(), NOW(), 'CREATED', 1, 1, 'Regional Hub 2', 'Second regional hub', 30017),
+    (20018, NOW(), NOW(), 'CREATED', 1, 1, 'Regional Hub 3', 'Third regional hub', 30018),
+    (20019, NOW(), NOW(), 'CREATED', 1, 1, 'Overflow Storage', 'Additional overflow capacity', 30019),
+    (20020, NOW(), NOW(), 'CREATED', 1, 1, 'Backup Facility', 'Emergency backup storage', 30020);

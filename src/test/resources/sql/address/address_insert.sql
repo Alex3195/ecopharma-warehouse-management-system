@@ -1,0 +1,22 @@
+INSERT INTO address (id, created_at, updated_at, status, created_by, updated_by, street, city, state, postal_code, country, latitude, longitude, additional_info)
+VALUES
+    (30001, now(), now(), 'CREATED', 1, 1, '123 Main St', 'New York', 'NY', '10001', 'USA', 40.7128, -74.0060, 'Near Central Park'),
+    (30002, now(),now(), 'CREATED', 1, 1, '456 Elm St', 'Los Angeles', 'CA', '90001', 'USA', 34.0522, -118.2437, 'Close to Hollywood'),
+    (30003, now(),now(), 'DELETED', 1, 1, '789 Oak St', 'Chicago', 'IL', '60601', 'USA', 41.8781, -87.6298, 'Downtown area'),
+    (30004, now(),now(), 'CREATED', 1, 1, '321 Pine St', 'Houston', 'TX', '77001', 'USA', 29.7604, -95.3698, 'Near Space Center'),
+    (30005, now(),now(), 'CREATED', 1, 1, '654 Maple St', 'Phoenix', 'AZ', '85001', 'USA', 33.4484, -112.0740, 'Desert view'),
+    (30006, now(),now(), 'CREATED', 1, 1, '987 Birch St', 'Philadelphia', 'PA', '19101', 'USA', 39.9526, -75.1652, 'Historic district'),
+    (30007, now(),now(), 'CREATED', 1, 1, '135 Walnut St', 'San Antonio', 'TX', '78201', 'USA', 29.4241, -98.4936, 'Riverwalk nearby'),
+    (30008, now(),now(), 'CREATED', 1, 1, '246 Cedar St', 'San Diego', 'CA', '92101', 'USA', 32.7157, -117.1611, 'Beachfront property'),
+    (30009, now(),now(), 'CREATED', 1, 1, '369 Spruce St', 'Dallas', 'TX', '75201', 'USA', 32.7767, -96.7970, 'Downtown skyscrapers'),
+    (30010, now(),now(), 'CREATED', 1, 1, '753 Cherry St', 'San Jose', 'CA', '95101', 'USA', 37.3382, -121.8863, 'Silicon Valley'),
+    (30011, now(),now(), 'CREATED', 1, 1, '852 Ash St', 'Austin', 'TX', '73301', 'USA', 30.2672, -97.7431, 'Live music capital'),
+    (30012, now(),now(), 'CREATED', 1, 1, '963 Willow St', 'Jacksonville', 'FL', '32201', 'USA', 30.3322, -81.6557, 'Near beaches'),
+    (30013, now(),now(), 'CREATED', 1, 1, '147 Poplar St', 'Fort Worth', 'TX', '76101', 'USA', 32.7555, -97.3308, 'Cultural district'),
+    (30014, now(),now(), 'CREATED', 1, 1, '258 Sycamore St', 'Columbus', 'OH', '43001', 'USA', 39.9612, -82.9988, 'State capital'),
+    (30015, now(),now(), 'CREATED', 1, 1, '369 Palm St', 'Charlotte', 'NC', '28201', 'USA', 35.2271, -80.8431, 'Financial district'),
+    (30016, now(),now(), 'CREATED', 1, 1, '789 Redwood St', 'Indianapolis', 'IN', '46201', 'USA', 39.7684, -86.1581, 'Racing history'),
+    (30017, now(),now(), 'CREATED', 1, 1, '123 Sequoia St', 'Seattle', 'WA', '98101', 'USA', 47.6062, -122.3321, 'Space Needle view'),
+    (30018, now(),now(), 'CREATED', 1, 1, '456 Juniper St', 'Denver', 'CO', '80201', 'USA', 39.7392, -104.9903, 'Mountain views'),
+    (30019, now(),now(), 'CREATED', 1, 1, '789 Fir St', 'Washington', 'DC', '20001', 'USA', 38.9072, -77.0369, 'National Mall nearby'),
+    (30020, now(),now(), 'CREATED', 1, 1, '321 Hemlock St', 'Boston', 'MA', '02101', 'USA', 42.3601, -71.0589, 'Freedom Trail');

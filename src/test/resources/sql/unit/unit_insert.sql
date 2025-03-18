@@ -1,0 +1,22 @@
+INSERT INTO unit (id, created_at, updated_at, status, created_by, updated_by, name, symbol, description)
+VALUES
+    (70001, NOW(), NOW(), 'CREATED', 1, 1, 'Kilogram', 'kg', 'Unit of mass in the metric system'),
+    (70002, NOW(), NOW(), 'CREATED', 1, 1, 'Gram', 'g', 'Smaller unit of mass in the metric system'),
+    (70003, NOW(), NOW(), 'CREATED', 1, 1, 'Milligram', 'mg', 'Very small unit of mass in the metric system'),
+    (70004, NOW(), NOW(), 'CREATED', 1, 1, 'Liter', 'L', 'Unit of volume in the metric system'),
+    (70005, NOW(), NOW(), 'CREATED', 1, 1, 'Milliliter', 'mL', 'Smaller unit of volume in the metric system'),
+    (70006, NOW(), NOW(), 'CREATED', 1, 1, 'Meter', 'm', 'Unit of length in the metric system'),
+    (70007, NOW(), NOW(), 'CREATED', 1, 1, 'Centimeter', 'cm', 'Smaller unit of length in the metric system'),
+    (70008, NOW(), NOW(), 'CREATED', 1, 1, 'Millimeter', 'mm', 'Very small unit of length in the metric system'),
+    (70009, NOW(), NOW(), 'CREATED', 1, 1, 'Piece', 'pc', 'Unit for counting individual items'),
+    (70010, NOW(), NOW(), 'CREATED', 1, 1, 'Box', 'box', 'Unit for grouping items into boxes'),
+    (70011, NOW(), NOW(), 'CREATED', 1, 1, 'Dozen', 'dz', 'Unit for grouping 12 items'),
+    (70012, NOW(), NOW(), 'CREATED', 1, 1, 'Gallon', 'gal', 'Unit of volume, commonly used in the US'),
+    (70013, NOW(), NOW(), 'CREATED', 1, 1, 'Ounce', 'oz', 'Unit of weight or volume'),
+    (70014, NOW(), NOW(), 'CREATED', 1, 1, 'Pound', 'lb', 'Unit of weight in the imperial system'),
+    (70015, NOW(), NOW(), 'CREATED', 1, 1, 'Ton', 't', 'Large unit of weight, equal to 1000 kg'),
+    (70016, NOW(), NOW(), 'CREATED', 1, 1, 'Cubic Meter', 'm³', 'Unit of volume for larger spaces'),
+    (70017, NOW(), NOW(), 'CREATED', 1, 1, 'Square Meter', 'm²', 'Unit of area in the metric system'),
+    (70018, NOW(), NOW(), 'CREATED', 1, 1, 'Hectare', 'ha', 'Unit of area for large land measurements'),
+    (70019, NOW(), NOW(), 'CREATED', 1, 1, 'Barrel', 'bbl', 'Unit of volume for liquids, especially oil'),
+    (70020, NOW(), NOW(), 'CREATED', 1, 1, 'Pack', 'pack', 'Unit for grouping items into packs');
