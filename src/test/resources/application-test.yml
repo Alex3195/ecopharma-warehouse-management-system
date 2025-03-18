@@ -3,13 +3,24 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/postgres
+    url: jdbc:postgresql://localhost:5430/postgres
     username: postgres
     password: postgres
   jpa:
     show-sql: true
   liquibase:
     default-schema: public
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://keycloak.duol.uz/realms/eco-pharma
+
+keycloak:
+  realm: eco-pharma
+  auth-server-url: https://keycloack.duol.uz
+  client-id: eco-pharma-warehouse
+  client-secret: 5YlYZNXDm4SWuvW6rSnk7qMRyU8nVnDf
 
 api:
   url: http://localhost:10001

@@ -28,4 +28,18 @@ public class WarehouseEntity extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id", insertable = false, updatable = false)
     private AddressEntity address;
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + getId() + ", " +
+                "name = " + getName() + ", " +
+                "description = " + getDescription() + ", " +
+                "addressId = " + getAddressId() + ", " +
+                "createdAt = " + getCreatedAt() + ", " +
+                "updatedAt = " + getUpdatedAt() + ", " +
+                "status = " + getStatus() + ", " +
+                "createdBy = " + getCreatedBy() + ", " +
+                "updatedBy = " + getUpdatedBy() + ")";
+    }
 }

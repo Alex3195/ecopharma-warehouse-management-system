@@ -3,12 +3,14 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 
 @Entity
 @Table(name = TableNamesConstant.Tables.UNIT)
 @Setter
 @Getter
+@ToString
 public class UnitsEntity extends BaseEntity {
     @Id
     @Column(name = "id")
