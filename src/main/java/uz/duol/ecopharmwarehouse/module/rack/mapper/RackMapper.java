@@ -3,10 +3,13 @@ package uz.duol.ecopharmwarehouse.module.rack.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
+import uz.duol.ecopharmwarehouse.entity.FloorEntity;
 import uz.duol.ecopharmwarehouse.entity.RackEntity;
 import uz.duol.ecopharmwarehouse.module.floor.mapper.FloorMapper;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
 import uz.duol.ecopharmwarehouse.module.sector.mapper.SectorMapper;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR, uses = {FloorMapper.class, SectorMapper.class})
 public interface RackMapper {
@@ -17,5 +20,15 @@ public interface RackMapper {
     @Mapping(target = "createdAt", ignore = true)
     RackEntity toEntity(RackDTO dto);
 
-    RackDTO toDTO(RackEntity entity);
+    @Mapping(target = "floors", ignore = true)
+    RackDTO toDto(RackEntity entity);
+
+    default List<Long> mapFloorIds(List<FloorEntity> floors) {
+        if (floors == null) {
+            return null;
+        }
+        return floors.stream()
+                .map(FloorEntity::getId)
+                .toList();
+    }
 }

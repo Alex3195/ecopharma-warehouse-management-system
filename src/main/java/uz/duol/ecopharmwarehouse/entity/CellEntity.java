@@ -1,5 +1,6 @@
 package uz.duol.ecopharmwarehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,22 +16,22 @@ public class CellEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cell_seq_gen")
     @SequenceGenerator(name = "cell_seq_gen", sequenceName = "cell_seq", allocationSize = 1)
     private Long id;
-    @Column(nullable = false)
+    @Column(name = "code", nullable = false)
     private String code;
 
-    @Column(nullable = false)
+    @Column(name = "width")
     private Double width;
 
-    @Column(nullable = false)
+    @Column(name = "depth")
     private Double depth;
 
-    @Column(nullable = false)
+    @Column(name = "height")
     private Double height;
 
-    @Column(nullable = false)
+    @Column(name = "max_weight")
     private Double maxWeight;
 
-    @Column(nullable = false)
+    @Column(name = "max_volume")
     private Double maxVolume;
 
     @Column(name = "is_empty")
@@ -41,5 +42,25 @@ public class CellEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "floor_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonBackReference
     private FloorEntity floor;
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + getId() + ", " +
+                "code = " + getCode() + ", " +
+                "width = " + getWidth() + ", " +
+                "depth = " + getDepth() + ", " +
+                "height = " + getHeight() + ", " +
+                "maxWeight = " + getMaxWeight() + ", " +
+                "maxVolume = " + getMaxVolume() + ", " +
+                "isEmpty = " + getIsEmpty() + ", " +
+                "floorId = " + getFloorId() + ", " +
+                "createdAt = " + getCreatedAt() + ", " +
+                "updatedAt = " + getUpdatedAt() + ", " +
+                "status = " + getStatus() + ", " +
+                "createdBy = " + getCreatedBy() + ", " +
+                "updatedBy = " + getUpdatedBy() + ")";
+    }
 }

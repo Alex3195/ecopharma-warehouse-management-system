@@ -1,11 +1,14 @@
 package uz.duol.ecopharmwarehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import uz.duol.ecopharmwarehouse.enums.RackTypeEnum;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.enums.RackTypeEnum;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,13 +37,32 @@ public class RackEntity extends BaseEntity {
     @Column(nullable = false)
     private Double depth;
 
-    @OneToMany(mappedBy = "rack", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FloorEntity> floors;
+    @OneToMany(mappedBy = "rack", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<FloorEntity> floors = new ArrayList<>();
 
     @Column(name = "sector_id")
     private Long sectorId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "sector_id",referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "sector_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonBackReference
     private SectorEntity sector;
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + getId() + ", " +
+                "name = " + getName() + ", " +
+                "type = " + getType() + ", " +
+                "height = " + getHeight() + ", " +
+                "width = " + getWidth() + ", " +
+                "depth = " + getDepth() + ", " +
+                "sectorId = " + getSectorId() + ", " +
+                "createdAt = " + getCreatedAt() + ", " +
+                "updatedAt = " + getUpdatedAt() + ", " +
+                "status = " + getStatus() + ", " +
+                "createdBy = " + getCreatedBy() + ", " +
+                "updatedBy = " + getUpdatedBy() + ")";
+    }
 }

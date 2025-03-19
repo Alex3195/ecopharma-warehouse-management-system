@@ -36,7 +36,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
             "classpath:sql/unit/unit_clear.sql"
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
-    @WithMockUser("UNIT_GET")
+    @WithMockUser(authorities = "UNIT_GET")
     void testFindById() throws Exception {
         mockMvc.perform(get("/api/v1/unit/{id}", 70001L))
                 .andExpect(status().isOk());
@@ -44,7 +44,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
     }
 
     @Test
-    @WithMockUser("UNIT_GET")
+    @WithMockUser(authorities = "UNIT_GET")
     void testFindById_ThenNotFound() throws Exception {
         mockMvc.perform(get("/api/v1/unit/{id}", 70001L))
                 .andExpect(status().isNotFound());
@@ -71,7 +71,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
             "classpath:sql/unit/unit_clear.sql"
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
-    @WithMockUser("UNIT_GET")
+    @WithMockUser(authorities = "UNIT_GET")
     void testFindAll() throws Exception {
         mockMvc.perform(get("/api/v1/unit/list")
                         .param("page", "0")
@@ -87,11 +87,113 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
             "classpath:sql/unit/unit_clear.sql"
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
-    @WithMockUser("UNIT_CREATE")
+    @WithMockUser(authorities = "UNIT_CREATE")
     void testCreate() throws Exception {
         mockMvc.perform(post("/api/v1/unit")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    @WithMockUser(authorities = "UNIT_CREATE")
+    void testCreate_ThenBadRequest() throws Exception {
+        mockMvc.perform(post("/api/v1/unit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new UnitsDTO())))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void testCreate_ThenForbidden() throws Exception {
+        mockMvc.perform(post("/api/v1/unit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testCreate_ThenUnauthorized() throws Exception {
+        mockMvc.perform(post("/api/v1/unit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Sql(scripts = {
+            "classpath:sql/unit/unit_clear.sql",
+            "classpath:sql/unit/unit_insert.sql",
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = {
+            "classpath:sql/unit/unit_clear.sql"
+    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Test
+    @WithMockUser(authorities = "UNIT_UPDATE")
+    void testUpdate() throws Exception {
+        mockMvc.perform(put("/api/v1/unit/{id}", 70001L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(authorities = "UNIT_UPDATE")
+    void testUpdate_ThenBadRequest() throws Exception {
+        mockMvc.perform(put("/api/v1/unit/{id}", 70001L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new UnitsDTO())))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void testUpdate_ThenForbidden() throws Exception {
+        mockMvc.perform(put("/api/v1/unit/{id}", 70001L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testUpdate_ThenUnauthorized() throws Exception {
+        mockMvc.perform(put("/api/v1/unit/{id}", 70001L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Sql(scripts = {
+            "classpath:sql/unit/unit_clear.sql",
+            "classpath:sql/unit/unit_insert.sql",
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = {
+            "classpath:sql/unit/unit_clear.sql"
+    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Test
+    @WithMockUser(authorities = "UNIT_DELETE")
+    void testDelete() throws Exception {
+        mockMvc.perform(delete("/api/v1/unit/{id}", 70001L))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(authorities = "UNIT_DELETE")
+    void testDelete_ThenNotFound() throws Exception {
+        mockMvc.perform(delete("/api/v1/unit/{id}", 70001L))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser
+    void testDelete_ThenForbidden() throws Exception {
+        mockMvc.perform(delete("/api/v1/unit/{id}", 70001L))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testDelete_ThenUnauthorized() throws Exception {
+        mockMvc.perform(delete("/api/v1/unit/{id}", 70001L))
+                .andExpect(status().isUnauthorized());
     }
 }

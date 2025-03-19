@@ -1,10 +1,13 @@
 package uz.duol.ecopharmwarehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,14 +27,29 @@ public class FloorEntity extends BaseEntity {
     @Column(name = "height", nullable = false)
     private Double height;
 
-    @OneToMany(mappedBy = "floor", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CellEntity> cells;
+    @OneToMany(mappedBy = "floor", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<CellEntity> cells = new ArrayList<>();
 
     @Column(name = "rack_id")
     private Long rackId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "rack_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonBackReference
     private RackEntity rack;
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + getId() + ", " +
+                "level = " + getLevel() + ", " +
+                "height = " + getHeight() + ", " +
+                "rackId = " + getRackId() + ", " +
+                "createdAt = " + getCreatedAt() + ", " +
+                "updatedAt = " + getUpdatedAt() + ", " +
+                "status = " + getStatus() + ", " +
+                "createdBy = " + getCreatedBy() + ", " +
+                "updatedBy = " + getUpdatedBy() + ")";
+    }
 }

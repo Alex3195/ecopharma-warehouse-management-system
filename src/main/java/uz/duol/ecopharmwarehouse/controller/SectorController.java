@@ -85,7 +85,7 @@ public class SectorController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('SECTOR_DELTE')")
+    @PreAuthorize("hasAuthority('SECTOR_DELETE')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) {

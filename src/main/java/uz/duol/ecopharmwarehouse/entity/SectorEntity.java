@@ -1,5 +1,6 @@
 package uz.duol.ecopharmwarehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +26,20 @@ public class SectorEntity extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "sector", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sector", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<SectorCharacteristicEntity> characteristics = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + getId() + ", " +
+                "name = " + getName() + ", " +
+                "description = " + getDescription() + ", " +
+                "createdAt = " + getCreatedAt() + ", " +
+                "updatedAt = " + getUpdatedAt() + ", " +
+                "status = " + getStatus() + ", " +
+                "createdBy = " + getCreatedBy() + ", " +
+                "updatedBy = " + getUpdatedBy() + ")";
+    }
 }

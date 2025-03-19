@@ -1,5 +1,6 @@
 package uz.duol.ecopharmwarehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,14 +17,15 @@ public class SectorCharacteristicEntity extends BaseEntity {
     @SequenceGenerator(name = "sector_characteristics_seq_gen", sequenceName = "sector_characteristics_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "sector_id", nullable = false)
+    @Column(name = "sector_id")
     private Long sectorId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "sector_id",referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonBackReference
     private SectorEntity sector;
 
-    @Column(name = "characteristic_id", nullable = false)
+    @Column(name = "characteristic_id")
     private Long characteristicId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

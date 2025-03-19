@@ -18,6 +18,8 @@ import uz.duol.ecopharmwarehouse.module.rack.mapper.RackMapper;
 import uz.duol.ecopharmwarehouse.module.rack.specification.RackSpecification;
 import uz.duol.ecopharmwarehouse.repositories.RackRepository;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class RackService {
@@ -28,7 +30,7 @@ public class RackService {
     @Transactional
     public RackDTO create(RackRequest request) {
         RackEntity rackEntity = rackEntityFromRequest(request);
-        return mapper.toDTO(repository.save(rackEntity));
+        return mapper.toDto(repository.save(rackEntity));
     }
 
     private RackEntity rackEntityFromRequest(RackRequest request) {
@@ -62,7 +64,7 @@ public class RackService {
     public RackDTO findById(Long id) {
         RackEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new RackNotFoundException("Rack not found"));
-        return mapper.toDTO(e);
+        return mapper.toDto(e);
     }
 
     @Transactional
@@ -70,7 +72,7 @@ public class RackService {
         findById(id);
         RackEntity e = mapper.toEntity(rackDTO);
         e.setId(id);
-        return mapper.toDTO(repository.save(e));
+        return mapper.toDto(repository.save(e));
     }
 
     @Transactional
@@ -87,6 +89,6 @@ public class RackService {
         if (search != null && !search.isEmpty()) {
             spec = spec.and(RackSpecification.hasText(search));
         }
-        return repository.findAll(spec, pageable).map(mapper::toDTO);
+        return repository.findAll(spec, pageable).map(mapper::toDto);
     }
 }

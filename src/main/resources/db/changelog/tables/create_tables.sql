@@ -90,11 +90,11 @@ CREATE TABLE cell
     created_by BIGINT,
     updated_by BIGINT,
     code       VARCHAR(255)                NOT NULL,
-    width      DOUBLE PRECISION            NOT NULL,
-    depth      DOUBLE PRECISION            NOT NULL,
-    height     DOUBLE PRECISION            NOT NULL,
-    max_weight DOUBLE PRECISION            NOT NULL,
-    max_volume DOUBLE PRECISION            NOT NULL,
+    width      DOUBLE PRECISION,
+    depth      DOUBLE PRECISION,
+    height     DOUBLE PRECISION,
+    max_weight DOUBLE PRECISION,
+    max_volume DOUBLE PRECISION,
     is_empty   BOOLEAN,
     floor_id   BIGINT,
     CONSTRAINT pk_cell PRIMARY KEY (id)
@@ -321,8 +321,8 @@ CREATE TABLE sector_characteristic
     status            VARCHAR(255)                NOT NULL,
     created_by        BIGINT,
     updated_by        BIGINT,
-    sector_id         BIGINT                      NOT NULL,
-    characteristic_id BIGINT                      NOT NULL,
+    sector_id         BIGINT,
+    characteristic_id BIGINT,
     value             VARCHAR(255)                NOT NULL,
     CONSTRAINT pk_sector_characteristic PRIMARY KEY (id)
 );

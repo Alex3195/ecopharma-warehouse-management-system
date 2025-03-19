@@ -1,0 +1,1 @@
+truncate table floor cascade ;
