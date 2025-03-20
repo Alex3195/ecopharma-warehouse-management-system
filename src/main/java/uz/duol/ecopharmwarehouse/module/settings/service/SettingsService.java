@@ -21,20 +21,20 @@ public class SettingsService {
 
     public SettingsDTO create(SettingsDTO dto) {
         SettingsEntity e = mapper.toEntity(dto);
-        return mapper.toDTO(repository.save(e));
+        return mapper.toDto(repository.save(e));
     }
 
     public SettingsDTO findById(Long id) {
         SettingsEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new SettingNotFoundException("Setting not found"));
-        return mapper.toDTO(e);
+        return mapper.toDto(e);
     }
 
     public SettingsDTO update(Long id, SettingsDTO dto) {
         findById(id);
         SettingsEntity e = mapper.toEntity(dto);
         e.setId(id);
-        return mapper.toDTO(repository.save(e));
+        return mapper.toDto(repository.save(e));
     }
 
     public void delete(Long id) {
@@ -49,6 +49,6 @@ public class SettingsService {
         if (search != null && !search.isEmpty()) {
             spec = spec.and(SettingsSpecification.hasText(search));
         }
-        return repository.findAll(spec, pageable).map(mapper::toDTO);
+        return repository.findAll(spec, pageable).map(mapper::toDto);
     }
 }

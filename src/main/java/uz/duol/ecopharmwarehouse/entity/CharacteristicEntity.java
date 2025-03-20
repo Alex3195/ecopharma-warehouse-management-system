@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import uz.duol.ecopharmwarehouse.enums.CharacteristicType;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 
@@ -10,6 +11,7 @@ import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 @Table(name = TableNamesConstant.Tables.CHARACTERISTIC)
 @Setter
 @Getter
+@ToString
 public class CharacteristicEntity extends BaseEntity {
     @Id
     @Column(name = "id")
@@ -24,6 +26,6 @@ public class CharacteristicEntity extends BaseEntity {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="type",nullable = false)
+    @Column(name = "type", nullable = false)
     private CharacteristicType type;
 }

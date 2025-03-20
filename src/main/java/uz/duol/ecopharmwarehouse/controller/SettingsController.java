@@ -101,7 +101,7 @@ public class SettingsController {
                     @ApiResponse(responseCode = "404",description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('SETTING_DELTE')")
+    @PreAuthorize("hasAuthority('SETTING_DELETE')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {

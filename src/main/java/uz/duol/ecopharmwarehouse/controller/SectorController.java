@@ -34,8 +34,8 @@ public class SectorController {
             }
     )
     @PreAuthorize("hasAuthority('SECTOR_CREATE')")
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public SectorDTO create(@Valid @RequestBody SectorDTO sectorDTO) {
         return service.create(sectorDTO);
     }

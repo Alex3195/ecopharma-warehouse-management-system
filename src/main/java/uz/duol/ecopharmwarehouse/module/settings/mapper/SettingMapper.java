@@ -16,5 +16,5 @@ public interface SettingMapper {
     @Mapping(target = "createdAt", ignore = true)
     SettingsEntity toEntity(SettingsDTO dto);
 
-    SettingsDTO toDTO(SettingsEntity e);
+    SettingsDTO toDto(SettingsEntity e);
 }

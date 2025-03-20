@@ -120,13 +120,6 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
                 .andExpect(status().isBadRequest());
     }
 
-    @Sql(scripts = {
-            "classpath:sql/sector/sector_clear.sql",
-            "classpath:sql/sector/sector_insert.sql",
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            "classpath:sql/sector/sector_clear.sql",
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     @WithMockUser
     void testFindById_ThenForbidden() throws Exception {
