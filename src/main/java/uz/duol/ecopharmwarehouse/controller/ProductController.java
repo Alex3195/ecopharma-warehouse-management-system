@@ -125,7 +125,7 @@ public class ProductController {
     @PreAuthorize("hasAuthority('PRODUCT_METADATA_CREATE')")
     @PostMapping("/metadata")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductMetadataDTO create(ProductMetadataDTO dto) {
+    public ProductMetadataDTO create(@Valid @RequestBody ProductMetadataDTO dto) {
         return productMetaDataService.create(dto);
     }
 
@@ -142,7 +142,7 @@ public class ProductController {
     )
     @PreAuthorize("hasAuthority('PRODUCT_METADATA_GET')")
     @GetMapping("/metadata/{id}")
-    public ProductMetadataDTO getMetadata(@PathVariable Long id) {
+    public ProductMetadataDTO getMetadata(@PathVariable("id") Long id) {
         return productMetaDataService.findById(id);
     }
 
@@ -159,7 +159,7 @@ public class ProductController {
     )
     @PreAuthorize("hasAuthority('PRODUCT_METADATA_UPDATE')")
     @PutMapping("/metadata/{id}")
-    public ProductMetadataDTO update(ProductMetadataDTO dto, @PathVariable Long id) {
+    public ProductMetadataDTO update(@Valid @RequestBody ProductMetadataDTO dto, @PathVariable Long id) {
         return productMetaDataService.update(id, dto);
     }
 
@@ -174,7 +174,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('PRODUCT_METADATA_DELTE')")
+    @PreAuthorize("hasAuthority('PRODUCT_METADATA_DELETE')")
     @DeleteMapping("/metadata/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMetadata(@PathVariable Long id) {

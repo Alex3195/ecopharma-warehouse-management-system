@@ -47,6 +47,7 @@ public class ProductService {
         ProductDTO productDTO = findById(id);
         ProductEntity productEntity = mapper.toEntity(productDTO);
         productEntity.setStatus(Status.DELETED);
+        repository.save(productEntity);
     }
 
     @Transactional(readOnly = true)

@@ -1,0 +1,1 @@
+truncate table product_meta_data cascade ;
