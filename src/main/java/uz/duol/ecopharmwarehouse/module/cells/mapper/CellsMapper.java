@@ -8,6 +8,7 @@ import uz.duol.ecopharmwarehouse.module.cells.dto.CellDTO;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface CellsMapper {
+    @Mapping(target = "floor", ignore = true)
     CellDTO toDto(CellEntity cellEntity);
 
     @Mapping(target = "updatedBy", ignore = true)

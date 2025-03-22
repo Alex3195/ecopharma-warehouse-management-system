@@ -10,6 +10,6 @@ public class FloorSpecification {
     }
 
     public static Specification<FloorEntity> hasText(String text) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), "%" + text + "%");
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("level"), "%" + text + "%");
     }
 }

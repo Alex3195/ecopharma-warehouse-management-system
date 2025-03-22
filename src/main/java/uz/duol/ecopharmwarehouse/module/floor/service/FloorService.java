@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import uz.duol.ecopharmwarehouse.entity.FloorEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.floor.dto.FloorDTO;
+import uz.duol.ecopharmwarehouse.module.floor.exception.FloorNotFoundException;
 import uz.duol.ecopharmwarehouse.module.floor.mapper.FloorMapper;
 import uz.duol.ecopharmwarehouse.module.floor.specification.FloorSpecification;
 import uz.duol.ecopharmwarehouse.repositories.FloorRepository;
@@ -25,7 +26,7 @@ public class FloorService {
 
     public FloorDTO findById(Long id) {
         FloorEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
-                .orElseThrow(() -> new RuntimeException("Could not find FloorEntity"));
+                .orElseThrow(() -> new FloorNotFoundException("Floor not found"));
         return mapper.toDto(e);
     }
 
@@ -42,11 +43,9 @@ public class FloorService {
         e.setStatus(Status.DELETED);
         repository.save(e);
     }
-    public Page<FloorDTO> findAll(String search, Pageable pageable) {
+    public Page<FloorDTO> findAll(Pageable pageable) {
         Specification<FloorEntity> spec = Specification.where((FloorSpecification.isActive()));
-        if(search != null) {
-            spec = spec.and(FloorSpecification.hasText(search));
-        }
+
         return repository.findAll(spec, pageable).map(mapper::toDto);
     }
 }
