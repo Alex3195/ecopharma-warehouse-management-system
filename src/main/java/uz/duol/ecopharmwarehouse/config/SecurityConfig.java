@@ -58,7 +58,7 @@ public class SecurityConfig {
             // Extract client roles from resource_access.{client_id}.roles
             Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
             if (resourceAccess != null) {
-                Map<String, Object> clientRoles = (Map<String, Object>) resourceAccess.get("eco-pharma-warehouse");
+                Map<String, Object> clientRoles = (Map<String, Object>) resourceAccess.get("eco-pharma");
                 if (clientRoles != null && clientRoles.containsKey("roles")) {
                     List<String> roles = (List<String>) clientRoles.get("roles");
                     roles.forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE_" + role)));
