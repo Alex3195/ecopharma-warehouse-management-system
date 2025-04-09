@@ -11,9 +11,7 @@ variables:
   LIQUIBASE_DEFAULT_SCHEMA: public
   DOCKER_IMAGE_NAME: $CI_REGISTRY/$DOCKER_USERNAME/eco-pharma-warehouse
   DOCKER_TAG: latest
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
+  DOCKER_TLS_CERTDIR: ""  # Required for Docker-in-Docker
 
 stages:
   - gradle-build
@@ -47,10 +45,12 @@ build:
 publish:
   stage: publish
   image: docker:latest
+  services:
+    - docker:20.10.7-dind  # Docker-in-Docker service
   before_script:
     - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
   script:
-    - unset DOCKER_HOST
+    - docker info  # Check Docker info to ensure connection works
     - docker buildx build --build-arg SPRING_PROFILE=$SPRING_PROFILES_ACTIVE --build-arg SERVER_PORT=$SERVER_PORT --build-arg DEBUG_PORT=$DEBUG_PORT --build-arg JAVA_OPTS="-Xmx512m" --build-arg EXTRA_ARGS="" -t $DOCKER_IMAGE_NAME:$DOCKER_TAG -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA .
     - docker push $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA
     - docker push $DOCKER_IMAGE_NAME:latest
