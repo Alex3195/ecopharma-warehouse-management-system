@@ -16,7 +16,7 @@ import uz.duol.ecopharmwarehouse.module.characteristics.dto.CharacteristicsDTO;
 import uz.duol.ecopharmwarehouse.module.characteristics.service.CharacteristicsService;
 
 @RestController
-@RequestMapping("/api/v1/characteristics")
+@RequestMapping("/api/v1/wms/characteristics")
 @RequiredArgsConstructor
 @Tag(name = "Characteristics endpoints")
 @PreAuthorize("hasAnyRole('ADMIN','USER')")

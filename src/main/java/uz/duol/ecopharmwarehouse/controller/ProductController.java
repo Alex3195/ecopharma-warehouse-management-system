@@ -18,7 +18,7 @@ import uz.duol.ecopharmwarehouse.module.product.metadata.service.ProductMetaData
 import uz.duol.ecopharmwarehouse.module.product.service.ProductService;
 
 @RestController
-@RequestMapping("/api/v1/product")
+@RequestMapping("/api/v1/wms/product")
 @RequiredArgsConstructor
 @Tag(name = "Product and its metadata endpoint0")
 @PreAuthorize("hasAnyRole('ADMIN','USER')")

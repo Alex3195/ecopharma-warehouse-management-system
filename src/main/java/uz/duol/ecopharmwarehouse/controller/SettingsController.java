@@ -15,7 +15,7 @@ import uz.duol.ecopharmwarehouse.module.settings.dto.SettingsDTO;
 import uz.duol.ecopharmwarehouse.module.settings.service.SettingsService;
 
 @RestController
-@RequestMapping("/api/v1/setting")
+@RequestMapping("/api/v1/wms/setting")
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('ADMIN','USER')")
 @Tag(name = "Settings endpoint")

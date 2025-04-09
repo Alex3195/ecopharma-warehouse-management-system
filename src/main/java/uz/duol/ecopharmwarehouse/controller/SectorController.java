@@ -16,7 +16,7 @@ import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
 import uz.duol.ecopharmwarehouse.module.sector.service.SectorService;
 
 @RestController
-@RequestMapping("/api/v1/sector")
+@RequestMapping("/api/v1/wms/sector")
 @RequiredArgsConstructor
 @Tag(name = "Sector endpoint")
 @PreAuthorize("hasAnyRole('ADMIN','USER')")

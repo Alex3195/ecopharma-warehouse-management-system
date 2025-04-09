@@ -1,6 +1,9 @@
 spring:
+  devtools:
+    restart:
+      enabled: true
   application:
-    name: EcoPharmWarehouse
+    name: eco-pharma-warehouse
   messages:
     basename: "messages,config.i18n.messages"
     fallback-to-system-locale: false
@@ -31,24 +34,9 @@ spring:
             connect-timeout: 5000
             read-timeout: 5000
             logger-level: full
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://keycloak.duol.zu/realms/eco-pharma
-          jwk-set-uri: https://keycloak.duol.uz/realms/eco-pharma/protocol/openid-connect/certs
 
 logging:
   config: classpath:log4j2.xml
 
-springdoc:
-  api-docs:
-    enabled: true
-    path: /api-docs
-  swagger-ui:
-    filter: true
-    path: /swagger-ui
-    try-it-out-enabled: true
-    operations-sorter: method
 
 

@@ -16,7 +16,7 @@ import uz.duol.ecopharmwarehouse.module.address.dto.AddressDTO;
 import uz.duol.ecopharmwarehouse.module.address.service.AddressService;
 
 @RestController
-@RequestMapping("/api/v1/address")
+@RequestMapping("/api/v1/wms/address")
 @RequiredArgsConstructor
 @Tag(name = "Address endpoint")
 @PreAuthorize("hasAnyRole('ADMIN','USER')")

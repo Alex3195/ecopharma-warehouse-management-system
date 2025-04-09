@@ -16,7 +16,7 @@ import uz.duol.ecopharmwarehouse.module.unit.dto.UnitsDTO;
 import uz.duol.ecopharmwarehouse.module.unit.service.UnitsService;
 
 @RestController
-@RequestMapping("/api/v1/unit")
+@RequestMapping("/api/v1/wms/unit")
 @RequiredArgsConstructor
 @Tag(name = "Units endpoint")
 @PreAuthorize("hasAnyRole('ADMIN','USER')")

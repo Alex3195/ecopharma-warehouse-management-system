@@ -10,14 +10,45 @@ spring:
     show-sql: true
   liquibase:
     default-schema: public
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://keycloak.duol.uz/realms/eco-pharma
+          jwk-set-uri: https://keycloak.duol.uz/realms/eco-pharma/protocol/openid-connect/certs
 
 keycloak:
   realm: eco-pharma
   auth-server-url: https://keycloack.duol.uz
-  client-id: eco-pharma-warehouse
-  client-secret: 5YlYZNXDm4SWuvW6rSnk7qMRyU8nVnDf
+  client-id: eco-pharma
+  client-secret: gDS25j4Vi0kEILXD19XcnkcFXBUD3fkk
 
 api:
   url: http://localhost:10001
   connection-timeout: 5000
   read-timeout: 10000
+
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8088/eureka/
+    healthcheck:
+      enabled: true
+    fetch-registry: true
+    register-with-eureka: true
+    registry-fetch-interval-seconds: 5
+    initial-instance-info-replication-interval-seconds: 10
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api/v1/wms/v3/api-docs
+  swagger-ui:
+    path: /api/v1/wms/swagger-ui
+    enabled: true
+    try-it-out-enabled: true
+    operations-sorter: method

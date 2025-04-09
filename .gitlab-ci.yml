@@ -1,0 +1,76 @@
+image: gradle:8.6.0-jdk21-alpine
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  SPRING_PROFILES_ACTIVE: dev # Use prod for main branch
+  SERVER_PORT: 9091
+  DEBUG_PORT: 9092
+  SPRING_DB_URL: jdbc:postgresql://192.168.7.12:5432/postgres
+  SPRING_DB_USERNAME: postgres
+  SPRING_DB_PASSWORD: postgres
+  LIQUIBASE_DEFAULT_SCHEMA: public
+  DOCKER_IMAGE_NAME: $CI_REGISTRY/$DOCKER_USERNAME/eco-pharma-warehouse
+  DOCKER_TAG: latest
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+stages:
+  - gradle-build
+  - publish
+  - deploy
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG-gradle-cache"
+  paths:
+    - ~/.gradle/caches/
+    - ~/.gradle/wrapper/
+  policy: pull-push
+  when: always
+
+# Stage 1: Build the JAR file
+build:
+  stage: gradle-build
+  script:
+    - gradle clean bootJar
+  artifacts:
+    paths:
+      - build/libs/*.jar
+      - docker-compose-wms.yml
+    when: always
+    expire_in: 1 week
+  only:
+    - main
+    - dev
+
+# Stage 2: Publish Docker image
+publish:
+  stage: publish
+  image: docker:latest
+  before_script:
+    - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
+  script:
+    - unset DOCKER_HOST
+    - docker buildx build --build-arg SPRING_PROFILE=$SPRING_PROFILES_ACTIVE --build-arg SERVER_PORT=$SERVER_PORT --build-arg DEBUG_PORT=$DEBUG_PORT --build-arg JAVA_OPTS="-Xmx512m" --build-arg EXTRA_ARGS="" -t $DOCKER_IMAGE_NAME:$DOCKER_TAG -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA .
+    - docker push $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA
+    - docker push $DOCKER_IMAGE_NAME:latest
+  only:
+    - main
+    - dev
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan $SERVER_IP >> ~/.ssh/known_hosts
+  script:
+    - ssh $SERVER_USER@$SERVER_IP "mkdir -p gitlab-runner-api/eco-pharma-api && chmod 755 gitlab-runner-api/eco-pharma-api"
+    - scp docker-compose-wms.yaml $SERVER_USER@$SERVER_IP:gitlab-runner-api/eco-pharma-api
+    - ssh $SERVER_USER@$SERVER_IP "cd gitlab-runner-api/eco-pharma-api && docker-compose -f docker-compose-wms.yml down || true && docker-compose -f docker-compose-wms.yml pull && docker-compose -f docker-compose-wms.yml up -d"
+  only:
+    - main
+    - dev

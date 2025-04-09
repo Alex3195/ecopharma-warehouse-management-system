@@ -16,7 +16,7 @@ import uz.duol.ecopharmwarehouse.module.task.dto.TaskDTO;
 import uz.duol.ecopharmwarehouse.module.task.service.TaskService;
 
 @RestController
-@RequestMapping("/api/v1/task")
+@RequestMapping("/api/v1/wms/task")
 @RequiredArgsConstructor
 @Tag(name = "Task endpoint")
 @PreAuthorize("hasAnyRole('ADMIN','USER')")

@@ -4,7 +4,7 @@ services:
   # PostgreSQL Database
   postgres:
     image: postgres:latest
-    container_name: ecopharm-warehouse-postgres
+    container_name: eco-pharma-warehouse-postgres
     restart: always
     environment:
       - POSTGRES_USER=postgres

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  # Spring Boot Application
+  wms-service:
+    image: duoluz/eco-pharma-warehouse:latest # Use the latest tag if TAG is not provided
+    container_name: eco-pharma-wms-service
+    restart: always
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5430/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_PROFILES_ACTIVE=dev
+    ports:
+      - "9091:9091"
+    networks:
+      - ecopharm-data
+
+volumes:
+  pg-data:
+    driver: local
+
+networks:
+  ecopharm-data:
+    driver: bridge

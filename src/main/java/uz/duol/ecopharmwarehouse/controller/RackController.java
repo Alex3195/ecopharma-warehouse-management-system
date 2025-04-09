@@ -17,7 +17,7 @@ import uz.duol.ecopharmwarehouse.module.rack.dto.RackRequest;
 import uz.duol.ecopharmwarehouse.module.rack.service.RackService;
 
 @RestController
-@RequestMapping("/api/v1/rack")
+@RequestMapping("/api/v1/wms/rack")
 @RequiredArgsConstructor
 @Tag(name = "Rack endpoint")
 @PreAuthorize("hasAnyRole('ADMIN','USER')")

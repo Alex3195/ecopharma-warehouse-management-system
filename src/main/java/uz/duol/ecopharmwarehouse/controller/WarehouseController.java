@@ -16,7 +16,7 @@ import uz.duol.ecopharmwarehouse.module.warehouse.dto.WarehouseDTO;
 import uz.duol.ecopharmwarehouse.module.warehouse.service.WarehouseService;
 
 @RestController
-@RequestMapping("/api/v1/warehouse")
+@RequestMapping("/api/v1/wms/warehouse")
 @RequiredArgsConstructor
 @Tag(name = "Warehouse entity")
 @PreAuthorize("hasAnyRole('ADMIN','USER')")
