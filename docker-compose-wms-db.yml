@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   # PostgreSQL Database
-  postgres:
+  wms-postgres:
     image: postgres:latest
     container_name: eco-pharma-warehouse-postgres
     restart: always
