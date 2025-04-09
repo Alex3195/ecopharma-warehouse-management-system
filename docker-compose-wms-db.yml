@@ -11,15 +11,15 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
     volumes:
-      - pg-data:/var/lib/postgresql/data
+      - pg-data-wms:/var/lib/postgresql/data  # Corrected volume reference
     ports:
       - "5430:5432"
     networks:
       - ecopharm-data
 
 volumes:
-  pg-data:
-    driver: local
+  pg-data-wms:
+    driver: local  # Volume name changed to pg-data-wms
 
 networks:
   ecopharm-data:
