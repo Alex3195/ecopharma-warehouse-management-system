@@ -194,18 +194,19 @@ CREATE TABLE inventory_snapshot
 
 CREATE TABLE location
 (
-    id         BIGINT                      NOT NULL,
-    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    status     VARCHAR(255)                NOT NULL,
-    created_by BIGINT,
-    updated_by BIGINT,
-    name       VARCHAR(255),
-    sector     BIGINT,
-    rack       BIGINT,
-    floor      BIGINT,
-    cell       BIGINT,
-    product_id BIGINT,
+    id           BIGINT                      NOT NULL,
+    created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at   TIMESTAMP WITHOUT TIME ZONE,
+    status       VARCHAR(255)                NOT NULL,
+    created_by   BIGINT,
+    updated_by   BIGINT,
+    name         VARCHAR(255),
+    warehouse_id BIGINT,
+    sector_id    BIGINT,
+    rack_id      BIGINT,
+    floor_id     BIGINT,
+    cell_id      BIGINT,
+    product_id   BIGINT,
     CONSTRAINT pk_location PRIMARY KEY (id)
 );
 

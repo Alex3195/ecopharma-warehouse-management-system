@@ -15,10 +15,17 @@ public class LocationEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "location_seq_gen")
     @SequenceGenerator(name = "location_seq_gen", sequenceName = "location_seq", allocationSize = 1)
     private Long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "warehouse_id")
+    private Long warehouseId;
+    @Column(name = "sector_id")
     private Long sector;
+    @Column(name = "rack_id")
     private Long rack;
+    @Column(name = "floor_id")
     private Long floor;
+    @Column(name = "cell_id")
     private Long cell;
 
     @Column(name = "product_id")

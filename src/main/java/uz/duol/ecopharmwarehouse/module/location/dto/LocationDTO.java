@@ -9,6 +9,7 @@ import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
 public class LocationDTO {
     private Long id;
     private String name;
+    private Long warehouseId;
     private Long sector;
     private Long rack;
     private Long floor;
