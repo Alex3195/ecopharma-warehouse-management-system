@@ -15,6 +15,7 @@ public interface SectorMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "warehouse", ignore = true)
     SectorEntity toEntity(SectorDTO dto);
 
     SectorDTO toDto(SectorEntity entity);

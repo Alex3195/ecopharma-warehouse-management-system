@@ -302,14 +302,15 @@ CREATE TABLE racks
 
 CREATE TABLE sector
 (
-    id          BIGINT                      NOT NULL,
-    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at  TIMESTAMP WITHOUT TIME ZONE,
-    status      VARCHAR(255)                NOT NULL,
-    created_by  BIGINT,
-    updated_by  BIGINT,
-    name        VARCHAR(255),
-    description VARCHAR(255),
+    id           BIGINT                      NOT NULL,
+    created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at   TIMESTAMP WITHOUT TIME ZONE,
+    status       VARCHAR(255)                NOT NULL,
+    created_by   BIGINT,
+    updated_by   BIGINT,
+    name         VARCHAR(255),
+    description  VARCHAR(255),
+    warehouse_id BIGINT,
     CONSTRAINT pk_sector PRIMARY KEY (id)
 );
 
@@ -468,6 +469,9 @@ ALTER TABLE sector_characteristic
 
 ALTER TABLE sector_characteristic
     ADD CONSTRAINT FK_SECTOR_CHARACTERISTIC_ON_SECTOR FOREIGN KEY (sector_id) REFERENCES sector (id);
+
+ALTER TABLE sector
+    ADD CONSTRAINT FK_SECTOR_ON_WAREHOUSE FOREIGN KEY (warehouse_id) REFERENCES warehouse (id);
 
 ALTER TABLE task
     ADD CONSTRAINT FK_TASK_ON_ASSIGNED_TO FOREIGN KEY (assigned_to) REFERENCES "user" (id);

@@ -1,8 +1,10 @@
 package uz.duol.ecopharmwarehouse.module.sector.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import uz.duol.ecopharmwarehouse.module.sector.characteristics.dto.SectorCharacteristicDTO;
+import uz.duol.ecopharmwarehouse.module.warehouse.dto.WarehouseDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,5 +15,8 @@ public class SectorDTO {
     @NotBlank
     private String name;
     private String description;
+    @NotNull
+    private Long warehouseId;
+    private WarehouseDTO warehouse;
     private List<SectorCharacteristicDTO> characteristics = new ArrayList<>();
 }
