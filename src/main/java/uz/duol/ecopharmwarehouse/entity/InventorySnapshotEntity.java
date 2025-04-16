@@ -29,11 +29,18 @@ public class InventorySnapshotEntity extends BaseEntity {
     private Long locationId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "location_id",referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "location_id", referencedColumnName = "id", insertable = false, updatable = false)
     private LocationEntity location;
 
     @Column(name = "quantity")
     private Integer quantity;
+
+    @Column(name = "unit_id")
+    private Long unitId;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "unit_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private UnitsEntity unit;
 
     @Column(name = "snapshot_time")
     private LocalDateTime snapshotTime;

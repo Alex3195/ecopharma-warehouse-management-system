@@ -34,7 +34,7 @@ public class PermissionController {
     }
 
     @GetMapping("/user-permissions/{userId}")
-    public List<PermissionResponseGroupBy> userPermissions(@PathVariable Long userId, Locale locale) {
+    public List<PermissionResponseGroupBy> userPermissions(@PathVariable String userId, Locale locale) {
         log.info("Request to get user permissions: {}", userId);
         return service.getUserPermissions(userId, locale);
     }

@@ -13,7 +13,9 @@ import java.util.List;
 public interface UserPermissionRepository extends JpaRepository<UserPermissionsEntity, Long>, JpaSpecificationExecutor<UserPermissionsEntity> {
     @Query("update UserPermissionsEntity u set u.status = 'DELETED' where u.userId = :userId")
     @Modifying
-    void softDeleteByUserId(@Param("userId") Long userId);
+    void softDeleteByUserId(@Param("userId") String userId);
 
-    List<UserPermissionsEntity> findAllByUserIdAndStatusIsNot(Long userId, Status status);
+    List<UserPermissionsEntity> findAllByUserIdAndStatusIsNot(String userId, Status status);
+
+    List<UserPermissionsEntity> findByUserId(String userId);
 }

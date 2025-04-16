@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class UserPermissionCreateRequest {
     @NotNull
-    private Long userId;
+    private String userId;
     @NotEmpty
     private List<PermissionEnums> permissions;
 }

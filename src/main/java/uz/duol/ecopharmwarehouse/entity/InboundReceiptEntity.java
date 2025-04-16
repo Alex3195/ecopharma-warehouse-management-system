@@ -42,4 +42,11 @@ public class InboundReceiptEntity extends BaseEntity {
     @Column(name = "receipt_status")
     @Enumerated(EnumType.STRING)
     private ReceiptStatusEnum receiptStatus;
+
+    @Column(name = "unit_id")
+    private Long unitId;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "unit_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private UnitsEntity unit; // Assuming a Unit entity exists
 }

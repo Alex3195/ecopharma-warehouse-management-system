@@ -18,7 +18,7 @@ public class UserPermissionsEntity extends BaseEntity {
     private Long id;
 
     @Column(name = "user_id")
-    private Long userId;
+    private String userId;
 
     @Column(name = "permission")
     @Enumerated(EnumType.STRING)

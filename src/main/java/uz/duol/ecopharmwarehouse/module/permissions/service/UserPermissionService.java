@@ -9,6 +9,8 @@ import uz.duol.ecopharmwarehouse.enums.PermissionEnums;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.permissions.dto.PermissionResponseGroupBy;
 import uz.duol.ecopharmwarehouse.module.permissions.dto.UserPermissionCreateRequest;
+import uz.duol.ecopharmwarehouse.module.permissions.dto.UserPermissionDto;
+import uz.duol.ecopharmwarehouse.module.permissions.mapper.UserPermissionMapper;
 import uz.duol.ecopharmwarehouse.repositories.UserPermissionRepository;
 
 import java.util.*;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class UserPermissionService {
     private final UserPermissionRepository repository;
     private final MessageSource messageSource;
+    private final UserPermissionMapper mapper;
 
     public void addPermissionToUser(UserPermissionCreateRequest request) {
         if (request.getUserId() != null && !request.getPermissions().isEmpty()) {
@@ -34,13 +37,6 @@ public class UserPermissionService {
         repository.saveAll(insertableData);
     }
 
-    public List<PermissionEnums> findPermissionsByUserId(Long userId) {
-        return repository.findAllByUserIdAndStatusIsNot(userId, Status.DELETED)
-                .stream()
-                .map(UserPermissionsEntity::getPermission)
-                .toList();
-    }
-
     public List<PermissionResponseGroupBy> getPermissionsGroupBy(Locale locale) {
         Map<PermissionEnums.Category, List<PermissionEnums>> groupedPermissions =
                 Arrays.stream(PermissionEnums.values())
@@ -48,7 +44,7 @@ public class UserPermissionService {
         return getPermissionResponseGroupBIES(locale, groupedPermissions);
     }
 
-    public List<PermissionResponseGroupBy> getUserPermissions(Long userId, Locale locale) {
+    public List<PermissionResponseGroupBy> getUserPermissions(String userId, Locale locale) {
         List<UserPermissionsEntity> permissionsEntities = repository.findAllByUserIdAndStatusIsNot(userId, Status.DELETED);
         Map<PermissionEnums.Category, List<PermissionEnums>> groupedPermissions =
                 permissionsEntities.stream().map(UserPermissionsEntity::getPermission)
@@ -78,5 +74,12 @@ public class UserPermissionService {
             response.add(responseGroupBy);
         }
         return response;
+    }
+
+    public List<UserPermissionDto> findUserPermissionByUserId(String userId) {
+        return repository.findByUserId(userId)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
     }
 }

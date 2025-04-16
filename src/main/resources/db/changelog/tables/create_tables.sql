@@ -38,6 +38,8 @@ CREATE SEQUENCE IF NOT EXISTS task_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS transport_label_seq START WITH 1 INCREMENT BY 1;
 
+CREATE SEQUENCE IF NOT EXISTS unit_conversion_seq START WITH 1 INCREMENT BY 1;
+
 CREATE SEQUENCE IF NOT EXISTS unit_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS user_permission_seq START WITH 1 INCREMENT BY 1;
@@ -156,6 +158,7 @@ CREATE TABLE inbound_receipt
     quantity       INTEGER,
     supplier_id    VARCHAR(255),
     receipt_status VARCHAR(255),
+    unit_id        BIGINT,
     CONSTRAINT pk_inbound_receipt PRIMARY KEY (id)
 );
 
@@ -188,6 +191,7 @@ CREATE TABLE inventory_snapshot
     product_id    BIGINT,
     location_id   BIGINT,
     quantity      INTEGER,
+    unit_id       BIGINT,
     snapshot_time TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_inventory_snapshot PRIMARY KEY (id)
 );
@@ -388,6 +392,21 @@ CREATE TABLE unit
     CONSTRAINT pk_unit PRIMARY KEY (id)
 );
 
+CREATE TABLE unit_conversion
+(
+    id                            BIGINT                      NOT NULL,
+    created_at                    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at                    TIMESTAMP WITHOUT TIME ZONE,
+    status                        VARCHAR(255)                NOT NULL,
+    created_by                    BIGINT,
+    updated_by                    BIGINT,
+    base_unit_id                  BIGINT                      NOT NULL,
+    alternative_unit_id           BIGINT                      NOT NULL,
+    base_conversion_factor        INTEGER                     NOT NULL,
+    alternative_conversion_factor INTEGER                     NOT NULL,
+    CONSTRAINT pk_unit_conversion PRIMARY KEY (id)
+);
+
 CREATE TABLE "user"
 (
     id         VARCHAR(255)                NOT NULL,
@@ -412,7 +431,7 @@ CREATE TABLE user_permissions
     status     VARCHAR(255)                NOT NULL,
     created_by BIGINT,
     updated_by BIGINT,
-    user_id    BIGINT,
+    user_id    VARCHAR(255),
     permission VARCHAR(255),
     CONSTRAINT pk_user_permissions PRIMARY KEY (id)
 );
@@ -455,6 +474,9 @@ ALTER TABLE inbound_receipt
 ALTER TABLE inbound_receipt
     ADD CONSTRAINT FK_INBOUND_RECEIPT_ON_SUPPLIER FOREIGN KEY (supplier_id) REFERENCES "user" (id);
 
+ALTER TABLE inbound_receipt
+    ADD CONSTRAINT FK_INBOUND_RECEIPT_ON_UNIT FOREIGN KEY (unit_id) REFERENCES unit (id);
+
 ALTER TABLE inventory_audit
     ADD CONSTRAINT FK_INVENTORY_AUDIT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
@@ -463,6 +485,9 @@ ALTER TABLE inventory_snapshot
 
 ALTER TABLE inventory_snapshot
     ADD CONSTRAINT FK_INVENTORY_SNAPSHOT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
+
+ALTER TABLE inventory_snapshot
+    ADD CONSTRAINT FK_INVENTORY_SNAPSHOT_ON_UNIT FOREIGN KEY (unit_id) REFERENCES unit (id);
 
 ALTER TABLE location
     ADD CONSTRAINT FK_LOCATION_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
@@ -505,6 +530,12 @@ ALTER TABLE transport_label
 
 ALTER TABLE transport_label
     ADD CONSTRAINT FK_TRANSPORT_LABEL_ON_SHIPMENT FOREIGN KEY (shipment_id) REFERENCES outbound_shipment (id);
+
+ALTER TABLE unit_conversion
+    ADD CONSTRAINT FK_UNIT_CONVERSION_ON_ALTERNATIVE_UNIT FOREIGN KEY (alternative_unit_id) REFERENCES unit (id);
+
+ALTER TABLE unit_conversion
+    ADD CONSTRAINT FK_UNIT_CONVERSION_ON_BASE_UNIT FOREIGN KEY (base_unit_id) REFERENCES unit (id);
 
 ALTER TABLE warehouse
     ADD CONSTRAINT FK_WAREHOUSE_ON_ADDRESS FOREIGN KEY (address_id) REFERENCES address (id);

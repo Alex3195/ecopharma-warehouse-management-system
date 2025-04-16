@@ -4,15 +4,17 @@ import lombok.Getter;
 
 @Getter
 public enum PermissionEnums {
-
+    //Address
     ADDRESS_CREATE(Category.ADDRESS),
     ADDRESS_GET(Category.ADDRESS),
     ADDRESS_UPDATE(Category.ADDRESS),
     ADDRESS_DELETE(Category.ADDRESS),
+    //Characteristics
     CHARACTERISTICS_CREATE(Category.CHARACTERISTICS),
     CHARACTERISTICS_GET(Category.CHARACTERISTICS),
     CHARACTERISTICS_UPDATE(Category.CHARACTERISTICS),
     CHARACTERISTICS_DELETE(Category.CHARACTERISTICS),
+    //Product
     PRODUCT_CREATE(Category.PRODUCT),
     PRODUCT_GET(Category.PRODUCT),
     PRODUCT_UPDATE(Category.PRODUCT),
@@ -21,26 +23,38 @@ public enum PermissionEnums {
     PRODUCT_METADATA_GET(Category.PRODUCT),
     PRODUCT_METADATA_UPDATE(Category.PRODUCT),
     PRODUCT_METADATA_DELETE(Category.PRODUCT),
+    //Rack
     RACK_CREATE(Category.RACK),
     RACK_GET(Category.RACK),
     RACK_UPDATE(Category.RACK),
     RACK_DELETE(Category.RACK),
+    //Sector
     SECTOR_CREATE(Category.SECTOR),
     SECTOR_GET(Category.SECTOR),
     SECTOR_UPDATE(Category.SECTOR),
     SECTOR_DELETE(Category.SECTOR),
+    // Setting
     SETTING_CREATE(Category.SETTING),
     SETTING_GET(Category.SETTING),
     SETTING_UPDATE(Category.SETTING),
     SETTING_DELETE(Category.SETTING),
+    // Task
     TASK_CREATE(Category.TASK),
     TASK_GET(Category.TASK),
     TASK_UPDATE(Category.TASK),
     TASK_DELETE(Category.TASK),
+    // Warehouse
     WAREHOUSE_CREATE(Category.WAREHOUSE),
     WAREHOUSE_GET(Category.WAREHOUSE),
     WAREHOUSE_UPDATE(Category.WAREHOUSE),
-    WAREHOUSE_DELETE(Category.WAREHOUSE);
+    WAREHOUSE_DELETE(Category.WAREHOUSE),
+
+    // Unit Conversion
+    CONVERSION_ADD(Category.CONVERSION),
+    CONVERSION_UPDATE(Category.CONVERSION),
+    CONVERSION_DELETE(Category.CONVERSION),
+    CONVERSION_GET_BY_FROM_ID_AND_TO_ID(Category.CONVERSION),
+    CONVERSION_GET_BY_MAIN_UNIT_ID(Category.CONVERSION);
 
     private final Category category;
 
@@ -58,5 +72,6 @@ public enum PermissionEnums {
         TASK,
         UNIT,
         WAREHOUSE,
+        CONVERSION
     }
 }

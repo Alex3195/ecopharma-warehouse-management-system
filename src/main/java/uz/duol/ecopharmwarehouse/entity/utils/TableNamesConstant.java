@@ -35,5 +35,6 @@ public class TableNamesConstant {
         public static final String SETTINGS = "settings";
         public static final String CROSS_DOCKING = "cross_docking";
         public static final String USER_PERMISSIONS = "user_permissions";
+        public static final String UNIT_CONVERSION = "unit_conversion";
     }
 }
