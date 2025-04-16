@@ -1,6 +1,7 @@
 package uz.duol.ecopharmwarehouse.module.characteristics.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,6 +18,7 @@ import uz.duol.ecopharmwarehouse.repositories.CharacteristicsRepository;
 @RequiredArgsConstructor
 public class CharacteristicsService {
     private final CharacteristicsRepository repository;
+    @Qualifier("characteristicsMapper")
     private final CharacteristicsMapper mapper;
 
     public CharacteristicsDTO create(CharacteristicsDTO dto) {

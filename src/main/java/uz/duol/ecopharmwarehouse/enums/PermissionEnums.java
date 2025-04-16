@@ -54,7 +54,17 @@ public enum PermissionEnums {
     CONVERSION_UPDATE(Category.CONVERSION),
     CONVERSION_DELETE(Category.CONVERSION),
     CONVERSION_GET_BY_FROM_ID_AND_TO_ID(Category.CONVERSION),
-    CONVERSION_GET_BY_MAIN_UNIT_ID(Category.CONVERSION);
+    CONVERSION_GET_BY_MAIN_UNIT_ID(Category.CONVERSION),
+
+    INBOUND_RECEIPT_DELETE(Category.INBOUND_RECEIPT),
+    INBOUND_RECEIPT_UPDATE(Category.INBOUND_RECEIPT),
+    INBOUND_RECEIPT_CREATE(Category.INBOUND_RECEIPT),
+    INBOUND_RECEIPT_GET(Category.INBOUND_RECEIPT),
+
+    UNIT_CREATE(Category.UNIT),
+    UNIT_GET(Category.UNIT),
+    UNIT_UPDATE(Category.UNIT),
+    UNIT_DELETE(Category.UNIT);
 
     private final Category category;
 
@@ -72,6 +82,7 @@ public enum PermissionEnums {
         TASK,
         UNIT,
         WAREHOUSE,
-        CONVERSION
+        CONVERSION,
+        INBOUND_RECEIPT
     }
 }

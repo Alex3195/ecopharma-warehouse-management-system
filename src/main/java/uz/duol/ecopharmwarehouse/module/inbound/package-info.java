@@ -1,0 +1,1 @@
+package uz.duol.ecopharmwarehouse.module.inbound;

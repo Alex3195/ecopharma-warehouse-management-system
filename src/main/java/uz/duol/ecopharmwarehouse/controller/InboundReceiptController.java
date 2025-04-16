@@ -1,0 +1,52 @@
+package uz.duol.ecopharmwarehouse.controller;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.module.inbound.receipt.dto.InboundReceiptDto;
+import uz.duol.ecopharmwarehouse.module.inbound.receipt.service.InboundReceiptService;
+
+@RestController
+@RequestMapping("/api/v1/wms/inbound-receipt")
+@RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('ADMIN','USER')")
+public class InboundReceiptController {
+    private final InboundReceiptService service;
+
+    @GetMapping("/list")
+    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_GET')")
+    public Page<InboundReceiptDto> getAll(@RequestParam(value = "search", required = false) String search, @PageableDefault Pageable pageable) {
+        return service.findAll(search, pageable);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_GET')")
+    public InboundReceiptDto getById(@PathVariable Long id) {
+        return service.findById(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_CREATE')")
+    public InboundReceiptDto create(@Valid @RequestBody InboundReceiptDto dto) {
+        return service.create(dto);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_UPDATE')")
+    public InboundReceiptDto update(@PathVariable Long id, @Valid @RequestBody InboundReceiptDto dto) {
+        return service.update(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_DELETE')")
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
+    }
+}
