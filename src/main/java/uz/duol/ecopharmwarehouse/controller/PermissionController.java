@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.duol.ecopharmwarehouse.module.permissions.dto.PermissionResponseGroupBy;
 import uz.duol.ecopharmwarehouse.module.permissions.dto.UserPermissionCreateRequest;
@@ -15,6 +16,7 @@ import java.util.Locale;
 @RestController
 @RequestMapping("/api/v1/wms/permission")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('ADMIN')")
 public class PermissionController {
     private final UserPermissionService service;
 
