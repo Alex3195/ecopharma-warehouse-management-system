@@ -40,7 +40,7 @@ CREATE SEQUENCE IF NOT EXISTS transport_label_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS unit_seq START WITH 1 INCREMENT BY 1;
 
-CREATE SEQUENCE IF NOT EXISTS user_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS user_permission_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS warehouse_seq START WITH 1 INCREMENT BY 1;
 
@@ -76,7 +76,7 @@ CREATE TABLE audit_trail
     action_type  VARCHAR(255),
     old_value    VARCHAR(255),
     new_value    VARCHAR(255),
-    performed_by BIGINT,
+    performed_by VARCHAR(255),
     action_time  TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_audit_trail PRIMARY KEY (id)
 );
@@ -154,7 +154,7 @@ CREATE TABLE inbound_receipt
     product_id     BIGINT,
     receipt_type   VARCHAR(255),
     quantity       INTEGER,
-    supplier_id    BIGINT,
+    supplier_id    VARCHAR(255),
     receipt_status VARCHAR(255),
     CONSTRAINT pk_inbound_receipt PRIMARY KEY (id)
 );
@@ -221,7 +221,7 @@ CREATE TABLE outbound_shipment
     product_id      BIGINT,
     shipment_type   VARCHAR(255),
     quantity        INTEGER,
-    customer_id     BIGINT,
+    customer_id     VARCHAR(255),
     scheduled_for   TIMESTAMP WITHOUT TIME ZONE,
     shipment_status VARCHAR(255),
     CONSTRAINT pk_outbound_shipment PRIMARY KEY (id)
@@ -353,7 +353,7 @@ CREATE TABLE task
     name        VARCHAR(255),
     task_type   VARCHAR(255),
     task_status VARCHAR(255),
-    assigned_to BIGINT,
+    assigned_to VARCHAR(255),
     due_date    TIMESTAMP WITHOUT TIME ZONE,
     product_id  BIGINT,
     location_id BIGINT,
@@ -390,17 +390,31 @@ CREATE TABLE unit
 
 CREATE TABLE "user"
 (
+    id         VARCHAR(255)                NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    status     VARCHAR(255)                NOT NULL,
+    created_by BIGINT,
+    updated_by BIGINT,
+    username   VARCHAR(100)                NOT NULL,
+    first_name VARCHAR(255)                NOT NULL,
+    last_name  VARCHAR(255),
+    email      VARCHAR(255),
+    phone      VARCHAR(255),
+    CONSTRAINT pk_user PRIMARY KEY (id)
+);
+
+CREATE TABLE user_permissions
+(
     id         BIGINT                      NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITHOUT TIME ZONE,
     status     VARCHAR(255)                NOT NULL,
     created_by BIGINT,
     updated_by BIGINT,
-    name       VARCHAR(255),
-    email      VARCHAR(255),
-    phone      VARCHAR(255),
-    role       VARCHAR(255),
-    CONSTRAINT pk_user PRIMARY KEY (id)
+    user_id    BIGINT,
+    permission VARCHAR(255),
+    CONSTRAINT pk_user_permissions PRIMARY KEY (id)
 );
 
 CREATE TABLE warehouse
@@ -416,6 +430,9 @@ CREATE TABLE warehouse
     address_id  BIGINT,
     CONSTRAINT pk_warehouse PRIMARY KEY (id)
 );
+
+ALTER TABLE "user"
+    ADD CONSTRAINT UC_USER_USERNAME UNIQUE (username);
 
 ALTER TABLE audit_trail
     ADD CONSTRAINT FK_AUDIT_TRAIL_ON_PERFORMED_BY FOREIGN KEY (performed_by) REFERENCES "user" (id);

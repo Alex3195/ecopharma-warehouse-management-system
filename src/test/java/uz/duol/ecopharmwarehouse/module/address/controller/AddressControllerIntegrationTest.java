@@ -37,7 +37,7 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "ADDRESS_CREATE")
     void testCreate() throws Exception {
-        mockMvc.perform(post("/api/v1/address")
+        mockMvc.perform(post("/api/v1/wms/address")
                 .content(objectMapper.writeValueAsString(dto))
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isCreated());
@@ -46,7 +46,7 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "ADDRESS_CREATE")
     void testCreate_ThenBadeRequest() throws Exception {
-        mockMvc.perform(post("/api/v1/address")
+        mockMvc.perform(post("/api/v1/wms/address")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new AddressDTO())))
                 .andExpect(status().isBadRequest());
@@ -55,7 +55,7 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser
     void testCreate_ThenForbidden() throws Exception {
-        mockMvc.perform(post("/api/v1/address")
+        mockMvc.perform(post("/api/v1/wms/address")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
@@ -63,7 +63,7 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
 
     @Test
     void testCreate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(post("/api/v1/address")
+        mockMvc.perform(post("/api/v1/wms/address")
                         .content(objectMapper.writeValueAsString(dto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
@@ -79,34 +79,34 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "ADDRESS_GET")
     void testFindById() throws Exception {
-        mockMvc.perform(get("/api/v1/address/{id}", 30001))
+        mockMvc.perform(get("/api/v1/wms/address/{id}", 30001))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(authorities = "ADDRESS_GET")
     void testFindById_ThenBadeRequest() throws Exception {
-        mockMvc.perform(get("/api/v1/address/{id}", "asdsa"))
+        mockMvc.perform(get("/api/v1/wms/address/{id}", "asdsa"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser
     void testFindById_ThenForbidden() throws Exception {
-        mockMvc.perform(get("/api/v1/address/{id}", 30001))
+        mockMvc.perform(get("/api/v1/wms/address/{id}", 30001))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void testFindById_ThenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/v1/address/{id}", 30001))
+        mockMvc.perform(get("/api/v1/wms/address/{id}", 30001))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(authorities = "ADDRESS_GET")
     void testFindById_ThenNotFound() throws Exception {
-        mockMvc.perform(get("/api/v1/address/{id}", 30001))
+        mockMvc.perform(get("/api/v1/wms/address/{id}", 30001))
                 .andExpect(status().isNotFound());
     }
 
@@ -120,7 +120,7 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "ADDRESS_UPDATE")
     void testUpdate() throws Exception {
-        mockMvc.perform(put("/api/v1/address/{id}", 30001)
+        mockMvc.perform(put("/api/v1/wms/address/{id}", 30001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto))
                 )
@@ -130,7 +130,7 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "ADDRESS_UPDATE")
     void testUpdate_ThenBadeRequest() throws Exception {
-        mockMvc.perform(put("/api/v1/address/{id}", 30001)
+        mockMvc.perform(put("/api/v1/wms/address/{id}", 30001)
                         .content(objectMapper.writeValueAsString(new AddressDTO()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -139,7 +139,7 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser
     void testUpdate_ThenForbidden() throws Exception {
-        mockMvc.perform(put("/api/v1/address/{id}", 30001)
+        mockMvc.perform(put("/api/v1/wms/address/{id}", 30001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
@@ -147,7 +147,7 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
 
     @Test
     void testUpdate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(put("/api/v1/address/{id}", 30001)
+        mockMvc.perform(put("/api/v1/wms/address/{id}", 30001)
                         .content(objectMapper.writeValueAsString(dto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
@@ -156,7 +156,7 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "ADDRESS_UPDATE")
     void testUpdate_ThenNotFound() throws Exception {
-        mockMvc.perform(put("/api/v1/address/{id}", 30001)
+        mockMvc.perform(put("/api/v1/wms/address/{id}", 30001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isNotFound());
@@ -172,34 +172,34 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "ADDRESS_DELETE")
     void testDelete() throws Exception {
-        mockMvc.perform(delete("/api/v1/address/{id}", 30001))
+        mockMvc.perform(delete("/api/v1/wms/address/{id}", 30001))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     @WithMockUser(authorities = "ADDRESS_DELETE")
     void testDelete_ThenBadeRequest() throws Exception {
-        mockMvc.perform(delete("/api/v1/address/{id}", "asdada"))
+        mockMvc.perform(delete("/api/v1/wms/address/{id}", "asdada"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser(authorities = "ADDRESS_DELETE")
     void testDelete_ThenNotFound() throws Exception {
-        mockMvc.perform(delete("/api/v1/address/{id}", 30001))
+        mockMvc.perform(delete("/api/v1/wms/address/{id}", 30001))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @WithMockUser
     void testDelete_ThenForbidden() throws Exception {
-        mockMvc.perform(delete("/api/v1/address/{id}", 30001))
+        mockMvc.perform(delete("/api/v1/wms/address/{id}", 30001))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void testDelete_ThenUnauthorized() throws Exception {
-        mockMvc.perform(delete("/api/v1/address/{id}", 30001))
+        mockMvc.perform(delete("/api/v1/wms/address/{id}", 30001))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -213,7 +213,7 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "ADDRESS_GET")
     void testFindAll() throws Exception {
-        mockMvc.perform(get("/api/v1/address/list")
+        mockMvc.perform(get("/api/v1/wms/address/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk());
@@ -221,7 +221,7 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
 
     @Test
     void testFindAll_ThenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/v1/address/list")
+        mockMvc.perform(get("/api/v1/wms/address/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isUnauthorized());
@@ -230,7 +230,7 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser
     void testFindAll_ThenForbidden() throws Exception {
-        mockMvc.perform(get("/api/v1/address/list")
+        mockMvc.perform(get("/api/v1/wms/address/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isForbidden());

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseControllerIntegrationTest;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
@@ -17,7 +18,7 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+@Transactional
 public class ProductControllerIntegrationTest extends BaseControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
@@ -69,7 +70,7 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "PRODUCT_GET")
     void testFindById() throws Exception {
-        mockMvc.perform(get("/api/v1/product/{id}", 8001))
+        mockMvc.perform(get("/api/v1/wms/product/{id}", 8001))
                 .andExpect(status().isOk());
 
     }
@@ -77,20 +78,20 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "PRODUCT_GET")
     void testFindById_ThenNotFound() throws Exception {
-        mockMvc.perform(get("/api/v1/product/{id}", 8001))
+        mockMvc.perform(get("/api/v1/wms/product/{id}", 8001))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @WithMockUser
     void testFindById_ThenForbidden() throws Exception {
-        mockMvc.perform(get("/api/v1/product/{id}", 8001))
+        mockMvc.perform(get("/api/v1/wms/product/{id}", 8001))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void testFindById_ThenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/v1/product/{id}", 8001))
+        mockMvc.perform(get("/api/v1/wms/product/{id}", 8001))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -111,7 +112,7 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "PRODUCT_CREATE")
     void testCreate() throws Exception {
-        mockMvc.perform(post("/api/v1/product")
+        mockMvc.perform(post("/api/v1/wms/product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
@@ -121,7 +122,7 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
     @WithMockUser(authorities = "PRODUCT_CREATE")
     void testCreate_ThenBadRequest() throws Exception {
         dto.setName(null);
-        mockMvc.perform(post("/api/v1/product")
+        mockMvc.perform(post("/api/v1/wms/product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest());
@@ -130,7 +131,7 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser
     void testCreate_ThenForbidden() throws Exception {
-        mockMvc.perform(post("/api/v1/product")
+        mockMvc.perform(post("/api/v1/wms/product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
@@ -138,7 +139,7 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
 
     @Test
     void testCreate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(post("/api/v1/product")
+        mockMvc.perform(post("/api/v1/wms/product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isUnauthorized());
@@ -162,7 +163,7 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
     @WithMockUser(authorities = "PRODUCT_UPDATE")
     void testUpdate() throws Exception {
         dto.setName("Updated");
-        mockMvc.perform(put("/api/v1/product/{id}", 8001)
+        mockMvc.perform(put("/api/v1/wms/product/{id}", 8001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
@@ -172,7 +173,7 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
     @WithMockUser(authorities = "PRODUCT_UPDATE")
     void testUpdate_ThenBadRequest() throws Exception {
         dto.setName(null);
-        mockMvc.perform(put("/api/v1/product/{id}", 8001)
+        mockMvc.perform(put("/api/v1/wms/product/{id}", 8001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest());
@@ -181,7 +182,7 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "PRODUCT_UPDATE")
     void testUpdate_ThenNotFound() throws Exception {
-        mockMvc.perform(put("/api/v1/product/{id}", 8001)
+        mockMvc.perform(put("/api/v1/wms/product/{id}", 8001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isNotFound());
@@ -190,7 +191,7 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser
     void testUpdate_ThenForbidden() throws Exception {
-        mockMvc.perform(put("/api/v1/product/{id}", 8001)
+        mockMvc.perform(put("/api/v1/wms/product/{id}", 8001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
@@ -198,7 +199,7 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
 
     @Test
     void testUpdate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(put("/api/v1/product/{id}", 8001)
+        mockMvc.perform(put("/api/v1/wms/product/{id}", 8001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isUnauthorized());
@@ -221,27 +222,27 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "PRODUCT_DELETE")
     void testDelete() throws Exception {
-        mockMvc.perform(delete("/api/v1/product/{id}", 8001))
+        mockMvc.perform(delete("/api/v1/wms/product/{id}", 8001))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     @WithMockUser(authorities = "PRODUCT_DELETE")
     void testDelete_ThenNotFound() throws Exception {
-        mockMvc.perform(delete("/api/v1/product/{id}", 8001))
+        mockMvc.perform(delete("/api/v1/wms/product/{id}", 8001))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @WithMockUser
     void testDelete_ThenForbidden() throws Exception {
-        mockMvc.perform(delete("/api/v1/product/{id}", 8001))
+        mockMvc.perform(delete("/api/v1/wms/product/{id}", 8001))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void testDelete_ThenUnauthorized() throws Exception {
-        mockMvc.perform(delete("/api/v1/product/{id}", 8001))
+        mockMvc.perform(delete("/api/v1/wms/product/{id}", 8001))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -262,7 +263,7 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "PRODUCT_GET")
     void testFindAll() throws Exception {
-        mockMvc.perform(get("/api/v1/product/list")
+        mockMvc.perform(get("/api/v1/wms/product/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk());
@@ -271,7 +272,7 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser
     void testFindAll_ThenForbidden() throws Exception {
-        mockMvc.perform(get("/api/v1/product/list")
+        mockMvc.perform(get("/api/v1/wms/product/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isForbidden());
@@ -279,7 +280,7 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
 
     @Test
     void testFindAll_ThenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/v1/product/list")
+        mockMvc.perform(get("/api/v1/wms/product/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isUnauthorized());

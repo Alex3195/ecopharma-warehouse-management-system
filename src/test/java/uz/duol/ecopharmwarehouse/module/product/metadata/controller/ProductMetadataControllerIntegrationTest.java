@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseControllerIntegrationTest;
 import uz.duol.ecopharmwarehouse.module.product.metadata.dto.ProductMetadataDTO;
 
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+@Transactional
 public class ProductMetadataControllerIntegrationTest extends BaseControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
@@ -33,7 +34,7 @@ public class ProductMetadataControllerIntegrationTest extends BaseControllerInte
     @Test
     @WithMockUser(authorities = "PRODUCT_METADATA_CREATE")
     void testCreate() throws Exception {
-        mockMvc.perform(post("/api/v1/product/metadata")
+        mockMvc.perform(post("/api/v1/wms/product/metadata")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
@@ -42,7 +43,7 @@ public class ProductMetadataControllerIntegrationTest extends BaseControllerInte
     @Test
     @WithMockUser(authorities = "PRODUCT_METADATA_CREATE")
     void testCreate_ThenBadRequest() throws Exception {
-        mockMvc.perform(post("/api/v1/product/metadata")
+        mockMvc.perform(post("/api/v1/wms/product/metadata")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new ProductMetadataDTO())))
                 .andExpect(status().isBadRequest());
@@ -51,7 +52,7 @@ public class ProductMetadataControllerIntegrationTest extends BaseControllerInte
     @Test
     @WithMockUser
     void testCreate_ThenForbidden() throws Exception {
-        mockMvc.perform(post("/api/v1/product/metadata")
+        mockMvc.perform(post("/api/v1/wms/product/metadata")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
@@ -59,7 +60,7 @@ public class ProductMetadataControllerIntegrationTest extends BaseControllerInte
 
     @Test
     void testCreate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(post("/api/v1/product/metadata")
+        mockMvc.perform(post("/api/v1/wms/product/metadata")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isUnauthorized());
@@ -78,27 +79,27 @@ public class ProductMetadataControllerIntegrationTest extends BaseControllerInte
     @Test
     @WithMockUser(authorities = "PRODUCT_METADATA_GET")
     void testFindById() throws Exception {
-        mockMvc.perform(get("/api/v1/product/metadata/{id}", 5001))
+        mockMvc.perform(get("/api/v1/wms/product/metadata/{id}", 5001))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(authorities = "PRODUCT_METADATA_GET")
     void testFindById_ThenNotFound() throws Exception {
-        mockMvc.perform(get("/api/v1/product/metadata/{id}", 5001))
+        mockMvc.perform(get("/api/v1/wms/product/metadata/{id}", 5001))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @WithMockUser
     void testFindById_ThenForbidden() throws Exception {
-        mockMvc.perform(get("/api/v1/product/metadata/{id}", 5001))
+        mockMvc.perform(get("/api/v1/wms/product/metadata/{id}", 5001))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void testFindById_ThenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/v1/product/metadata/{id}", 5001))
+        mockMvc.perform(get("/api/v1/wms/product/metadata/{id}", 5001))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -116,7 +117,7 @@ public class ProductMetadataControllerIntegrationTest extends BaseControllerInte
     @WithMockUser(authorities = "PRODUCT_METADATA_UPDATE")
     void testUpdate() throws Exception {
         dto.setBatchNumber("5001234");
-        mockMvc.perform(put("/api/v1/product/metadata/{id}", 5001)
+        mockMvc.perform(put("/api/v1/wms/product/metadata/{id}", 5001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
@@ -126,7 +127,7 @@ public class ProductMetadataControllerIntegrationTest extends BaseControllerInte
     @WithMockUser(authorities = "PRODUCT_METADATA_UPDATE")
     void testUpdate_ThenBadRequest() throws Exception {
         dto.setBatchNumber(null);
-        mockMvc.perform(put("/api/v1/product/metadata/{id}", 5001)
+        mockMvc.perform(put("/api/v1/wms/product/metadata/{id}", 5001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new ProductMetadataDTO())))
                 .andExpect(status().isBadRequest());
@@ -135,7 +136,7 @@ public class ProductMetadataControllerIntegrationTest extends BaseControllerInte
     @Test
     @WithMockUser(authorities = "PRODUCT_METADATA_UPDATE")
     void testUpdate_ThenNotFound() throws Exception {
-        mockMvc.perform(put("/api/v1/product/metadata/{id}", 5001)
+        mockMvc.perform(put("/api/v1/wms/product/metadata/{id}", 5001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isNotFound());
@@ -144,7 +145,7 @@ public class ProductMetadataControllerIntegrationTest extends BaseControllerInte
     @Test
     @WithMockUser
     void testUpdate_ThenForbidden() throws Exception {
-        mockMvc.perform(put("/api/v1/product/metadata/{id}", 5001)
+        mockMvc.perform(put("/api/v1/wms/product/metadata/{id}", 5001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
@@ -152,7 +153,7 @@ public class ProductMetadataControllerIntegrationTest extends BaseControllerInte
 
     @Test
     void testUpdate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(put("/api/v1/product/metadata/{id}", 5001)
+        mockMvc.perform(put("/api/v1/wms/product/metadata/{id}", 5001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isUnauthorized());
@@ -171,24 +172,24 @@ public class ProductMetadataControllerIntegrationTest extends BaseControllerInte
     @Test
     @WithMockUser(authorities = "PRODUCT_METADATA_DELETE")
     void testDelete() throws Exception {
-        mockMvc.perform(delete("/api/v1/product/metadata/{id}", 5001))
+        mockMvc.perform(delete("/api/v1/wms/product/metadata/{id}", 5001))
                 .andExpect(status().isNoContent());
     }
     @Test
     @WithMockUser(authorities = "PRODUCT_METADATA_DELETE")
     void testDelete_ThenNotFound() throws Exception {
-        mockMvc.perform(delete("/api/v1/product/metadata/{id}", 5001))
+        mockMvc.perform(delete("/api/v1/wms/product/metadata/{id}", 5001))
                 .andExpect(status().isNotFound());
     }
     @Test
     @WithMockUser
     void testDelete_ThenForbidden() throws Exception {
-        mockMvc.perform(delete("/api/v1/product/metadata/{id}", 5001))
+        mockMvc.perform(delete("/api/v1/wms/product/metadata/{id}", 5001))
                 .andExpect(status().isForbidden());
     }
     @Test
     void testDelete_ThenUnauthorized() throws Exception {
-        mockMvc.perform(delete("/api/v1/product/metadata/{id}", 5001))
+        mockMvc.perform(delete("/api/v1/wms/product/metadata/{id}", 5001))
                 .andExpect(status().isUnauthorized());
     }
 }

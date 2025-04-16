@@ -7,12 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseControllerIntegrationTest;
 import uz.duol.ecopharmwarehouse.module.settings.dto.SettingsDTO;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+@Transactional
 public class SettingsControllerIntegrationTest extends BaseControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
@@ -30,7 +31,7 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
     @Test
     @WithMockUser(authorities = "SETTING_CREATE")
     public void testCreate() throws Exception {
-        mockMvc.perform(post("/api/v1/setting")
+        mockMvc.perform(post("/api/v1/wms/setting")
                         .content(objectMapper.writeValueAsString(dto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
@@ -39,7 +40,7 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
     @Test
     @WithMockUser(authorities = "SETTING_CREATE")
     public void testCreate_ThenBadRequest() throws Exception {
-        mockMvc.perform(post("/api/v1/setting")
+        mockMvc.perform(post("/api/v1/wms/setting")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new SettingsDTO())))
                 .andExpect(status().isBadRequest());
@@ -48,7 +49,7 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
     @Test
     @WithMockUser
     public void testCreate_ThenForbidden() throws Exception {
-        mockMvc.perform(post("/api/v1/setting")
+        mockMvc.perform(post("/api/v1/wms/setting")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
@@ -56,7 +57,7 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
 
     @Test
     public void testCreate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(post("/api/v1/setting")
+        mockMvc.perform(post("/api/v1/wms/setting")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isUnauthorized());
@@ -72,27 +73,27 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
     @Test
     @WithMockUser(authorities = "SETTING_GET")
     public void testFindById() throws Exception {
-        mockMvc.perform(get("/api/v1/setting/{id}", 40001))
+        mockMvc.perform(get("/api/v1/wms/setting/{id}", 40001))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
     public void testFindById_ThenForbidden() throws Exception {
-        mockMvc.perform(get("/api/v1/setting/{id}", 40001))
+        mockMvc.perform(get("/api/v1/wms/setting/{id}", 40001))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     @WithMockUser(authorities = "SETTING_GET")
     public void testFindById_ThenNotFound() throws Exception {
-        mockMvc.perform(get("/api/v1/setting/{id}", 40001))
+        mockMvc.perform(get("/api/v1/wms/setting/{id}", 40001))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void testFindById_ThenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/v1/setting/{id}", 40001))
+        mockMvc.perform(get("/api/v1/wms/setting/{id}", 40001))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -106,7 +107,7 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
     @Test
     @WithMockUser(authorities = "SETTING_UPDATE")
     public void testUpdate() throws Exception {
-        mockMvc.perform(put("/api/v1/setting/{id}", 40001)
+        mockMvc.perform(put("/api/v1/wms/setting/{id}", 40001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
@@ -115,7 +116,7 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
     @Test
     @WithMockUser(authorities = "SETTING_UPDATE")
     public void testUpdate_ThenBadRequest() throws Exception {
-        mockMvc.perform(put("/api/v1/setting/{id}", 40001)
+        mockMvc.perform(put("/api/v1/wms/setting/{id}", 40001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new SettingsDTO())))
                 .andExpect(status().isBadRequest());
@@ -124,7 +125,7 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
     @Test
     @WithMockUser(authorities = "SETTING_UPDATE")
     public void testUpdate_ThenNotFound() throws Exception {
-        mockMvc.perform(put("/api/v1/setting/{id}", 40001)
+        mockMvc.perform(put("/api/v1/wms/setting/{id}", 40001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isNotFound());
@@ -133,7 +134,7 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
     @Test
     @WithMockUser
     public void testUpdate_ThenForbidden() throws Exception {
-        mockMvc.perform(put("/api/v1/setting/{id}", 40001)
+        mockMvc.perform(put("/api/v1/wms/setting/{id}", 40001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
@@ -141,7 +142,7 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
 
     @Test
     public void testUpdate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(put("/api/v1/setting/{id}", 40001)
+        mockMvc.perform(put("/api/v1/wms/setting/{id}", 40001)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isUnauthorized());
@@ -157,27 +158,27 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
     @Test
     @WithMockUser(authorities = "SETTING_DELETE")
     public void testDelete() throws Exception {
-        mockMvc.perform(delete("/api/v1/setting/{id}", 40001))
+        mockMvc.perform(delete("/api/v1/wms/setting/{id}", 40001))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     @WithMockUser(authorities = "SETTING_DELETE")
     public void testDelete_ThenNotFound() throws Exception {
-        mockMvc.perform(delete("/api/v1/setting/{id}", 40001))
+        mockMvc.perform(delete("/api/v1/wms/setting/{id}", 40001))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @WithMockUser
     public void testDelete_ThenForbidden() throws Exception {
-        mockMvc.perform(delete("/api/v1/setting/{id}", 40001))
+        mockMvc.perform(delete("/api/v1/wms/setting/{id}", 40001))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     public void testDelete_ThenUnauthorized() throws Exception {
-        mockMvc.perform(delete("/api/v1/setting/{id}", 40001))
+        mockMvc.perform(delete("/api/v1/wms/setting/{id}", 40001))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -191,7 +192,7 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
     @Test
     @WithMockUser(authorities = "SETTING_GET")
     public void testFindAll() throws Exception {
-        mockMvc.perform(get("/api/v1/setting/list")
+        mockMvc.perform(get("/api/v1/wms/setting/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk());
@@ -200,7 +201,7 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
     @Test
     @WithMockUser
     public void testFindAll_ThenForbidden() throws Exception {
-        mockMvc.perform(get("/api/v1/setting/list")
+        mockMvc.perform(get("/api/v1/wms/setting/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isForbidden());
@@ -208,7 +209,7 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
 
     @Test
     public void testFindAll_ThenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/v1/setting/list")
+        mockMvc.perform(get("/api/v1/wms/setting/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isUnauthorized());

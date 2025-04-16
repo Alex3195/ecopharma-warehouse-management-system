@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
 import uz.duol.ecopharmwarehouse.module.cells.dto.CellDTO;
 import uz.duol.ecopharmwarehouse.module.floor.dto.FloorDTO;
@@ -15,7 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
+@Transactional
 public class FloorServiceIntegrationTest extends BaseServiceIntegrationTest {
     @Autowired
     private FloorService service;
@@ -26,7 +27,7 @@ public class FloorServiceIntegrationTest extends BaseServiceIntegrationTest {
         dto = new FloorDTO();
         dto.setId(1L);
         dto.setLevel(1);
-        dto.setHeight(300.0);
+        dto.setHeight(4.5);
         dto.setRackId(6001L);
         CellDTO cell = new CellDTO();
         cell.setId(1L);
@@ -153,7 +154,7 @@ public class FloorServiceIntegrationTest extends BaseServiceIntegrationTest {
         Page<FloorDTO> actual = service.findAll( PageRequest.of(0,10));
 
         assertEquals(10,actual.getNumberOfElements());
-        assertEquals(20,actual.getTotalPages());
         assertEquals(2,actual.getTotalPages());
+        assertEquals(1,actual.getTotalPages());
     }
 }

@@ -38,7 +38,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "UNIT_GET")
     void testFindById() throws Exception {
-        mockMvc.perform(get("/api/v1/unit/{id}", 70001L))
+        mockMvc.perform(get("/api/v1/wms/unit/{id}", 70001L))
                 .andExpect(status().isOk());
 
     }
@@ -46,20 +46,20 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "UNIT_GET")
     void testFindById_ThenNotFound() throws Exception {
-        mockMvc.perform(get("/api/v1/unit/{id}", 70001L))
+        mockMvc.perform(get("/api/v1/wms/unit/{id}", 70001L))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @WithMockUser
     void testFindById_ThenForbidden() throws Exception {
-        mockMvc.perform(get("/api/v1/unit/{id}", 70001L))
+        mockMvc.perform(get("/api/v1/wms/unit/{id}", 70001L))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void testFindById_ThenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/v1/unit/{id}", 70001L))
+        mockMvc.perform(get("/api/v1/wms/unit/{id}", 70001L))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -73,7 +73,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "UNIT_GET")
     void testFindAll() throws Exception {
-        mockMvc.perform(get("/api/v1/unit/list")
+        mockMvc.perform(get("/api/v1/wms/unit/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk());
@@ -89,7 +89,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "UNIT_CREATE")
     void testCreate() throws Exception {
-        mockMvc.perform(post("/api/v1/unit")
+        mockMvc.perform(post("/api/v1/wms/unit")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
@@ -98,7 +98,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "UNIT_CREATE")
     void testCreate_ThenBadRequest() throws Exception {
-        mockMvc.perform(post("/api/v1/unit")
+        mockMvc.perform(post("/api/v1/wms/unit")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new UnitsDTO())))
                 .andExpect(status().isBadRequest());
@@ -107,7 +107,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser
     void testCreate_ThenForbidden() throws Exception {
-        mockMvc.perform(post("/api/v1/unit")
+        mockMvc.perform(post("/api/v1/wms/unit")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
@@ -115,7 +115,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
 
     @Test
     void testCreate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(post("/api/v1/unit")
+        mockMvc.perform(post("/api/v1/wms/unit")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isUnauthorized());
@@ -131,7 +131,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "UNIT_UPDATE")
     void testUpdate() throws Exception {
-        mockMvc.perform(put("/api/v1/unit/{id}", 70001L)
+        mockMvc.perform(put("/api/v1/wms/unit/{id}", 70001L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
@@ -140,7 +140,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "UNIT_UPDATE")
     void testUpdate_ThenBadRequest() throws Exception {
-        mockMvc.perform(put("/api/v1/unit/{id}", 70001L)
+        mockMvc.perform(put("/api/v1/wms/unit/{id}", 70001L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new UnitsDTO())))
                 .andExpect(status().isBadRequest());
@@ -149,7 +149,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser
     void testUpdate_ThenForbidden() throws Exception {
-        mockMvc.perform(put("/api/v1/unit/{id}", 70001L)
+        mockMvc.perform(put("/api/v1/wms/unit/{id}", 70001L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
@@ -157,7 +157,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
 
     @Test
     void testUpdate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(put("/api/v1/unit/{id}", 70001L)
+        mockMvc.perform(put("/api/v1/wms/unit/{id}", 70001L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isUnauthorized());
@@ -173,27 +173,27 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "UNIT_DELETE")
     void testDelete() throws Exception {
-        mockMvc.perform(delete("/api/v1/unit/{id}", 70001L))
+        mockMvc.perform(delete("/api/v1/wms/unit/{id}", 70001L))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     @WithMockUser(authorities = "UNIT_DELETE")
     void testDelete_ThenNotFound() throws Exception {
-        mockMvc.perform(delete("/api/v1/unit/{id}", 70001L))
+        mockMvc.perform(delete("/api/v1/wms/unit/{id}", 70001L))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @WithMockUser
     void testDelete_ThenForbidden() throws Exception {
-        mockMvc.perform(delete("/api/v1/unit/{id}", 70001L))
+        mockMvc.perform(delete("/api/v1/wms/unit/{id}", 70001L))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void testDelete_ThenUnauthorized() throws Exception {
-        mockMvc.perform(delete("/api/v1/unit/{id}", 70001L))
+        mockMvc.perform(delete("/api/v1/wms/unit/{id}", 70001L))
                 .andExpect(status().isUnauthorized());
     }
 }

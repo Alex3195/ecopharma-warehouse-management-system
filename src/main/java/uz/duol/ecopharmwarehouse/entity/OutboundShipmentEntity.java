@@ -35,7 +35,7 @@ public class OutboundShipmentEntity extends BaseEntity {
     private Integer quantity;
 
     @Column(name = "customer_id")
-    private Long customerId;
+    private String customerId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", referencedColumnName = "id", insertable = false, updatable = false)

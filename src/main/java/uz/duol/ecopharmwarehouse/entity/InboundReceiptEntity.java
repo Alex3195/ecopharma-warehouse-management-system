@@ -33,7 +33,7 @@ public class InboundReceiptEntity extends BaseEntity {
     private Integer quantity;
 
     @Column(name = "supplier_id")
-    private Long supplierId;
+    private String supplierId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "supplier_id", referencedColumnName = "id", insertable = false, updatable = false)

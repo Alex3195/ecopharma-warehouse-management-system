@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@Transactional
 public class ProductServiceIntegrationTest extends BaseServiceIntegrationTest {
     @Autowired
     private ProductService service;
@@ -62,18 +62,21 @@ public class ProductServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
             "classpath:sql/product/metadata/clear-product-metadata.sql",
 
+            "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/product/insert-product.sql",
             "classpath:sql/location/insert-location.sql",
             "classpath:sql/product/metadata/insert-product-metadata.sql"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
-            "classpath:sql/product/metadata/clear-product-metadata.sql"
+            "classpath:sql/product/metadata/clear-product-metadata.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testUpdate() {
@@ -91,18 +94,21 @@ public class ProductServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
             "classpath:sql/product/metadata/clear-product-metadata.sql",
 
+            "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/product/insert-product.sql",
             "classpath:sql/location/insert-location.sql",
             "classpath:sql/product/metadata/insert-product-metadata.sql"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
-            "classpath:sql/product/metadata/clear-product-metadata.sql"
+            "classpath:sql/product/metadata/clear-product-metadata.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindById() {
@@ -118,18 +124,21 @@ public class ProductServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
             "classpath:sql/product/metadata/clear-product-metadata.sql",
 
+            "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/product/insert-product.sql",
             "classpath:sql/location/insert-location.sql",
             "classpath:sql/product/metadata/insert-product-metadata.sql"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
-            "classpath:sql/product/metadata/clear-product-metadata.sql"
+            "classpath:sql/product/metadata/clear-product-metadata.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testDelete() {
@@ -146,18 +155,21 @@ public class ProductServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
             "classpath:sql/product/metadata/clear-product-metadata.sql",
 
+            "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/product/insert-product.sql",
             "classpath:sql/location/insert-location.sql",
             "classpath:sql/product/metadata/insert-product-metadata.sql"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
-            "classpath:sql/product/metadata/clear-product-metadata.sql"
+            "classpath:sql/product/metadata/clear-product-metadata.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {

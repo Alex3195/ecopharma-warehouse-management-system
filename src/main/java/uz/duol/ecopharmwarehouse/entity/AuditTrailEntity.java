@@ -28,7 +28,7 @@ public class AuditTrailEntity extends BaseEntity {
     @Column(name = "new_value")
     private String newValue;
     @Column(name = "performed_by")
-    private Long performedById;
+    private String performedById;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "performed_by", referencedColumnName = "id", insertable = false, updatable = false)

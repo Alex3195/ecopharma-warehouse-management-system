@@ -40,6 +40,7 @@ public class LocationServiceUnitTest extends BaseUnitTest {
         dto = new LocationDTO();
         dto.setId(1L);
         dto.setName("name");
+        dto.setWarehouseId(20001L);
         dto.setProductId(8001L);
         dto.setSector(2001L);
         dto.setRack(3001L);
@@ -49,6 +50,7 @@ public class LocationServiceUnitTest extends BaseUnitTest {
         entity = new LocationEntity();
         entity.setId(1L);
         entity.setName("name");
+        entity.setWarehouseId(20001L);
         entity.setProductId(8001L);
         entity.setSector(2001L);
         entity.setRack(3001L);

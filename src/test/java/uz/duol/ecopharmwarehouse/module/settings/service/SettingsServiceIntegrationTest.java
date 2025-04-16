@@ -12,7 +12,7 @@ import uz.duol.ecopharmwarehouse.module.settings.dto.SettingsDTO;
 import uz.duol.ecopharmwarehouse.module.settings.exception.SettingNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@Transactional
 public class SettingsServiceIntegrationTest extends BaseServiceIntegrationTest {
     @Autowired
     private SettingsService service;

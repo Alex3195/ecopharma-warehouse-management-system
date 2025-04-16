@@ -1,6 +1,5 @@
 package uz.duol.ecopharmwarehouse.module.sector.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -46,6 +45,7 @@ public class SectorServiceUnitTest extends BaseUnitTest {
         dto.setId(1L);
         dto.setName("Sector A");
         dto.setDescription("Sector A");
+        dto.setWarehouseId(1L);
         SectorCharacteristicDTO characteristic = new SectorCharacteristicDTO();
         characteristic.setId(1L);
         characteristic.setCharacteristicId(2L);
@@ -56,6 +56,7 @@ public class SectorServiceUnitTest extends BaseUnitTest {
         entity.setId(1L);
         entity.setName("Sector A");
         entity.setDescription("Sector A");
+        entity.setWarehouseId(1L);
         SectorCharacteristicEntity characteristicE = new SectorCharacteristicEntity();
         characteristicE.setId(1L);
         characteristicE.setCharacteristicId(2L);

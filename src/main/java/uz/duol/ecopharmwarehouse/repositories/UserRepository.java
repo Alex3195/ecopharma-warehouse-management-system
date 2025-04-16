@@ -7,6 +7,6 @@ import uz.duol.ecopharmwarehouse.enums.Status;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<UserEntity, Long>, JpaSpecificationExecutor<UserEntity> {
-    Optional<UserEntity> findByIdAndStatusIsNot(Long id, Status status);
+public interface UserRepository extends JpaRepository<UserEntity, String>, JpaSpecificationExecutor<UserEntity> {
+    Optional<UserEntity> findByIdAndStatusIsNot(String id, Status status);
 }

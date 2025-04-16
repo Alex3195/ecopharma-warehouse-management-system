@@ -74,7 +74,7 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
         request.setFloors(2);
         request.setCells(3);
 
-        mockMvc.perform(post("/api/v1/rack")
+        mockMvc.perform(post("/api/v1/wms/rack")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
@@ -84,7 +84,7 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
     @WithMockUser(authorities = "RACK_CREATE")
     void testCrete_ThenBadRequest() throws Exception {
 
-        mockMvc.perform(post("/api/v1/rack")
+        mockMvc.perform(post("/api/v1/wms/rack")
                         .content(objectMapper.writeValueAsString(new RackRequest()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -104,7 +104,7 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
         request.setFloors(2);
         request.setCells(3);
 
-        mockMvc.perform(post("/api/v1/rack")
+        mockMvc.perform(post("/api/v1/wms/rack")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -112,7 +112,7 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
 
     @Test
     void testCreate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(post("/api/v1/rack")
+        mockMvc.perform(post("/api/v1/wms/rack")
                         .content(objectMapper.writeValueAsString(dto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
@@ -138,7 +138,7 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "RACK_UPDATE")
     void testUpdate() throws Exception {
-        mockMvc.perform(put("/api/v1/rack/{id}", 6001L)
+        mockMvc.perform(put("/api/v1/wms/rack/{id}", 6001L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
@@ -147,7 +147,7 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "RACK_UPDATE")
     void testUpdateNotFound() throws Exception {
-        mockMvc.perform(put("/api/v1/rack/{id}", 1L)
+        mockMvc.perform(put("/api/v1/wms/rack/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isNotFound());
@@ -156,7 +156,7 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser
     void testUpdate_ThenForbidden() throws Exception {
-        mockMvc.perform(put("/api/v1/rack/{id}", 6001L)
+        mockMvc.perform(put("/api/v1/wms/rack/{id}", 6001L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
@@ -164,7 +164,7 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
 
     @Test
     void testUpdate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(put("/api/v1/rack/{id}", 6001L)
+        mockMvc.perform(put("/api/v1/wms/rack/{id}", 6001L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isUnauthorized());
@@ -190,7 +190,7 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "RACK_UPDATE")
     void testUpdate_ThenBadRequest() throws Exception {
-        mockMvc.perform(put("/api/v1/rack/{id}", 6001L)
+        mockMvc.perform(put("/api/v1/wms/rack/{id}", 6001L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new RackDTO())))
                 .andExpect(status().isBadRequest());
@@ -216,34 +216,34 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "RACK_GET")
     void testFindById() throws Exception {
-        mockMvc.perform(get("/api/v1/rack/{id}", 6001L))
+        mockMvc.perform(get("/api/v1/wms/rack/{id}", 6001L))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(authorities = "RACK_GET")
     void testFindByIdNotFound() throws Exception {
-        mockMvc.perform(get("/api/v1/rack/{id}", 1L))
+        mockMvc.perform(get("/api/v1/wms/rack/{id}", 1L))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @WithMockUser(authorities = "RACK_GET")
     void testFindById_ThenBadRequest() throws Exception {
-        mockMvc.perform(get("/api/v1/rack/{id}", "0L"))
+        mockMvc.perform(get("/api/v1/wms/rack/{id}", "0L"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser
     void testFindById_ThenForbidden() throws Exception {
-        mockMvc.perform(get("/api/v1/rack/{id}", 6001L))
+        mockMvc.perform(get("/api/v1/wms/rack/{id}", 6001L))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void testFindById_ThenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/v1/rack/{id}", 6001L))
+        mockMvc.perform(get("/api/v1/wms/rack/{id}", 6001L))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -267,7 +267,7 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "RACK_GET")
     void testFindAll() throws Exception {
-        mockMvc.perform(get("/api/v1/rack/list")
+        mockMvc.perform(get("/api/v1/wms/rack/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk());
@@ -276,7 +276,7 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser
     void testFindAll_ThenForbidden() throws Exception {
-        mockMvc.perform(get("/api/v1/rack/list")
+        mockMvc.perform(get("/api/v1/wms/rack/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isForbidden());
@@ -284,7 +284,7 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
 
     @Test
     void testFindAll_ThenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/v1/rack/list")
+        mockMvc.perform(get("/api/v1/wms/rack/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isUnauthorized());
@@ -310,34 +310,34 @@ public class RackControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     @WithMockUser(authorities = "RACK_DELETE")
     void testDelete() throws Exception {
-        mockMvc.perform(delete("/api/v1/rack/{id}", 6001L))
+        mockMvc.perform(delete("/api/v1/wms/rack/{id}", 6001L))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     @WithMockUser
     void testDelete_ThenForbidden() throws Exception {
-        mockMvc.perform(delete("/api/v1/rack/{id}", 6001L))
+        mockMvc.perform(delete("/api/v1/wms/rack/{id}", 6001L))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     @WithMockUser(authorities = "RACK_DELETE")
     void testDeleteNotFound() throws Exception {
-        mockMvc.perform(delete("/api/v1/rack/{id}", 1L))
+        mockMvc.perform(delete("/api/v1/wms/rack/{id}", 1L))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void testDelete_ThenUnauthorized() throws Exception {
-        mockMvc.perform(delete("/api/v1/rack/{id}", 6001L))
+        mockMvc.perform(delete("/api/v1/wms/rack/{id}", 6001L))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(authorities = "RACK_DELETE")
     void testDelete_ThenBadRequest() throws Exception {
-        mockMvc.perform(delete("/api/v1/rack/{id}", "0L"))
+        mockMvc.perform(delete("/api/v1/wms/rack/{id}", "0L"))
                 .andExpect(status().isBadRequest());
     }
 }

@@ -32,7 +32,7 @@ public class TaskEntity extends BaseEntity {
     private TaskStatusEnum taskStatus; // pending, in-progress, completed
 
     @Column(name = "assigned_to")
-    private Long assignedTo;
+    private String assignedTo;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "assigned_to", referencedColumnName = "id", insertable = false, updatable = false)

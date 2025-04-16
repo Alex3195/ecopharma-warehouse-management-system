@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+@Transactional
 public class SectorControllerIntegrationTest extends BaseControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
@@ -30,6 +30,7 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
         dto.setId(1L);
         dto.setName("Sector A");
         dto.setDescription("Sector A");
+        dto.setWarehouseId(20001L);
         SectorCharacteristicDTO characteristic = new SectorCharacteristicDTO();
         characteristic.setId(1L);
         characteristic.setCharacteristicId(2L);
@@ -43,17 +44,24 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
+
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Transactional
     @Test
     @WithMockUser(authorities = "SECTOR_CREATE")
     void testCreate() throws Exception {
-        mockMvc.perform(post("/api/v1/sector")
+        mockMvc.perform(post("/api/v1/wms/sector")
                         .content(objectMapper.writeValueAsString(dto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
@@ -62,7 +70,7 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
     @Test
     @WithMockUser(authorities = "SECTOR_CREATE")
     void testCreate_ThenBadRequest() throws Exception {
-        mockMvc.perform(post("/api/v1/sector")
+        mockMvc.perform(post("/api/v1/wms/sector")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new SectorDTO())))
                 .andExpect(status().isBadRequest());
@@ -71,7 +79,7 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
     @Test
     @WithMockUser
     void testCreate_ThenForbidden() throws Exception {
-        mockMvc.perform(post("/api/v1/sector")
+        mockMvc.perform(post("/api/v1/wms/sector")
                         .content(objectMapper.writeValueAsString(dto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -79,71 +87,92 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
 
     @Test
     void testCreate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(post("/api/v1/sector")
+        mockMvc.perform(post("/api/v1/wms/sector")
                         .content(objectMapper.writeValueAsString(dto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
+
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     @WithMockUser(authorities = "SECTOR_GET")
     void testFindById() throws Exception {
-        mockMvc.perform(get("/api/v1/sector/{id}", 8001L))
+        mockMvc.perform(get("/api/v1/wms/sector/{id}", 8001L))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(authorities = "SECTOR_GET")
     void testFindById_ThenNotFound() throws Exception {
-        mockMvc.perform(get("/api/v1/sector/{id}", 8001L))
+        mockMvc.perform(get("/api/v1/wms/sector/{id}", 8001L))
                 .andExpect(status().isNotFound());
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
+
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     @WithMockUser(authorities = "SECTOR_GET")
     void testFindById_ThenBadRequest() throws Exception {
-        mockMvc.perform(get("/api/v1/sector/{id}", "8001L"))
+        mockMvc.perform(get("/api/v1/wms/sector/{id}", "8001L"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser
     void testFindById_ThenForbidden() throws Exception {
-        mockMvc.perform(get("/api/v1/sector/{id}", 8001L))
+        mockMvc.perform(get("/api/v1/wms/sector/{id}", 8001L))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void testFindById_ThenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/v1/sector/{id}", 8001L))
+        mockMvc.perform(get("/api/v1/wms/sector/{id}", 8001L))
                 .andExpect(status().isUnauthorized());
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
+
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     @WithMockUser(authorities = "SECTOR_UPDATE")
     void testUpdate() throws Exception {
-        mockMvc.perform(put("/api/v1/sector/{id}", 8001L)
+        mockMvc.perform(put("/api/v1/wms/sector/{id}", 8001L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
@@ -152,7 +181,7 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
     @Test
     @WithMockUser(authorities = "SECTOR_UPDATE")
     void testUpdate_ThenBadRequest() throws Exception {
-        mockMvc.perform(put("/api/v1/sector/{id}", 8001L)
+        mockMvc.perform(put("/api/v1/wms/sector/{id}", 8001L)
                         .content(objectMapper.writeValueAsString(new SectorDTO()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -161,7 +190,7 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
     @Test
     @WithMockUser(authorities = "SECTOR_UPDATE")
     void testUpdate_ThenNotFound() throws Exception {
-        mockMvc.perform(put("/api/v1/sector/{id}", 8001L)
+        mockMvc.perform(put("/api/v1/wms/sector/{id}", 8001L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isNotFound());
@@ -170,7 +199,7 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
     @Test
     @WithMockUser
     void testUpdate_ThenForbidden() throws Exception {
-        mockMvc.perform(put("/api/v1/sector/{id}", 8001L)
+        mockMvc.perform(put("/api/v1/wms/sector/{id}", 8001L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isForbidden());
@@ -178,65 +207,79 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
 
     @Test
     void testUpdate_ThenUnauthorized() throws Exception {
-        mockMvc.perform(put("/api/v1/sector/{id}", 8001L)
+        mockMvc.perform(put("/api/v1/wms/sector/{id}", 8001L)
                         .content(objectMapper.writeValueAsString(dto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
+
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     @WithMockUser(authorities = "SECTOR_DELETE")
     @Transactional
     void testDelete() throws Exception {
-        mockMvc.perform(delete("/api/v1/sector/{id}", 8001L))
+        mockMvc.perform(delete("/api/v1/wms/sector/{id}", 8001L))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     @WithMockUser(authorities = "SECTOR_DELETE")
     void testDelete_ThenNotFound() throws Exception {
-        mockMvc.perform(delete("/api/v1/sector/{id}", 8001L))
+        mockMvc.perform(delete("/api/v1/wms/sector/{id}", 8001L))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @WithMockUser
     void testDelete_ThenForbidden() throws Exception {
-        mockMvc.perform(delete("/api/v1/sector/{id}", 8001L))
+        mockMvc.perform(delete("/api/v1/wms/sector/{id}", 8001L))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void testDelete_ThenUnauthorized() throws Exception {
-        mockMvc.perform(delete("/api/v1/sector/{id}", 8001L))
+        mockMvc.perform(delete("/api/v1/wms/sector/{id}", 8001L))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(authorities = "SECTOR_DELETE")
     void testDelete_ThenBadRequest() throws Exception {
-        mockMvc.perform(delete("/api/v1/sector/{id}", "8001L"))
+        mockMvc.perform(delete("/api/v1/wms/sector/{id}", "8001L"))
                 .andExpect(status().isBadRequest());
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
+
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     @WithMockUser(authorities = "SECTOR_GET")
     void testFindAll() throws Exception {
-        mockMvc.perform(get("/api/v1/sector/list")
+        mockMvc.perform(get("/api/v1/wms/sector/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk());
@@ -245,7 +288,7 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
     @Test
     @WithMockUser
     void testFindAll_ThenForbidden() throws Exception {
-        mockMvc.perform(get("/api/v1/sector/list")
+        mockMvc.perform(get("/api/v1/wms/sector/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isForbidden());
@@ -253,7 +296,7 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
 
     @Test
     void testFindAll_ThenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/v1/sector/list")
+        mockMvc.perform(get("/api/v1/wms/sector/list")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isUnauthorized());

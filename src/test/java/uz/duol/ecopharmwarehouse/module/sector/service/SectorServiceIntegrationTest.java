@@ -17,7 +17,7 @@ import uz.duol.ecopharmwarehouse.module.sector.exception.SectorNotFoundException
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@Transactional
 public class SectorServiceIntegrationTest extends BaseServiceIntegrationTest {
     @Autowired
     private SectorService sectorService;
@@ -29,6 +29,7 @@ public class SectorServiceIntegrationTest extends BaseServiceIntegrationTest {
         dto.setId(1L);
         dto.setName("Sector A");
         dto.setDescription("Sector A");
+        dto.setWarehouseId(20001L);
         SectorCharacteristicDTO characteristic = new SectorCharacteristicDTO();
         characteristic.setId(1L);
         characteristic.setCharacteristicId(2L);
@@ -49,10 +50,14 @@ public class SectorServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
+
             "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
@@ -68,10 +73,14 @@ public class SectorServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
+
             "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
@@ -88,10 +97,14 @@ public class SectorServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
+
             "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
@@ -105,10 +118,14 @@ public class SectorServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
+
             "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
