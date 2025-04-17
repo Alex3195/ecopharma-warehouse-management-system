@@ -32,7 +32,7 @@ public class DatabaseBackupScheduler {
     @Value("${spring.datasource.url}")
     private String dbUrl;
 
-    @Value("${spring.application.name:eco-pharma-service}")
+    @Value("${spring.application.name:eco-pharma-wms-service}")
     private String serviceName;
 
     @Value("${backup.useShell:false}")
@@ -96,16 +96,16 @@ public class DatabaseBackupScheduler {
 
             int exitCode = process.waitFor();
             if (exitCode == 0) {
-                log.info("✅ {} backup complete: {}", type, objectPath);
+                log.info("{} backup complete: {}", type, objectPath);
             } else {
-                log.error("❌ pg_dump failed with exit code {}", exitCode);
+                log.error("pg_dump failed with exit code {}", exitCode);
                 try (InputStream errorStream = process.getErrorStream()) {
                     errorStream.transferTo(System.err);
                 }
             }
 
         } catch (Exception e) {
-            log.error("❌ {} backup failed", type, e);
+            log.error("{} backup failed", type, e);
         }
     }
 
