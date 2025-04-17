@@ -52,3 +52,16 @@ springdoc:
     enabled: true
     try-it-out-enabled: true
     operations-sorter: method
+
+minio:
+  endpoint: https://storage.winpro.uz
+  access-key: xSfeETHCpUfHzcXwUz51
+  secret-key: EWRIyhmglLJfYOQnebCimwj30ivUq2kVUfbk51HM
+  bucket: ecopharma-backups
+
+postgres:
+  container:
+    name: eco-pharma-warehouse-postgres
+
+backup:
+  useShell: false

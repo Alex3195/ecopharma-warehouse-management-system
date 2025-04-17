@@ -1,16 +1,30 @@
+# Stage 1: Build the Spring Boot application using Gradle
 FROM gradle:8.6.0-jdk21-alpine AS build
+WORKDIR /app
 
+# Copy only essential files for dependency caching
+COPY build.gradle settings.gradle gradle.properties ./
+COPY gradle gradle
+RUN gradle --no-daemon build || return 0  # Cache dependencies
+
+# Now copy the rest of the source code
+COPY . .
+RUN gradle bootJar --no-daemon
+
+# Stage 2: Create a lightweight runtime image
+FROM eclipse-temurin:21-jre-alpine
+
+# Install only the required tools: pg_dump (via postgresql-client) and gzip
+RUN apk add --no-cache postgresql-client gzip
+
+# Set working directory
 WORKDIR /opt/app
 
-ENV SPRING_PROFILE=dev \
-    SERVER_PORT=9091 \
-    JAVA_OPTS="-Xmx512m" \
-    EXTRA_ARGS=""
+# Copy built jar from the previous stage
+COPY --from=build /app/build/libs/*.jar app.jar
 
-ARG DEBUG_PORT=9092
-
-COPY ./build/libs/*.jar app-api-wms.jar
-
+# Expose necessary ports
 EXPOSE 9091 9092
 
-ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar app-api-wms.jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$DEBUG_PORT --spring.profiles.active=$SPRING_PROFILE $EXTRA_ARGS"]
+# Use exec form of CMD to properly signal processes
+ENTRYPOINT ["java", "-jar", "app.jar"]
