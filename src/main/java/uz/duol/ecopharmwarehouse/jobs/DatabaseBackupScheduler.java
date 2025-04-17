@@ -38,11 +38,6 @@ public class DatabaseBackupScheduler {
     @Value("${backup.useShell:false}")
     private boolean useShell;
 
-    @Scheduled(cron = "0 * * * * *") // Every minute for testing
-    public void runNowForTest() {
-        runBackup("manual");
-    }
-
     @Scheduled(cron = "0 0 2 * * *")
     public void dailyBackup() {
         runBackup("daily");
