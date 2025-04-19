@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.duol.ecopharmwarehouse.module.users.dto.UserDTO;
+import uz.duol.ecopharmwarehouse.module.users.dto.UserUpdateDto;
 import uz.duol.ecopharmwarehouse.module.users.service.UserService;
 
 @RestController
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserDTO update(@PathVariable String id, @RequestBody UserDTO user) {
+    public UserDTO update(@PathVariable String id, @RequestBody UserUpdateDto user) {
         return userService.update(id, user);
     }
 
