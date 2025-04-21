@@ -66,7 +66,7 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
         if (clientRoles != null && clientRoles.containsKey("roles")) {
             List<String> roles = (List<String>) clientRoles.get("roles");
             authorities.addAll(roles.stream()
-                    .map(role -> "ROLE_"+role) // Add the ROLE_ prefix
+                    .map(role -> "ROLE_" + role) // Add the ROLE_ prefix
                     .map(SimpleGrantedAuthority::new)
                     .toList());
         }
