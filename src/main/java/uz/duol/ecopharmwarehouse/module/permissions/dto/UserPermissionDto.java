@@ -12,6 +12,6 @@ public class UserPermissionDto {
     private Long id;
     @Schema(name = "userId", example = "45")
     private String userId;
-    @Schema(name = "name", examples = {"PRODUCT_GROUP_DELETE", "PRODUCT_GROUP_UPDATE", "PRODUCT_GROUP_CREATE"})
-    private PermissionEnums name;
+    @Schema(name = "permission", examples = {"PRODUCT_GROUP_DELETE", "PRODUCT_GROUP_UPDATE", "PRODUCT_GROUP_CREATE"})
+    private PermissionEnums permission;
 }

@@ -17,6 +17,5 @@ public interface UserPermissionMapper {
     @Mapping(target = "createdAt", ignore = true)
     UserPermissionsEntity toEntity(UserPermissionDto dto);
 
-    @Mapping(target = "name", ignore = true)
     UserPermissionDto toDto(UserPermissionsEntity entity);
 }

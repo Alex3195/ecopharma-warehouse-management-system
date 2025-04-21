@@ -75,7 +75,7 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
     private List<SimpleGrantedAuthority> loadAuthoritiesFromDatabase(String userId) {
         List<UserPermissionDto> userPermissions = userPermissionService.findUserPermissionByUserId(userId);
         return userPermissions.stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.getName().name()))
+                .map(permission -> new SimpleGrantedAuthority(permission.getPermission().name()))
                 .toList();
     }
 }
