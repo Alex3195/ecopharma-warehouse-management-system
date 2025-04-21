@@ -15,8 +15,8 @@ public class StoreAggregationController {
     private final StoreAggregationService storeAggregationService;
 
     @PostMapping("/store-sync")
-    public void storeSync(@RequestBody StoreSyncRequest request) {
-        storeAggregationService.createAndReturnBarCode(request);
+    public String storeSync(@RequestBody StoreSyncRequest request) {
+        return storeAggregationService.createAndReturnBarCode(request);
 
     }
 }
