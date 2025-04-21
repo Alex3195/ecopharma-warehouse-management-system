@@ -26,7 +26,7 @@ public class UserPermissionService {
 
     @Transactional
     public void addPermissionToUser(UserPermissionCreateRequest request) {
-        if (request.getUserId() != null && !request.getPermissions().isEmpty()) {
+        if (request.getUserId() != null) {
             repository.softDeleteByUserId(request.getUserId());
         }
         if (request.getPermissions() != null && !request.getPermissions().isEmpty()) {

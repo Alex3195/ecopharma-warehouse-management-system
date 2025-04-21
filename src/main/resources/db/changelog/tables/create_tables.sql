@@ -34,6 +34,8 @@ CREATE SEQUENCE IF NOT EXISTS sector_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS settings_seq START WITH 1 INCREMENT BY 1;
 
+CREATE SEQUENCE IF NOT EXISTS store_aggregations_with_alternative_unit_seq START WITH 1 INCREMENT BY 1;
+
 CREATE SEQUENCE IF NOT EXISTS task_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS transport_label_seq START WITH 1 INCREMENT BY 1;
@@ -344,6 +346,25 @@ CREATE TABLE settings
     name       VARCHAR(255),
     value      VARCHAR(255),
     CONSTRAINT pk_settings PRIMARY KEY (id)
+);
+
+CREATE TABLE store_aggregations_with_alternative_unit_entity
+(
+    id                  BIGINT                      NOT NULL,
+    created_at          TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at          TIMESTAMP WITHOUT TIME ZONE,
+    status              VARCHAR(255)                NOT NULL,
+    created_by          BIGINT,
+    updated_by          BIGINT,
+    product_id          BIGINT,
+    supplier_id         VARCHAR(255),
+    alternative_unit_id BIGINT,
+    base_unit_id        BIGINT,
+    aggregations        TEXT[],
+    produced_date       VARCHAR(255),
+    expiration_date     VARCHAR(255),
+    barcode             VARCHAR(255),
+    CONSTRAINT pk_storeaggregationswithalternativeunitentity PRIMARY KEY (id)
 );
 
 CREATE TABLE task
