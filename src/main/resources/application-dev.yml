@@ -14,7 +14,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://keycloak.duol.zu/realms/eco-pharma
+          issuer-uri: https://keycloak.duol.uz/realms/eco-pharma
           jwk-set-uri: https://keycloak.duol.uz/realms/eco-pharma/protocol/openid-connect/certs
 
 keycloak:
@@ -23,6 +23,10 @@ keycloak:
   client-id: eco-pharma
   client-secret: gDS25j4Vi0kEILXD19XcnkcFXBUD3fkk
 
+api:
+  url: http://192.168.7.12:10001
+  connection-timeout: 5000
+  read-timeout: 10000
 
 eureka:
   instance:
@@ -36,8 +40,8 @@ eureka:
       enabled: true
     fetch-registry: true
     register-with-eureka: true
-    registry-fetch-interval-seconds: 10
-    initial-instance-info-replication-interval-seconds: 30
+    registry-fetch-interval-seconds: 5
+    initial-instance-info-replication-interval-seconds: 10
 
 springdoc:
   api-docs:
@@ -60,4 +64,4 @@ postgres:
     name: eco-pharma-warehouse-postgres
 
 backup:
-  useShell: true
+  useShell: false
