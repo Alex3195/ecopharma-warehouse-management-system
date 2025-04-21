@@ -23,19 +23,22 @@ public class UserPermissionService {
     private final UserPermissionRepository repository;
     private final MessageSource messageSource;
     private final UserPermissionMapper mapper;
+
     @Transactional
     public void addPermissionToUser(UserPermissionCreateRequest request) {
         if (request.getUserId() != null && !request.getPermissions().isEmpty()) {
             repository.softDeleteByUserId(request.getUserId());
         }
-        List<UserPermissionsEntity> insertableData = request.getPermissions().stream().map(item -> {
-            UserPermissionsEntity entity = new UserPermissionsEntity();
-            entity.setUserId(request.getUserId());
-            entity.setPermission(item);
-            return entity;
-        }).toList();
+        if (request.getPermissions() != null && !request.getPermissions().isEmpty()) {
+            List<UserPermissionsEntity> insertableData = request.getPermissions().stream().map(item -> {
+                UserPermissionsEntity entity = new UserPermissionsEntity();
+                entity.setUserId(request.getUserId());
+                entity.setPermission(item);
+                return entity;
+            }).toList();
 
-        repository.saveAll(insertableData);
+            repository.saveAll(insertableData);
+        }
     }
 
     public List<PermissionResponseGroupBy> getPermissionsGroupBy(Locale locale) {
@@ -78,7 +81,7 @@ public class UserPermissionService {
     }
 
     public List<UserPermissionDto> findUserPermissionByUserId(String userId) {
-        return repository.findByUserId(userId)
+        return repository.findByUserIdAndStatusIsNot(userId, Status.DELETED)
                 .stream()
                 .map(mapper::toDto)
                 .toList();

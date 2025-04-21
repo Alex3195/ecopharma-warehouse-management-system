@@ -17,5 +17,5 @@ public interface UserPermissionRepository extends JpaRepository<UserPermissionsE
 
     List<UserPermissionsEntity> findAllByUserIdAndStatusIsNot(String userId, Status status);
 
-    List<UserPermissionsEntity> findByUserId(String userId);
+    List<UserPermissionsEntity> findByUserIdAndStatusIsNot(String userId, Status status);
 }
