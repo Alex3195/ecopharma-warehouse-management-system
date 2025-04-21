@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.UserPermissionsEntity;
 import uz.duol.ecopharmwarehouse.enums.PermissionEnums;
 import uz.duol.ecopharmwarehouse.enums.Status;
@@ -22,7 +23,7 @@ public class UserPermissionService {
     private final UserPermissionRepository repository;
     private final MessageSource messageSource;
     private final UserPermissionMapper mapper;
-
+    @Transactional
     public void addPermissionToUser(UserPermissionCreateRequest request) {
         if (request.getUserId() != null && !request.getPermissions().isEmpty()) {
             repository.softDeleteByUserId(request.getUserId());
