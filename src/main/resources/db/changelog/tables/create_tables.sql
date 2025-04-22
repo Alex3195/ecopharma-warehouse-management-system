@@ -16,6 +16,8 @@ CREATE SEQUENCE IF NOT EXISTS inventory_audit_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS inventory_snapshot_seq START WITH 1 INCREMENT BY 1;
 
+CREATE SEQUENCE IF NOT EXISTS jobs_seq START WITH 1 INCREMENT BY 1;
+
 CREATE SEQUENCE IF NOT EXISTS location_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS product_meta_data_seq START WITH 1 INCREMENT BY 1;
@@ -197,6 +199,19 @@ CREATE TABLE inventory_snapshot
     unit_id       BIGINT,
     snapshot_time TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_inventory_snapshot PRIMARY KEY (id)
+);
+
+CREATE TABLE jobs
+(
+    id         BIGINT                      NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    status     VARCHAR(255)                NOT NULL,
+    created_by BIGINT,
+    updated_by BIGINT,
+    job_name   VARCHAR(255),
+    job_status VARCHAR(255),
+    CONSTRAINT pk_jobs PRIMARY KEY (id)
 );
 
 CREATE TABLE location

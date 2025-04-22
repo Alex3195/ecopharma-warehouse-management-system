@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import uz.duol.ecopharmwarehouse.config.MinioProperties;
+import uz.duol.ecopharmwarehouse.entity.JobsEntity;
+import uz.duol.ecopharmwarehouse.repositories.JobsRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -19,7 +21,7 @@ import java.util.zip.GZIPOutputStream;
 @Service
 @RequiredArgsConstructor
 public class DatabaseBackupScheduler {
-
+    private final JobsRepository repository;
     private final MinioClient minioClient;
     private final MinioProperties minioProperties;
 
@@ -56,19 +58,17 @@ public class DatabaseBackupScheduler {
     private void runBackup(String type) {
         LocalDate today = LocalDate.now();
         String filename = String.format("%s-%s-%s.sql.gz", serviceName, type, today);
-        String objectPath = String.format("backup/%s/%d/%02d/%02d/%s",
-                serviceName, today.getYear(), today.getMonthValue(), today.getDayOfMonth(), filename);
-
+        String objectPath = String.format("wms-service/%s/%d/%02d/%02d/%s", serviceName, today.getYear(), today.getMonthValue(), today.getDayOfMonth(), filename);
+        JobsEntity job = new JobsEntity();
+        job.setJobName("Database Backup_" + type);
+        job.setJobStatus("Started");
+        repository.save(job);
         try {
             String host = extractHost(dbUrl);
             String port = extractPort(dbUrl);
             String dbName = extractDatabaseName(dbUrl);
 
-            ProcessBuilder pb = useShell
-                    ? new ProcessBuilder("sh", "-c",
-                    String.format("PGPASSWORD=%s pg_dump -h %s -p %s -U %s -d %s | gzip",
-                            dbPassword, host, port, dbUser, dbName))
-                    : new ProcessBuilder("pg_dump", "-h", host, "-p", port, "-U", dbUser, "-d", dbName, "--no-password");
+            ProcessBuilder pb = useShell ? new ProcessBuilder("sh", "-c", String.format("PGPASSWORD=%s pg_dump -h %s -p %s -U %s -d %s | gzip", dbPassword, host, port, dbUser, dbName)) : new ProcessBuilder("pg_dump", "-h", host, "-p", port, "-U", dbUser, "-d", dbName, "--no-password");
 
             pb.environment().put("PGPASSWORD", dbPassword);
             Process process = pb.start();
@@ -85,19 +85,16 @@ public class DatabaseBackupScheduler {
                 inputStream = process.getInputStream();
             }
 
-            minioClient.putObject(
-                    PutObjectArgs.builder()
-                            .bucket(minioProperties.getBucket())
-                            .object(objectPath)
-                            .stream(inputStream, -1, 10 * 1024 * 1024)
-                            .contentType("application/gzip")
-                            .build()
-            );
+            minioClient.putObject(PutObjectArgs.builder().bucket(minioProperties.getBucket()).object(objectPath).stream(inputStream, -1, 10 * 1024 * 1024).contentType("application/gzip").build());
 
             int exitCode = process.waitFor();
             if (exitCode == 0) {
+                job.setJobStatus("Completed");
+                repository.save(job);
                 log.info("{} backup complete: {}", type, objectPath);
             } else {
+                job.setJobStatus("Failed");
+                repository.save(job);
                 log.error("pg_dump failed with exit code {}", exitCode);
                 try (InputStream errorStream = process.getErrorStream()) {
                     errorStream.transferTo(System.err);
@@ -105,6 +102,8 @@ public class DatabaseBackupScheduler {
             }
 
         } catch (Exception e) {
+            job.setJobStatus("Failed");
+            repository.save(job);
             log.error("{} backup failed", type, e);
         }
     }

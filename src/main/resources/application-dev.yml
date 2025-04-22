@@ -57,7 +57,7 @@ minio:
   endpoint: https://storage.winpro.uz
   access-key: xSfeETHCpUfHzcXwUz51
   secret-key: EWRIyhmglLJfYOQnebCimwj30ivUq2kVUfbk51HM
-  bucket: ecopharma-backups
+  bucket: backups
 
 postgres:
   container:
