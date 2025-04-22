@@ -19,4 +19,5 @@ public class InboundReceiptDto {
     private ReceiptStatusEnum receiptStatus;
     private Long unitId;
     private UnitsDTO unit; // Assuming a Unit entity exists
+    private Long alternateStoreId;
 }

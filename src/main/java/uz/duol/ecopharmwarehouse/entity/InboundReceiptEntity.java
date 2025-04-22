@@ -49,4 +49,7 @@ public class InboundReceiptEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "unit_id", referencedColumnName = "id", insertable = false, updatable = false)
     private UnitsEntity unit; // Assuming a Unit entity exists
+
+    @Column(name = "alternate_store_id")
+    private Long alternateStoreId;
 }

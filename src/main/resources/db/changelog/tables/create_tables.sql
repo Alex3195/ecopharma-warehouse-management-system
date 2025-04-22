@@ -149,18 +149,19 @@ CREATE TABLE floor
 
 CREATE TABLE inbound_receipt
 (
-    id             BIGINT                      NOT NULL,
-    created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at     TIMESTAMP WITHOUT TIME ZONE,
-    status         VARCHAR(255)                NOT NULL,
-    created_by     BIGINT,
-    updated_by     BIGINT,
-    product_id     BIGINT,
-    receipt_type   VARCHAR(255),
-    quantity       INTEGER,
-    supplier_id    VARCHAR(255),
-    receipt_status VARCHAR(255),
-    unit_id        BIGINT,
+    id                 BIGINT                      NOT NULL,
+    created_at         TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at         TIMESTAMP WITHOUT TIME ZONE,
+    status             VARCHAR(255)                NOT NULL,
+    created_by         BIGINT,
+    updated_by         BIGINT,
+    product_id         BIGINT,
+    receipt_type       VARCHAR(255),
+    quantity           INTEGER,
+    supplier_id        VARCHAR(255),
+    receipt_status     VARCHAR(255),
+    unit_id            BIGINT,
+    alternate_store_id BIGINT,
     CONSTRAINT pk_inbound_receipt PRIMARY KEY (id)
 );
 

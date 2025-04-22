@@ -19,11 +19,11 @@ public class StoreAggregationService {
     private final StoreAggregationWithAlternativeUnitRepository repository;
     private final StoreAggregationWithAlternativeUnitMapper mapper;
 
-    public String createAndReturnBarCode(StoreSyncRequest request) {
+    public StoreSyncRequest createAndReturnBarCode(StoreSyncRequest request) {
         StoreAggregationsWithAlternativeUnitEntity e = mapper.toEntity(request);
         e.setBarcode(generateBarCode());
         repository.save(e);
-        return e.getBarcode();
+        return mapper.toDto(e);
     }
 
     public StoreSyncRequest findById(Long id) {
