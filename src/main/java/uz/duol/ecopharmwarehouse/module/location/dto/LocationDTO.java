@@ -14,8 +14,7 @@ public class LocationDTO {
     private Long rack;
     private Long floor;
     private Long cell;
-
+    private String barcode;
     private Long productId;
-
     private ProductDTO product;
 }

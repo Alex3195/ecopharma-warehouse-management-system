@@ -213,6 +213,7 @@ CREATE TABLE location
     rack_id      BIGINT,
     floor_id     BIGINT,
     cell_id      BIGINT,
+    barcode      VARCHAR(255),
     product_id   BIGINT,
     CONSTRAINT pk_location PRIMARY KEY (id)
 );

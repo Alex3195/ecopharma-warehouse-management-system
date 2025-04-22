@@ -27,6 +27,8 @@ public class LocationEntity extends BaseEntity {
     private Long floor;
     @Column(name = "cell_id")
     private Long cell;
+    @Column(name = "barcode")
+    private String barcode;
 
     @Column(name = "product_id")
     private Long productId;
