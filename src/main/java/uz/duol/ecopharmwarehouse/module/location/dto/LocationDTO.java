@@ -16,5 +16,6 @@ public class LocationDTO {
     private Long cell;
     private String barcode;
     private Long productId;
+    private Boolean available;
     private ProductDTO product;
 }

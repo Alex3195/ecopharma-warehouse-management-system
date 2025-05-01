@@ -6,8 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.ProductLocationByItsBarcodeAndCellCodeEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
+import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
+import uz.duol.ecopharmwarehouse.module.location.service.LocationService;
 import uz.duol.ecopharmwarehouse.module.product.location.dto.ProductLocationByItsBarcodeAndLocationCodeDto;
 import uz.duol.ecopharmwarehouse.module.product.location.mapper.ProductLocationByItsBarcodeAndCellCodeMapper;
 import uz.duol.ecopharmwarehouse.module.product.location.specification.ProductLocationByItsBarcodeAndCellCodeSpecification;
@@ -18,11 +21,21 @@ import uz.duol.ecopharmwarehouse.repositories.ProductLocationByItsBarcodeAndCell
 public class ProductLocationByItsBarcodeAndCellCodeService {
     private final ProductLocationByItsBarcodeAndCellCodeMapper mapper;
     private final ProductLocationByItsBarcodeAndCellCodeRepository repository;
+    private final LocationService locationService;
 
+    @Transactional
     public ProductLocationByItsBarcodeAndLocationCodeDto create(ProductLocationByItsBarcodeAndLocationCodeDto dto) {
-        ProductLocationByItsBarcodeAndCellCodeEntity e = mapper.toEntity(dto);
-        repository.save(e);
-        return mapper.toDto(e);
+        LocationDTO locationDTO = locationService.findByBarcode(dto.getLocationBarcode());
+        if (locationDTO.getAvailable()) {
+            ProductLocationByItsBarcodeAndCellCodeEntity e = mapper.toEntity(dto);
+            repository.save(e);
+            locationDTO.setAvailable(false);
+            locationService.update(locationDTO.getId(), locationDTO);
+            return mapper.toDto(e);
+        } else {
+            throw new RuntimeException("Location is not empty");
+        }
+
     }
 
     public String findByProductBarCodeItsLocationCode(String productBarCode) {

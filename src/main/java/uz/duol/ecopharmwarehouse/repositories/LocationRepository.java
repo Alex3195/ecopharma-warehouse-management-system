@@ -9,4 +9,7 @@ import java.util.Optional;
 
 public interface LocationRepository extends JpaRepository<LocationEntity, Long>, JpaSpecificationExecutor<LocationEntity> {
     Optional<LocationEntity> findByIdAndStatusIsNot(Long id, Status status);
+
+    Optional<LocationEntity> findByBarcodeAndStatusIsNot(String barcode, Status status);
+
 }

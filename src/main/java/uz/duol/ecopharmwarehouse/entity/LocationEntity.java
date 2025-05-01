@@ -30,6 +30,9 @@ public class LocationEntity extends BaseEntity {
     @Column(name = "barcode")
     private String barcode;
 
+    @Column(name = "is_empty")
+    private Boolean isEmpty;
+
     @Column(name = "product_id")
     private Long productId;
 

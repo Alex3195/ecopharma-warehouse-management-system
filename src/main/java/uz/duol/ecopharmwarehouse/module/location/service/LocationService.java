@@ -21,7 +21,8 @@ public class LocationService {
 
     public LocationDTO create(LocationDTO dto) {
         LocationEntity entity = mapper.toEntity(dto);
-        return mapper.toDto(repository.save(entity));
+        repository.save(entity);
+        return mapper.toDto(entity);
     }
 
     public LocationDTO findById(Long id) {
@@ -50,5 +51,11 @@ public class LocationService {
             spec = spec.and(LocationSpecification.hasText(name));
         }
         return repository.findAll(spec, pageable).map(mapper::toDto);
+    }
+
+    public LocationDTO findByBarcode(String locationBarcode) {
+        LocationEntity entity = repository.findByBarcodeAndStatusIsNot(locationBarcode, Status.DELETED)
+                .orElseThrow(() -> new LocationNotFoundException("Location not found"));
+        return mapper.toDto(entity);
     }
 }

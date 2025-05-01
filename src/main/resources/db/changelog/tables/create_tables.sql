@@ -231,6 +231,7 @@ CREATE TABLE location
     floor_id     BIGINT,
     cell_id      BIGINT,
     barcode      VARCHAR(255),
+    is_empty     BOOLEAN,
     product_id   BIGINT,
     CONSTRAINT pk_location PRIMARY KEY (id)
 );
