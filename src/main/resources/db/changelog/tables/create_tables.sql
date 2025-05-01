@@ -20,6 +20,8 @@ CREATE SEQUENCE IF NOT EXISTS jobs_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS location_seq START WITH 1 INCREMENT BY 1;
 
+CREATE SEQUENCE IF NOT EXISTS product_location_seq START WITH 1 INCREMENT BY 1;
+
 CREATE SEQUENCE IF NOT EXISTS product_meta_data_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS product_output_algorithm_seq START WITH 1 INCREMENT BY 1;
@@ -263,6 +265,19 @@ CREATE TABLE product
     product_type VARCHAR(255),
     quantity     INTEGER,
     CONSTRAINT pk_product PRIMARY KEY (id)
+);
+
+CREATE TABLE product_location_by_barcode_and_cell_code
+(
+    id               BIGINT                      NOT NULL,
+    created_at       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at       TIMESTAMP WITHOUT TIME ZONE,
+    status           VARCHAR(255)                NOT NULL,
+    created_by       BIGINT,
+    updated_by       BIGINT,
+    product_barcode  VARCHAR(255),
+    location_barcode VARCHAR(255),
+    CONSTRAINT pk_product_location_by_barcode_and_cell_code PRIMARY KEY (id)
 );
 
 CREATE TABLE product_meta_data
