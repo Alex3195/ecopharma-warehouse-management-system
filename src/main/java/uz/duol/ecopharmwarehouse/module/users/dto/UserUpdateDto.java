@@ -20,4 +20,8 @@ public class UserUpdateDto {
 
     @Schema(description = "Phone number of user", example = "+998XX-XXX-XX-XX")
     private String phone;
+
+    private String hikvisionAccessId;
+
+    private String telegramNickName;
 }

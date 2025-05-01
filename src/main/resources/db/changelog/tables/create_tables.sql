@@ -447,17 +447,19 @@ CREATE TABLE unit_conversion
 
 CREATE TABLE "user"
 (
-    id         VARCHAR(255)                NOT NULL,
-    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    status     VARCHAR(255)                NOT NULL,
-    created_by BIGINT,
-    updated_by BIGINT,
-    username   VARCHAR(100)                NOT NULL,
-    first_name VARCHAR(255)                NOT NULL,
-    last_name  VARCHAR(255),
-    email      VARCHAR(255),
-    phone      VARCHAR(255),
+    id                  VARCHAR(255)                NOT NULL,
+    created_at          TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at          TIMESTAMP WITHOUT TIME ZONE,
+    status              VARCHAR(255)                NOT NULL,
+    created_by          BIGINT,
+    updated_by          BIGINT,
+    username            VARCHAR(100)                NOT NULL,
+    first_name          VARCHAR(255)                NOT NULL,
+    last_name           VARCHAR(255),
+    email               VARCHAR(255),
+    phone               VARCHAR(255),
+    hikvision_access_id VARCHAR(255),
+    telegram_nick_name  VARCHAR(255),
     CONSTRAINT pk_user PRIMARY KEY (id)
 );
 

@@ -31,6 +31,12 @@ public class UserEntity extends BaseEntity {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "hikvision_access_id")
+    private String hikvisionAccessId;
+
+    @Column(name = "telegram_nick_name")
+    private String telegramNickName;
+
     @OneToMany(mappedBy = "assignedToUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TaskEntity> tasks;
 }

@@ -56,6 +56,6 @@ public class StoreAggregationService {
     }
 
     private String generateBarCode() {
-        return String.format("%012d", (long) (Math.random() * 1_000_000_000_000L));
+        return String.format("%020d", (long) (Math.random() * 1_000_000_000_000L));
     }
 }
