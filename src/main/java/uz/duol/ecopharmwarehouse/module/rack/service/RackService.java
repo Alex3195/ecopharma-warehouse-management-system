@@ -18,6 +18,8 @@ import uz.duol.ecopharmwarehouse.module.rack.dto.RackRequest;
 import uz.duol.ecopharmwarehouse.module.rack.exception.RackNotFoundException;
 import uz.duol.ecopharmwarehouse.module.rack.mapper.RackMapper;
 import uz.duol.ecopharmwarehouse.module.rack.specification.RackSpecification;
+import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
+import uz.duol.ecopharmwarehouse.module.sector.service.SectorService;
 import uz.duol.ecopharmwarehouse.repositories.RackRepository;
 
 @Service
@@ -25,22 +27,25 @@ import uz.duol.ecopharmwarehouse.repositories.RackRepository;
 public class RackService {
     private final RackRepository repository;
     private final LocationService locationService;
+    private final SectorService sectorService;
     @Qualifier("rackMapper")
     private final RackMapper mapper;
 
     @Transactional
     public RackDTO create(RackRequest request) {
         RackEntity rackEntity = rackEntityFromRequest(request);
+        repository.save(rackEntity);
         createLocations(rackEntity);
-        return mapper.toDto(repository.save(rackEntity));
+        return mapper.toDto(rackEntity);
     }
 
     @Transactional(readOnly = true)
     protected void createLocations(RackEntity rackEntity) {
+        SectorDTO sector = sectorService.findById(rackEntity.getSectorId());
         rackEntity.getFloors().forEach(floor -> floor.getCells().forEach(cell -> {
             LocationDTO location = new LocationDTO();
-            location.setName(rackEntity.getSector().getWarehouse().getName() + "-" + rackEntity.getSector().getName() + "-" + rackEntity.getName() + "-" + floor.getLevel() + "-" + cell.getCode());
-            location.setWarehouseId(rackEntity.getSector().getWarehouse().getId());
+            location.setName(sector.getWarehouse().getName() + "-" + sector.getName() + "-" + rackEntity.getName() + "-" + floor.getLevel() + "-" + cell.getCode());
+            location.setWarehouseId(sector.getWarehouse().getId());
             location.setSector(rackEntity.getSectorId());
             location.setRack(rackEntity.getId());
             location.setFloor(floor.getId());

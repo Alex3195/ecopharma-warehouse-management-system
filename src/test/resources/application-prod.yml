@@ -22,3 +22,15 @@ api:
   connection-timeout: ${CONNECTION_TIME_OUT}
   read-timeout: ${READ_TIME_OUT}
 
+minio:
+  endpoint: https://storage.winpro.uz
+  access-key: xSfeETHCpUfHzcXwUz51
+  secret-key: EWRIyhmglLJfYOQnebCimwj30ivUq2kVUfbk51HM
+  bucket: ecopharma-backups
+
+postgres:
+  container:
+    name: eco-pharma-warehouse-postgres
+
+backup:
+  useShell: false

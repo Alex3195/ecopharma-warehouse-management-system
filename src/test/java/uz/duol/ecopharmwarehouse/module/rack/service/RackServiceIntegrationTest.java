@@ -50,12 +50,19 @@ public class RackServiceIntegrationTest extends BaseServiceIntegrationTest {
 
         dto.setFloors(List.of(floor));
     }
+
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
 
+            "classpath:sql/address/address_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
