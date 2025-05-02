@@ -12,4 +12,5 @@ public interface LocationRepository extends JpaRepository<LocationEntity, Long>,
 
     Optional<LocationEntity> findByBarcodeAndStatusIsNot(String barcode, Status status);
 
+    boolean existsByBarcode(String barcode);
 }

@@ -50,15 +50,11 @@ public class RackService {
             location.setRack(rackEntity.getId());
             location.setFloor(floor.getId());
             location.setCell(cell.getId());
-            location.setBarcode(generateBarCode());
             location.setAvailable(true);
             locationService.create(location);
         }));
     }
 
-    private String generateBarCode() {
-        return String.format("%020d", (long) (Math.random() * 1_000_000_000_000L));
-    }
 
     private RackEntity rackEntityFromRequest(RackRequest request) {
         RackEntity rackEntity = new RackEntity();

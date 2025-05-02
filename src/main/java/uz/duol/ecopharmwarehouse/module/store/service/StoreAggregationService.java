@@ -21,20 +21,22 @@ public class StoreAggregationService {
 
     public StoreSyncRequest createAndReturnBarCode(StoreSyncRequest request) {
         StoreAggregationsWithAlternativeUnitEntity e = mapper.toEntity(request);
+        String barCode = generateBarCode();
+        while (repository.existsByBarcode(barCode)) {
+            barCode = generateBarCode();
+        }
         e.setBarcode(generateBarCode());
         repository.save(e);
         return mapper.toDto(e);
     }
 
     public StoreSyncRequest findById(Long id) {
-        StoreAggregationsWithAlternativeUnitEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
-                .orElseThrow(() -> new EntityNotFoundException("Store not found"));
+        StoreAggregationsWithAlternativeUnitEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED).orElseThrow(() -> new EntityNotFoundException("Store not found"));
         return mapper.toDto(e);
     }
 
     public void delete(Long id) {
-        StoreAggregationsWithAlternativeUnitEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
-                .orElseThrow(() -> new EntityNotFoundException("Store not found"));
+        StoreAggregationsWithAlternativeUnitEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED).orElseThrow(() -> new EntityNotFoundException("Store not found"));
         e.setStatus(Status.DELETED);
         repository.save(e);
     }

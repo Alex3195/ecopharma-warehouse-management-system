@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface StoreAggregationWithAlternativeUnitRepository extends JpaRepository<StoreAggregationsWithAlternativeUnitEntity, Long>, JpaSpecificationExecutor<StoreAggregationsWithAlternativeUnitEntity> {
     Optional<StoreAggregationsWithAlternativeUnitEntity> findByIdAndStatusIsNot(Long id, Status status);
+
+    boolean existsByBarcode(String barcode);
 }

@@ -21,6 +21,11 @@ public class LocationService {
 
     public LocationDTO create(LocationDTO dto) {
         LocationEntity entity = mapper.toEntity(dto);
+        String barcode = generateBarCode();
+        while (repository.existsByBarcode(barcode)) {
+            barcode = generateBarCode();
+        }
+        entity.setBarcode(barcode);
         repository.save(entity);
         return mapper.toDto(entity);
     }
@@ -43,6 +48,10 @@ public class LocationService {
         LocationEntity entity = mapper.toEntity(dto);
         entity.setStatus(Status.DELETED);
         repository.save(entity);
+    }
+
+    private String generateBarCode() {
+        return String.format("%020d", (long) (Math.random() * 1_000_000_000_000L));
     }
 
     public Page<LocationDTO> findAll(String name, Pageable pageable) {
