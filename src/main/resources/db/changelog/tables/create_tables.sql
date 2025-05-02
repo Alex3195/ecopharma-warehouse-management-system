@@ -285,16 +285,17 @@ CREATE TABLE product_location_by_barcode_and_cell_code
 
 CREATE TABLE product_meta_data
 (
-    id            BIGINT                      NOT NULL,
-    created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at    TIMESTAMP WITHOUT TIME ZONE,
-    status        VARCHAR(255)                NOT NULL,
-    created_by    VARCHAR(255),
-    updated_by    VARCHAR(255),
-    product_id    BIGINT,
-    batch_number  VARCHAR(255),
-    expiry_date   date,
-    serial_number VARCHAR(255),
+    id                           BIGINT                      NOT NULL,
+    created_at                   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at                   TIMESTAMP WITHOUT TIME ZONE,
+    status                       VARCHAR(255)                NOT NULL,
+    created_by                   VARCHAR(255),
+    updated_by                   VARCHAR(255),
+    product_id                   BIGINT,
+    batch_number                 VARCHAR(255),
+    expiry_date                  date,
+    serial_number                VARCHAR(255),
+    quarantine_storage_duaration INTEGER,
     CONSTRAINT pk_product_meta_data PRIMARY KEY (id)
 );
 
@@ -456,6 +457,7 @@ CREATE TABLE unit_conversion
     status                        VARCHAR(255)                NOT NULL,
     created_by                    VARCHAR(255),
     updated_by                    VARCHAR(255),
+    product_id                    BIGINT                      NOT NULL,
     base_unit_id                  BIGINT                      NOT NULL,
     alternative_unit_id           BIGINT                      NOT NULL,
     base_conversion_factor        INTEGER                     NOT NULL,

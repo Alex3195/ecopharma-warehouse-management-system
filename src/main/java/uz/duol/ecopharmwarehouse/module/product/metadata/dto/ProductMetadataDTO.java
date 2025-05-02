@@ -20,6 +20,8 @@ public class ProductMetadataDTO {
     private String batchNumber;
     @NotNull
     private LocalDate expiryDate;
-    @NotBlank
+
     private String serialNumber;
+
+    private Integer quarantineStorageDuration;
 }

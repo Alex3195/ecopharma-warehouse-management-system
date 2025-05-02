@@ -15,8 +15,11 @@ import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 public class UnitConversionEntity extends BaseEntity {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "unit_conversion_seq_gen")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unit_conversion_seq_gen")
     private Long id;
+
+    @Column(name = "product_id", nullable = false)
+    private Long productId;
 
     @Column(name = "base_unit_id", nullable = false)
     private Long baseUnitId;

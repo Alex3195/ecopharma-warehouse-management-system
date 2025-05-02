@@ -13,6 +13,11 @@ public class UnitConversionDto {
     @Schema(name = "baseUnitId", example = "12")
     private Long baseUnitId;
 
+    @NotNull
+    @Schema(name = "productId", example = "12")
+    private Long productId;
+
+
     @Schema(name = "baseUnitSymbol", example = "kg", description = "This field is for information purposes only")
     private String baseUnitSymbol;
 
