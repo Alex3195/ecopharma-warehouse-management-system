@@ -14,38 +14,38 @@ import uz.duol.ecopharmwarehouse.module.inbound.receipt.service.InboundReceiptSe
 @RestController
 @RequestMapping("/api/v1/wms/inbound-receipt")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
 public class InboundReceiptController {
     private final InboundReceiptService service;
 
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_GET')")
+    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_GET') or hasRole('SUPER_ADMIN')")
     public Page<InboundReceiptDto> getAll(@RequestParam(value = "search", required = false) String search, @PageableDefault Pageable pageable) {
         return service.findAll(search, pageable);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_GET')")
+    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_GET') or hasRole('SUPER_ADMIN')")
     public InboundReceiptDto getById(@PathVariable Long id) {
         return service.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_CREATE')")
+    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_CREATE') or hasRole('SUPER_ADMIN')")
     public InboundReceiptDto create(@Valid @RequestBody InboundReceiptDto dto) {
         return service.create(dto);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_UPDATE')")
+    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_UPDATE') or hasRole('SUPER_ADMIN')")
     public InboundReceiptDto update(@PathVariable Long id, @Valid @RequestBody InboundReceiptDto dto) {
         return service.update(id, dto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_DELETE')")
+    @PreAuthorize("hasAuthority('INBOUND_RECEIPT_DELETE') or hasRole('SUPER_ADMIN')")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

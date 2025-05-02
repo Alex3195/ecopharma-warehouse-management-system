@@ -64,7 +64,13 @@ public enum PermissionEnums {
     UNIT_CREATE(Category.UNIT),
     UNIT_GET(Category.UNIT),
     UNIT_UPDATE(Category.UNIT),
-    UNIT_DELETE(Category.UNIT);
+    UNIT_DELETE(Category.UNIT),
+
+    // User
+    USER_READ(Category.USER),
+    USER_CREATE(Category.USER),
+    USER_UPDATE(Category.USER),
+    USER_DELETE(Category.USER);
 
     private final Category category;
 
@@ -83,6 +89,7 @@ public enum PermissionEnums {
         UNIT,
         WAREHOUSE,
         CONVERSION,
-        INBOUND_RECEIPT
+        INBOUND_RECEIPT,
+        USER,
     }
 }

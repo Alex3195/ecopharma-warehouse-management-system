@@ -17,7 +17,7 @@ import uz.duol.ecopharmwarehouse.module.settings.service.SettingsService;
 @RestController
 @RequestMapping("/api/v1/wms/setting")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
 @Tag(name = "Settings endpoint")
 public class SettingsController {
 
@@ -34,7 +34,7 @@ public class SettingsController {
                     @ApiResponse(responseCode = "404",description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('SETTING_GET')")
+    @PreAuthorize("hasAuthority('SETTING_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/{id}")
     public SettingsDTO getById(@PathVariable Long id) {
         return service.findById(id);
@@ -49,7 +49,7 @@ public class SettingsController {
                     @ApiResponse(responseCode = "403",description = "Access denied - Bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('SETTING_GET')")
+    @PreAuthorize("hasAuthority('SETTING_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/list")
     public Page<SettingsDTO> getAll(@RequestParam(value = "search", required = false) String search,
                                     @PageableDefault Pageable pageable) {
@@ -66,7 +66,7 @@ public class SettingsController {
                     @ApiResponse(responseCode = "403",description = "Access denied - Bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('SETTING_CREATE')")
+    @PreAuthorize("hasAuthority('SETTING_CREATE') or hasRole('SUPER_ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SettingsDTO create(@RequestBody SettingsDTO dto) {
@@ -84,7 +84,7 @@ public class SettingsController {
                     @ApiResponse(responseCode = "404",description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('SETTING_UPDATE')")
+    @PreAuthorize("hasAuthority('SETTING_UPDATE') or hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
     public SettingsDTO update(@PathVariable Long id, @RequestBody SettingsDTO dto) {
         return service.update(id, dto);
@@ -101,7 +101,7 @@ public class SettingsController {
                     @ApiResponse(responseCode = "404",description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('SETTING_DELETE')")
+    @PreAuthorize("hasAuthority('SETTING_DELETE') or hasRole('SUPER_ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {

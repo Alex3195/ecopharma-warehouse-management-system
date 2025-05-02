@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/wms/unit-conversion")
+@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
 public class UnitConversionController {
     private final UnitConversionService service;
 
@@ -32,7 +33,7 @@ public class UnitConversionController {
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role/permission"),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             })
-    @PreAuthorize("hasAuthority('CONVERSION_GET_BY_FROM_ID_AND_TO_ID')")
+    @PreAuthorize("hasAuthority('CONVERSION_GET_BY_FROM_ID_AND_TO_ID') or hasRole('SUPER_ADMIN')")
     @GetMapping("/{baseUnitId}/{alternativeUnitId}")
     public List<UnitConversionDto> getUnitConversion(@PathVariable Long baseUnitId, @PathVariable Long alternativeUnitId) {
         log.info("Getting units conversion for from {} to {}", baseUnitId, alternativeUnitId);
@@ -48,7 +49,7 @@ public class UnitConversionController {
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role/permission"),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             })
-    @PreAuthorize("hasAuthority('CONVERSION_ADD')")
+    @PreAuthorize("hasAuthority('CONVERSION_ADD') or hasRole('SUPER_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public UnitConversionDto saveUnitConversion(@RequestBody @Valid UnitConversionDto unitConversionDto) {
@@ -65,7 +66,7 @@ public class UnitConversionController {
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role/permission"),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             })
-    @PreAuthorize("hasAuthority('CONVERSION_UPDATE')")
+    @PreAuthorize("hasAuthority('CONVERSION_UPDATE') or hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
     public UnitConversionDto updateUnitConversion(@PathVariable Long id, @RequestBody @Valid UnitConversionDto unitConversionDto) {
         log.info("Updating units conversion with id:{}, body:{}", id, unitConversionDto);
@@ -81,7 +82,7 @@ public class UnitConversionController {
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role/permission"),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             })
-    @PreAuthorize("hasAuthority('CONVERSION_DELETE')")
+    @PreAuthorize("hasAuthority('CONVERSION_DELETE') or hasRole('SUPER_ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUnitConversion(@PathVariable Long id) {
@@ -99,7 +100,7 @@ public class UnitConversionController {
                     @ApiResponse(responseCode = "404", description = "Not found - data nit found"),
             }
     )
-    @PreAuthorize("hasAuthority('CONVERSION_GET_BY_MAIN_UNIT_ID')")
+    @PreAuthorize("hasAuthority('CONVERSION_GET_BY_MAIN_UNIT_ID') or hasRole('SUPER_ADMIN')")
     @GetMapping("/get-by-main-unit/{id}")
     public Page<UnitConversionDto> getUnitConversionByMainUnit(@PathVariable Long id, Pageable pageable) {
         return service.getByMainUnitId(id,pageable);
@@ -114,7 +115,7 @@ public class UnitConversionController {
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role/permission"),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             })
-    @PreAuthorize("hasAuthority('CONVERSION_DELETE')")
+    @PreAuthorize("hasAuthority('CONVERSION_DELETE') or hasRole('SUPER_ADMIN')")
     @DeleteMapping("/deleteAll")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAll(@RequestParam("ids") List<Long> ids) {

@@ -19,7 +19,7 @@ import uz.duol.ecopharmwarehouse.module.sector.service.SectorService;
 @RequestMapping("/api/v1/wms/sector")
 @RequiredArgsConstructor
 @Tag(name = "Sector endpoint")
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
 public class SectorController {
     private final SectorService service;
 
@@ -33,7 +33,7 @@ public class SectorController {
                     @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('SECTOR_CREATE')")
+    @PreAuthorize("hasAuthority('SECTOR_CREATE') or hasRole('SUPER_ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SectorDTO create(@Valid @RequestBody SectorDTO sectorDTO) {
@@ -51,7 +51,7 @@ public class SectorController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('SECTOR_GET')")
+    @PreAuthorize("hasAuthority('SECTOR_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/{id}")
     public SectorDTO getById(@PathVariable Long id) {
         return service.findById(id);
@@ -68,7 +68,7 @@ public class SectorController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('SECTOR_UPDATE')")
+    @PreAuthorize("hasAuthority('SECTOR_UPDATE') or hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
     public SectorDTO update(@PathVariable Long id, @Valid @RequestBody SectorDTO sectorDTO) {
         return service.update(id, sectorDTO);
@@ -85,7 +85,7 @@ public class SectorController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('SECTOR_DELETE')")
+    @PreAuthorize("hasAuthority('SECTOR_DELETE') or hasRole('SUPER_ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) {
@@ -103,7 +103,7 @@ public class SectorController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('SECTOR_GET')")
+    @PreAuthorize("hasAuthority('SECTOR_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/list")
     public Page<SectorDTO> getAll(@RequestParam(value = "search", required = false) String search,
                                   @PageableDefault Pageable pageable) {

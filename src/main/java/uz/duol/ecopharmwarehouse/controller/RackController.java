@@ -20,7 +20,7 @@ import uz.duol.ecopharmwarehouse.module.rack.service.RackService;
 @RequestMapping("/api/v1/wms/rack")
 @RequiredArgsConstructor
 @Tag(name = "Rack endpoint")
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
 public class RackController {
     private final RackService service;
 
@@ -34,7 +34,7 @@ public class RackController {
                     @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('RACK_CREATE')")
+    @PreAuthorize("hasAuthority('RACK_CREATE') or hasRole('SUPER_ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RackDTO create(@Valid @RequestBody RackRequest request) {
@@ -52,7 +52,7 @@ public class RackController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('RACK_GET')")
+    @PreAuthorize("hasAuthority('RACK_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/{id}")
     public RackDTO findById(@PathVariable Long id) {
         return service.findById(id);
@@ -69,7 +69,7 @@ public class RackController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('RACK_UPDATE')")
+    @PreAuthorize("hasAuthority('RACK_UPDATE') or hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
     public RackDTO update(@PathVariable Long id, @Valid @RequestBody RackDTO rackDTO) {
         return service.update(id, rackDTO);
@@ -86,7 +86,7 @@ public class RackController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('RACK_DELETE')")
+    @PreAuthorize("hasAuthority('RACK_DELETE') or hasRole('SUPER_ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
@@ -102,7 +102,7 @@ public class RackController {
                     @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('RACK_GET')")
+    @PreAuthorize("hasAuthority('RACK_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/list")
     public Page<RackDTO> getAll(@RequestParam(value = "search", required = false) String search,
                                 @PageableDefault Pageable pageable) {

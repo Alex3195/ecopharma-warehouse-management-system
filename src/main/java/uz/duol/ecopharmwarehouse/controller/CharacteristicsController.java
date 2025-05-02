@@ -19,7 +19,7 @@ import uz.duol.ecopharmwarehouse.module.characteristics.service.CharacteristicsS
 @RequestMapping("/api/v1/wms/characteristics")
 @RequiredArgsConstructor
 @Tag(name = "Characteristics endpoints")
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
 public class CharacteristicsController {
     private final CharacteristicsService service;
 
@@ -34,7 +34,7 @@ public class CharacteristicsController {
             }
     )
     @PostMapping
-    @PreAuthorize("hasAuthority('CHARACTERISTICS_CREATE')")
+    @PreAuthorize("hasAuthority('CHARACTERISTICS_CREATE') or hasRole('SUPER_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public CharacteristicsDTO create(@Valid @RequestBody CharacteristicsDTO dto) {
         return service.create(dto);
@@ -51,7 +51,7 @@ public class CharacteristicsController {
             }
     )
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('CHARACTERISTICS_GET')")
+    @PreAuthorize("hasAuthority('CHARACTERISTICS_GET') or hasRole('SUPER_ADMIN')")
     public CharacteristicsDTO findById(@PathVariable Long id) {
         return service.findById(id);
     }
@@ -66,7 +66,7 @@ public class CharacteristicsController {
             }
     )
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('CHARACTERISTICS_GET')")
+    @PreAuthorize("hasAuthority('CHARACTERISTICS_GET') or hasRole('SUPER_ADMIN')")
     public Page<CharacteristicsDTO> findAll(@RequestParam(required = false) String search,
                                             @PageableDefault Pageable pageable) {
         return service.findAll(search, pageable);
@@ -84,7 +84,7 @@ public class CharacteristicsController {
             }
     )
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('CHARACTERISTICS_UPDATE')")
+    @PreAuthorize("hasAuthority('CHARACTERISTICS_UPDATE') or hasRole('SUPER_ADMIN')")
     public CharacteristicsDTO update(@PathVariable Long id, @Valid @RequestBody CharacteristicsDTO dto) {
         return service.update(id, dto);
     }
@@ -99,7 +99,7 @@ public class CharacteristicsController {
             }
     )
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('CHARACTERISTICS_DELETE')")
+    @PreAuthorize("hasAuthority('CHARACTERISTICS_DELETE') or hasRole('SUPER_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         service.delete(id);

@@ -21,7 +21,7 @@ import uz.duol.ecopharmwarehouse.module.product.service.ProductService;
 @RequestMapping("/api/v1/wms/product")
 @RequiredArgsConstructor
 @Tag(name = "Product and its metadata endpoint0")
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
 public class ProductController {
 
     private final ProductService service;
@@ -37,7 +37,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('PRODUCT_CREATE')")
+    @PreAuthorize("hasAuthority('PRODUCT_CREATE') or hasRole('SUPER_ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDTO create(@Valid @RequestBody ProductDTO dto) {
@@ -55,7 +55,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('PRODUCT_GET')")
+    @PreAuthorize("hasAuthority('PRODUCT_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/{id}")
     public ProductDTO get(@PathVariable Long id) {
         return service.findById(id);
@@ -72,7 +72,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('PRODUCT_UPDATE')")
+    @PreAuthorize("hasAuthority('PRODUCT_UPDATE') or hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
     public ProductDTO update(@PathVariable Long id, @Valid @RequestBody ProductDTO dto) {
         return service.update(id, dto);
@@ -87,7 +87,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('PRODUCT_GET')")
+    @PreAuthorize("hasAuthority('PRODUCT_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/list")
     public Page<ProductDTO> getAll(@RequestParam(value = "search", required = false) String search,
                                    @PageableDefault Pageable pageable) {
@@ -105,7 +105,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('PRODUCT_DELETE')")
+    @PreAuthorize("hasAuthority('PRODUCT_DELETE') or hasRole('SUPER_ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
@@ -122,7 +122,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('PRODUCT_METADATA_CREATE')")
+    @PreAuthorize("hasAuthority('PRODUCT_METADATA_CREATE') or hasRole('SUPER_ADMIN')")
     @PostMapping("/metadata")
     @ResponseStatus(HttpStatus.CREATED)
     public ProductMetadataDTO create(@Valid @RequestBody ProductMetadataDTO dto) {
@@ -140,7 +140,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('PRODUCT_METADATA_GET')")
+    @PreAuthorize("hasAuthority('PRODUCT_METADATA_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/metadata/{id}")
     public ProductMetadataDTO getMetadata(@PathVariable("id") Long id) {
         return productMetaDataService.findById(id);
@@ -157,7 +157,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('PRODUCT_METADATA_UPDATE')")
+    @PreAuthorize("hasAuthority('PRODUCT_METADATA_UPDATE') or hasRole('SUPER_ADMIN')")
     @PutMapping("/metadata/{id}")
     public ProductMetadataDTO update(@Valid @RequestBody ProductMetadataDTO dto, @PathVariable Long id) {
         return productMetaDataService.update(id, dto);
@@ -174,7 +174,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('PRODUCT_METADATA_DELETE')")
+    @PreAuthorize("hasAuthority('PRODUCT_METADATA_DELETE') or hasRole('SUPER_ADMIN')")
     @DeleteMapping("/metadata/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMetadata(@PathVariable Long id) {

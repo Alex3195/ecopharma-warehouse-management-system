@@ -19,7 +19,7 @@ import uz.duol.ecopharmwarehouse.module.task.service.TaskService;
 @RequestMapping("/api/v1/wms/task")
 @RequiredArgsConstructor
 @Tag(name = "Task endpoint")
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
 public class TaskController {
 
     private final TaskService taskService;
@@ -34,7 +34,7 @@ public class TaskController {
                     @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('TASK_CREATE')")
+    @PreAuthorize("hasAuthority('TASK_CREATE') or hasRole('SUPER_ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TaskDTO create(@Valid @RequestBody TaskDTO taskDTO) {
@@ -52,7 +52,7 @@ public class TaskController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('TASK_GET')")
+    @PreAuthorize("hasAuthority('TASK_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/{id}")
     public TaskDTO get(@PathVariable Long id) {
         return taskService.findById(id);
@@ -69,7 +69,7 @@ public class TaskController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('TASK_UPDATE')")
+    @PreAuthorize("hasAuthority('TASK_UPDATE') or hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
     public TaskDTO update(@PathVariable Long id, @Valid @RequestBody TaskDTO taskDTO) {
         return taskService.update(id, taskDTO);
@@ -86,7 +86,7 @@ public class TaskController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('TASK_DELETE')")
+    @PreAuthorize("hasAuthority('TASK_DELETE') or hasRole('SUPER_ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
@@ -102,7 +102,7 @@ public class TaskController {
                     @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('TASK_GET')")
+    @PreAuthorize("hasAuthority('TASK_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/list")
     public Page<TaskDTO> getAll(@RequestParam("search") String search,
                                 @PageableDefault

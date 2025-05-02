@@ -19,7 +19,7 @@ import uz.duol.ecopharmwarehouse.module.unit.service.UnitsService;
 @RequestMapping("/api/v1/wms/unit")
 @RequiredArgsConstructor
 @Tag(name = "Units endpoint")
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
 public class UnitController {
     private final UnitsService service;
 
@@ -33,7 +33,7 @@ public class UnitController {
                     @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('UNIT_CREATE')")
+    @PreAuthorize("hasAuthority('UNIT_CREATE') or hasRole('SUPER_ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UnitsDTO create(@Valid @RequestBody UnitsDTO dto) {
@@ -51,7 +51,7 @@ public class UnitController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('UNIT_GET')")
+    @PreAuthorize("hasAuthority('UNIT_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/{id}")
     public UnitsDTO getById(@PathVariable Long id) {
         return service.findById(id);
@@ -68,7 +68,7 @@ public class UnitController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('UNIT_UPDATE')")
+    @PreAuthorize("hasAuthority('UNIT_UPDATE') or hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
     public UnitsDTO update(@PathVariable Long id, @Valid @RequestBody UnitsDTO dto) {
         return service.update(id, dto);
@@ -85,7 +85,7 @@ public class UnitController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('UNIT_DELETE')")
+    @PreAuthorize("hasAuthority('UNIT_DELETE') or hasRole('SUPER_ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
@@ -101,7 +101,7 @@ public class UnitController {
                     @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('UNIT_GET')")
+    @PreAuthorize("hasAuthority('UNIT_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/list")
     public Page<UnitsDTO> getAll(
             @RequestParam(value = "search", required = false) String search,

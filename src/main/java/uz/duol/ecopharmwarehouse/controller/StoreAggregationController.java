@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.duol.ecopharmwarehouse.module.store.dto.StoreSyncRequest;
 import uz.duol.ecopharmwarehouse.module.store.service.StoreAggregationService;
@@ -14,6 +15,7 @@ import uz.duol.ecopharmwarehouse.module.store.service.StoreAggregationService;
 @RestController
 @RequestMapping("/api/v1/wms/store-aggregation")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
 public class StoreAggregationController {
     private final StoreAggregationService storeAggregationService;
 

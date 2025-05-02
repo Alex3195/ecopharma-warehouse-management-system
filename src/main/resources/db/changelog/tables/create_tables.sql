@@ -278,6 +278,9 @@ CREATE TABLE product_location_by_barcode_and_cell_code
     updated_by       VARCHAR(255),
     product_barcode  VARCHAR(255),
     location_barcode VARCHAR(255),
+    unit_id          BIGINT,
+    quantity         INTEGER,
+    product_id       BIGINT,
     CONSTRAINT pk_product_location_by_barcode_and_cell_code PRIMARY KEY (id)
 );
 

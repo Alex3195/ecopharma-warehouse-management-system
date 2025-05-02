@@ -22,4 +22,13 @@ public class ProductLocationByItsBarcodeAndCellCodeEntity extends BaseEntity {
     @Column(name = "location_barcode")
     private String locationBarcode;
 
+    @Column(name = "unit_id")
+    private Long unitId;
+
+    @Column(name = "quantity")
+    private Integer quantity;
+
+    @Column(name = "product_id")
+    private Long productId;
+
 }

@@ -19,7 +19,7 @@ import uz.duol.ecopharmwarehouse.module.address.service.AddressService;
 @RequestMapping("/api/v1/wms/address")
 @RequiredArgsConstructor
 @Tag(name = "Address endpoint")
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
 public class AddressController {
     private final AddressService addressService;
 
@@ -33,7 +33,7 @@ public class AddressController {
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('ADDRESS_CREATE')")
+    @PreAuthorize("hasAuthority('ADDRESS_CREATE') or hasRole('SUPER_ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AddressDTO create(@Valid @RequestBody AddressDTO dto) {
@@ -51,7 +51,7 @@ public class AddressController {
                     @ApiResponse(responseCode = "404", description = "Not found - data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('ADDRESS_GET')")
+    @PreAuthorize("hasAuthority('ADDRESS_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/{id}")
     public AddressDTO getAddress(@PathVariable Long id) {
         return addressService.findById(id);
@@ -68,7 +68,7 @@ public class AddressController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('ADDRESS_UPDATE')")
+    @PreAuthorize("hasAuthority('ADDRESS_UPDATE') or hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
     public AddressDTO updateAddress(@PathVariable Long id, @Valid @RequestBody AddressDTO dto) {
         return addressService.update(id, dto);
@@ -85,7 +85,7 @@ public class AddressController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('ADDRESS_DELETE')")
+    @PreAuthorize("hasAuthority('ADDRESS_DELETE') or hasRole('SUPER_ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAddress(@PathVariable Long id) {
@@ -101,7 +101,7 @@ public class AddressController {
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('ADDRESS_GET')")
+    @PreAuthorize("hasAuthority('ADDRESS_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/list")
     public Page<AddressDTO> getAll(@RequestParam(value = "search", required = false) String search,
                                          @PageableDefault Pageable pageable) {

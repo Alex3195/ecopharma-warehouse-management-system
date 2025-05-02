@@ -16,7 +16,7 @@ import java.util.Locale;
 @RestController
 @RequestMapping("/api/v1/wms/permission")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN') or hasRole('SUPER_ADMIN')")
 public class PermissionController {
     private final UserPermissionService service;
 
