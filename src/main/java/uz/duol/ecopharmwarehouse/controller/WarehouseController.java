@@ -19,7 +19,7 @@ import uz.duol.ecopharmwarehouse.module.warehouse.service.WarehouseService;
 @RequestMapping("/api/v1/wms/warehouse")
 @RequiredArgsConstructor
 @Tag(name = "Warehouse entity")
-@PreAuthorize("hasAnyRole('ADMIN','USER')")
+@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
 public class WarehouseController {
 
     private final WarehouseService service;
@@ -34,7 +34,7 @@ public class WarehouseController {
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('WAREHOUSE_CREATE')")
+    @PreAuthorize("hasAuthority('WAREHOUSE_CREATE') or hasRole('SUPER_ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public WarehouseDTO create(@Valid @RequestBody WarehouseDTO dto) {
@@ -52,7 +52,7 @@ public class WarehouseController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('WAREHOUSE_GET')")
+    @PreAuthorize("hasAuthority('WAREHOUSE_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/{id}")
     public WarehouseDTO findById(@PathVariable Long id) {
         return service.findById(id);
@@ -69,7 +69,7 @@ public class WarehouseController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('WAREHOUSE_UPDATE')")
+    @PreAuthorize("hasAuthority('WAREHOUSE_UPDATE') or hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
     public WarehouseDTO update(@PathVariable Long id, @Valid @RequestBody WarehouseDTO dto) {
         return service.update(id, dto);
@@ -85,7 +85,7 @@ public class WarehouseController {
                     @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
-    @PreAuthorize("hasAuthority('WAREHOUSE_DELETE')")
+    @PreAuthorize("hasAuthority('WAREHOUSE_DELETE') or hasRole('SUPER_ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
@@ -101,7 +101,7 @@ public class WarehouseController {
                     @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
-    @PreAuthorize("hasAuthority('WAREHOUSE_GET')")
+    @PreAuthorize("hasAuthority('WAREHOUSE_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/list")
     public Page<WarehouseDTO> findAll(@RequestParam(value = "search",required = false) String search,
                                       @PageableDefault Pageable pageable) {
