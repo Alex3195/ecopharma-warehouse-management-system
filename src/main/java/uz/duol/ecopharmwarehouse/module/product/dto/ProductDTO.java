@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
-import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 import uz.duol.ecopharmwarehouse.module.product.metadata.dto.ProductMetadataDTO;
 
 import java.util.List;
@@ -23,5 +22,4 @@ public class ProductDTO {
 
     private List<ProductMetadataDTO> productMetadata;
 
-    private List<LocationDTO> locations;
 }

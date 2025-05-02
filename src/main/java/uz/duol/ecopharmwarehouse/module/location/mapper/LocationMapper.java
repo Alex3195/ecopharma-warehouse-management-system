@@ -9,7 +9,6 @@ import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface LocationMapper {
 
-    @Mapping(target = "product", ignore = true)
     @Mapping(target = "available", source = "isEmpty")
     LocationDTO toDto(LocationEntity location);
 
@@ -18,7 +17,6 @@ public interface LocationMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "product", ignore = true)
     @Mapping(target = "isEmpty", source = "available")
     LocationEntity toEntity(LocationDTO dto);
 }

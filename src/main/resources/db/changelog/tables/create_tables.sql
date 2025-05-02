@@ -232,7 +232,6 @@ CREATE TABLE location
     cell_id      BIGINT,
     barcode      VARCHAR(255),
     is_empty     BOOLEAN,
-    product_id   BIGINT,
     CONSTRAINT pk_location PRIMARY KEY (id)
 );
 
@@ -547,9 +546,6 @@ ALTER TABLE inventory_snapshot
 
 ALTER TABLE inventory_snapshot
     ADD CONSTRAINT FK_INVENTORY_SNAPSHOT_ON_UNIT FOREIGN KEY (unit_id) REFERENCES unit (id);
-
-ALTER TABLE location
-    ADD CONSTRAINT FK_LOCATION_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
 ALTER TABLE outbound_shipment
     ADD CONSTRAINT FK_OUTBOUND_SHIPMENT_ON_CUSTOMER FOREIGN KEY (customer_id) REFERENCES "user" (id);

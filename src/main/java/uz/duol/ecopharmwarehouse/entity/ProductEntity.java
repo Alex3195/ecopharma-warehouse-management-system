@@ -29,9 +29,6 @@ public class ProductEntity extends BaseEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductMetadataEntity> productMetadata;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<LocationEntity> locations;
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
