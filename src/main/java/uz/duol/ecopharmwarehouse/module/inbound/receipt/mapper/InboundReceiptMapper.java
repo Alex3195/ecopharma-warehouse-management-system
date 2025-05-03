@@ -10,6 +10,8 @@ import uz.duol.ecopharmwarehouse.module.users.mapper.UserMapper;
 
 @Mapper(componentModel = "spring", uses = {UnitMapper.class, ProductMapper.class, UserMapper.class}, unmappedTargetPolicy = org.mapstruct.ReportingPolicy.ERROR)
 public interface InboundReceiptMapper {
+    @Mapping(target = "processingTime", ignore = true)
+    @Mapping(target = "crossDockType", ignore = true)
     InboundReceiptDto toDto(InboundReceiptEntity entity);
 
     @Mapping(target = "updatedBy", ignore = true)

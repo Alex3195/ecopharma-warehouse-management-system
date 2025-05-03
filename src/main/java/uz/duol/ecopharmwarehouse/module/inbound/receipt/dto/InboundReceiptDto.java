@@ -1,11 +1,14 @@
 package uz.duol.ecopharmwarehouse.module.inbound.receipt.dto;
 
 import lombok.Data;
+import uz.duol.ecopharmwarehouse.enums.CrossDockTypeEnum;
 import uz.duol.ecopharmwarehouse.enums.ReceiptStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ReceiptTypeEnum;
 import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
 import uz.duol.ecopharmwarehouse.module.unit.dto.UnitsDTO;
 import uz.duol.ecopharmwarehouse.module.users.dto.UserDTO;
+
+import java.time.LocalDateTime;
 
 @Data
 public class InboundReceiptDto {
@@ -20,4 +23,7 @@ public class InboundReceiptDto {
     private Long unitId;
     private UnitsDTO unit; // Assuming a Unit entity exists
     private Long alternateStoreId;
+
+    private CrossDockTypeEnum crossDockType; // Assuming a CrossDockTypeEnum exists
+    private LocalDateTime processingTime;
 }

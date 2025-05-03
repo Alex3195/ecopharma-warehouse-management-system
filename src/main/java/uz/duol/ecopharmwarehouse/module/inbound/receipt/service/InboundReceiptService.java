@@ -7,11 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.entity.CrossDockingEntity;
 import uz.duol.ecopharmwarehouse.entity.InboundReceiptEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.dto.InboundReceiptDto;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.mapper.InboundReceiptMapper;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.specification.InboundReceiptSpecification;
+import uz.duol.ecopharmwarehouse.repositories.CrossDockingRepository;
 import uz.duol.ecopharmwarehouse.repositories.InboundReceiptRepository;
 
 @Service
@@ -20,11 +23,25 @@ public class InboundReceiptService {
     private final InboundReceiptRepository repository;
     @Qualifier("inboundReceiptMapper")
     private final InboundReceiptMapper mapper;
+    private final CrossDockingRepository crossDockingRepository;
 
+    @Transactional
     public InboundReceiptDto create(InboundReceiptDto receipt) {
         InboundReceiptEntity e = mapper.toEntity(receipt);
         repository.save(e);
+        if (receipt.getCrossDockType() != null) {
+            CrossDockingEntity crossDockingEntity = crossDockingEntityFromRequest(receipt);
+            crossDockingRepository.save(crossDockingEntity);
+        }
         return mapper.toDto(e);
+    }
+
+    private CrossDockingEntity crossDockingEntityFromRequest(InboundReceiptDto request) {
+        CrossDockingEntity crossDockingEntity = new CrossDockingEntity();
+        crossDockingEntity.setInboundReceiptId(request.getId());
+        crossDockingEntity.setCrossDockType(request.getCrossDockType());
+        crossDockingEntity.setProcessingTime(request.getProcessingTime());
+        return crossDockingEntity;
     }
 
     public InboundReceiptDto findById(Long id) {
