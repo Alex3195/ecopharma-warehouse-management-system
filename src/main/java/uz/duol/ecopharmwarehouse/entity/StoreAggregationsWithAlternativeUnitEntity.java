@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
+@EntityListeners(AuditTrailListener.class)
 @SequenceGenerator(name = "store_aggregations_with_alternative_unit_seq_gen", sequenceName = "store_aggregations_with_alternative_unit_seq", allocationSize = 1)
 public class StoreAggregationsWithAlternativeUnitEntity extends BaseEntity {
     @Id

@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 @Entity
 @Table(name = TableNamesConstant.Tables.UNIT_CONVERSION)
 @Getter
 @Setter
 @ToString
+@EntityListeners(AuditTrailListener.class)
 @SequenceGenerator(name = "unit_conversion_seq_gen", sequenceName = "unit_conversion_seq", allocationSize = 1)
 public class UnitConversionEntity extends BaseEntity {
     @Id

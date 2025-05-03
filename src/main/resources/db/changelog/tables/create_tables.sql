@@ -82,8 +82,8 @@ CREATE TABLE audit_trail
     table_name   VARCHAR(255),
     record_id    BIGINT,
     action_type  VARCHAR(255),
-    old_value    VARCHAR(255),
-    new_value    VARCHAR(255),
+    old_value    TEXT,
+    new_value    TEXT,
     performed_by VARCHAR(255),
     action_time  TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_audit_trail PRIMARY KEY (id)

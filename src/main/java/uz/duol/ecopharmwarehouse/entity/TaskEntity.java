@@ -6,6 +6,7 @@ import lombok.Setter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.enums.TaskStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.TaskTypeEnum;
+import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = TableNamesConstant.Tables.TASK)
 @Setter
 @Getter
+@EntityListeners(AuditTrailListener.class)
 public class TaskEntity extends BaseEntity {
     @Id
     @Column(name = "id")

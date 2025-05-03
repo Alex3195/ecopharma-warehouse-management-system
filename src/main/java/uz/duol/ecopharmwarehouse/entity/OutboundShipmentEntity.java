@@ -6,6 +6,7 @@ import lombok.Setter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.enums.ShipmentStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ShipmentTypeEnum;
+import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = TableNamesConstant.Tables.OUTBOUND_SHIPMENT)
 @Getter
 @Setter
+@EntityListeners(AuditTrailListener.class)
 public class OutboundShipmentEntity extends BaseEntity {
     @Id
     @Column(name = "id")

@@ -6,12 +6,14 @@ import lombok.Setter;
 import lombok.ToString;
 import uz.duol.ecopharmwarehouse.enums.CharacteristicType;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 @Entity
 @Table(name = TableNamesConstant.Tables.CHARACTERISTIC)
 @Setter
 @Getter
 @ToString
+@EntityListeners(AuditTrailListener.class)
 public class CharacteristicEntity extends BaseEntity {
     @Id
     @Column(name = "id")

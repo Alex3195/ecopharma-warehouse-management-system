@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 import java.time.LocalDate;
 
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @ToString(exclude = "product")
+@EntityListeners(AuditTrailListener.class)
 public class ProductMetadataEntity extends BaseEntity {
     @Id
     @Column(name = "id")

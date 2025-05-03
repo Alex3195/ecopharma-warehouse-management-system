@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 @Entity
 @Table(name = TableNamesConstant.Tables.SECTOR_CHARACTERISTIC)
 @Setter
 @Getter
+@EntityListeners(AuditTrailListener.class)
 public class SectorCharacteristicEntity extends BaseEntity {
     @Id
     @Column(name = "id")

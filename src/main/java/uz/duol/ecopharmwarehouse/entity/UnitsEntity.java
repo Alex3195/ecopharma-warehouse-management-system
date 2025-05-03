@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 @Entity
 @Table(name = TableNamesConstant.Tables.UNIT)
 @Setter
 @Getter
 @ToString
+@EntityListeners(AuditTrailListener.class)
 public class UnitsEntity extends BaseEntity {
     @Id
     @Column(name = "id")

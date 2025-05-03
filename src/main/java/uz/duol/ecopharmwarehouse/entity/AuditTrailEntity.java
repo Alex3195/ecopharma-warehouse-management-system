@@ -23,9 +23,9 @@ public class AuditTrailEntity extends BaseEntity {
     private Long recordId;
     @Column(name = "action_type")
     private String actionType; // e.g., insert, update, delete
-    @Column(name = "old_value")
+    @Column(name = "old_value", columnDefinition = "text")
     private String oldValue;
-    @Column(name = "new_value")
+    @Column(name = "new_value", columnDefinition = "text")
     private String newValue;
     @Column(name = "performed_by")
     private String performedById;
@@ -35,5 +35,4 @@ public class AuditTrailEntity extends BaseEntity {
     private UserEntity performedBy;
     @Column(name = "action_time")
     private LocalDateTime actionTime;
-
 }

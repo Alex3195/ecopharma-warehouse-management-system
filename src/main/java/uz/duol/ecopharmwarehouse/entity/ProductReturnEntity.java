@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 @Table(name = TableNamesConstant.Tables.PRODUCT_RETURN)
 @Entity
 @Setter
 @Getter
+@EntityListeners(AuditTrailListener.class)
 public class ProductReturnEntity extends BaseEntity {
 
     @Id

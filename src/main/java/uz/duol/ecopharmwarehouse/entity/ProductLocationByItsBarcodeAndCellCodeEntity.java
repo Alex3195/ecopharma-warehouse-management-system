@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 @Entity
 @Table(name = TableNamesConstant.Tables.PRODUCT_LOCATION_BY_BARCODE_AND_CELL_CODE)
 @Setter
 @Getter
+@EntityListeners(AuditTrailListener.class)
 public class ProductLocationByItsBarcodeAndCellCodeEntity extends BaseEntity {
     @Id
     @Column(name = "id")

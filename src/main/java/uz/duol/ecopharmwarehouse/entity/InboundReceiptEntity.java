@@ -6,11 +6,13 @@ import lombok.Setter;
 import uz.duol.ecopharmwarehouse.enums.ReceiptStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ReceiptTypeEnum;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 @Entity
 @Table(name = TableNamesConstant.Tables.INBOUND_RECEIPT)
 @Getter
 @Setter
+@EntityListeners(AuditTrailListener.class)
 public class InboundReceiptEntity extends BaseEntity {
 
     @Id

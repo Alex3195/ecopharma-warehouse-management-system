@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.enums.RackTypeEnum;
+import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @Table(name = TableNamesConstant.Tables.RACKS)
 @Setter
 @Getter
+@EntityListeners(AuditTrailListener.class)
 public class RackEntity extends BaseEntity {
     @Id
     @Column(name = "id")

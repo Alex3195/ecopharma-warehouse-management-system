@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = TableNamesConstant.Tables.INVENTORY_SNAPSHOT)
 @Setter
 @Getter
+@EntityListeners(AuditTrailListener.class)
 public class InventorySnapshotEntity extends BaseEntity {
 
     @Id
