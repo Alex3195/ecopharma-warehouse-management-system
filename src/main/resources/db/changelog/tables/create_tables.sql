@@ -384,7 +384,7 @@ CREATE TABLE settings
     CONSTRAINT pk_settings PRIMARY KEY (id)
 );
 
-CREATE TABLE store_aggregations_with_alternative_unit_entity
+CREATE TABLE store_aggregations_with_alternative_unit
 (
     id                  BIGINT                      NOT NULL,
     created_at          TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -400,7 +400,7 @@ CREATE TABLE store_aggregations_with_alternative_unit_entity
     produced_date       VARCHAR(255),
     expiration_date     VARCHAR(255),
     barcode             VARCHAR(255),
-    CONSTRAINT pk_storeaggregationswithalternativeunitentity PRIMARY KEY (id)
+    CONSTRAINT pk_store_aggregations_with_alternative_unit PRIMARY KEY (id)
 );
 
 CREATE TABLE task

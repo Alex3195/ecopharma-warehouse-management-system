@@ -3,11 +3,12 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 import java.util.List;
 
-@Table
+@Table(name = TableNamesConstant.Tables.STORAGE_AGGREGATIONS_WITH_ALTERNATIVE_UNIT)
 @Entity
 @Setter
 @Getter
