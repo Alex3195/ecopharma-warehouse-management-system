@@ -24,7 +24,8 @@ public class OutboundShipmentService {
     }
 
     public OutboundShipmentDto findById(Long id) {
-        OutboundShipmentEntity entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Outbound shipment not found"));
+        OutboundShipmentEntity entity = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Outbound shipment not found"));
         return mapper.toDto(entity);
     }
 
