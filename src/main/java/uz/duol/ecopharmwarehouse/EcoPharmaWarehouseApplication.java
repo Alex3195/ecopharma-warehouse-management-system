@@ -1,6 +1,7 @@
 package uz.duol.ecopharmwarehouse;
 
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -18,6 +19,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableJpaRepositories(basePackages = "uz.duol.ecopharmwarehouse")
 @EnableFeignClients
 @EnableDiscoveryClient
+@EnableRabbit
 public class EcoPharmaWarehouseApplication {
 
     public static void main(String[] args) {
