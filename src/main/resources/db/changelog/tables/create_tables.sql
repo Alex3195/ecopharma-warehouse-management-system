@@ -437,15 +437,17 @@ CREATE TABLE transport_label
 
 CREATE TABLE unit
 (
-    id          BIGINT                      NOT NULL,
-    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at  TIMESTAMP WITHOUT TIME ZONE,
-    status      VARCHAR(255)                NOT NULL,
-    created_by  VARCHAR(255),
-    updated_by  VARCHAR(255),
-    name        VARCHAR(255),
-    symbol      VARCHAR(255),
-    description VARCHAR(255),
+    id                            BIGINT                      NOT NULL,
+    created_at                    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at                    TIMESTAMP WITHOUT TIME ZONE,
+    status                        VARCHAR(255)                NOT NULL,
+    created_by                    VARCHAR(255),
+    updated_by                    VARCHAR(255),
+    base_unit_id                  BIGINT                      NOT NULL,
+    alternative_unit_id           BIGINT                      NOT NULL,
+    base_conversion_factor        INTEGER                     NOT NULL,
+    alternative_conversion_factor INTEGER                     NOT NULL,
+    product_id                    BIGINT,
     CONSTRAINT pk_unit PRIMARY KEY (id)
 );
 
@@ -593,6 +595,12 @@ ALTER TABLE unit_conversion
 
 ALTER TABLE unit_conversion
     ADD CONSTRAINT FK_UNIT_CONVERSION_ON_BASE_UNIT FOREIGN KEY (base_unit_id) REFERENCES unit (id);
+
+ALTER TABLE unit
+    ADD CONSTRAINT FK_UNIT_ON_ALTERNATIVE_UNIT FOREIGN KEY (alternative_unit_id) REFERENCES unit (id);
+
+ALTER TABLE unit
+    ADD CONSTRAINT FK_UNIT_ON_BASE_UNIT FOREIGN KEY (base_unit_id) REFERENCES unit (id);
 
 ALTER TABLE warehouse
     ADD CONSTRAINT FK_WAREHOUSE_ON_ADDRESS FOREIGN KEY (address_id) REFERENCES address (id);

@@ -54,7 +54,7 @@ public class UnitConversionController {
     @PostMapping
     public UnitConversionDto saveUnitConversion(@RequestBody @Valid UnitConversionDto unitConversionDto) {
         log.info("Saving units conversion {}", unitConversionDto);
-        return service.save(unitConversionDto);
+        return service.create(unitConversionDto);
     }
 
     @Operation(security = @SecurityRequirement(name = "bearerAuth"),

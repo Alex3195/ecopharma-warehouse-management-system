@@ -19,11 +19,13 @@ public class UnitsEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unit_seq_gen")
     @SequenceGenerator(name = "unit_seq_gen", sequenceName = "unit_seq", allocationSize = 1)
     private Long id;
-    @Column(name = "name")
+    @Column(name = "code")
+    private Integer code;
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "symbol")
+    @Column(name = "symbol", nullable = false)
     private String symbol;
-    @Column(name = "description")
-    private String description;
+    @Column(name = "international_abbreviation")
+    private String internationalAbbreviation;
 
 }

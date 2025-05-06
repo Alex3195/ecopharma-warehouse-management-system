@@ -20,9 +20,6 @@ public class UnitConversionEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unit_conversion_seq_gen")
     private Long id;
 
-    @Column(name = "product_id", nullable = false)
-    private Long productId;
-
     @Column(name = "base_unit_id", nullable = false)
     private Long baseUnitId;
 
@@ -45,4 +42,6 @@ public class UnitConversionEntity extends BaseEntity {
     @Column(name = "alternative_conversion_factor", nullable = false)
     private Integer alternativeConversionFactor;
 
+    @Column(name = "product_id")
+    private Long productId;
 }

@@ -6,9 +6,10 @@ import lombok.Data;
 @Data
 public class UnitsDTO {
     private Long id;
+    private Integer code;
     @NotBlank
     private String name;
-    private String description;
     @NotBlank
     private String symbol;
+    private String internationalAbbreviation;
 }
