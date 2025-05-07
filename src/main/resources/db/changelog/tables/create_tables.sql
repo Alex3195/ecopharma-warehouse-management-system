@@ -384,6 +384,12 @@ CREATE TABLE settings
     CONSTRAINT pk_settings PRIMARY KEY (id)
 );
 
+CREATE TABLE store_aggregations
+(
+    store_agg_id   BIGINT NOT NULL,
+    aggregation_id VARCHAR(255)
+);
+
 CREATE TABLE store_aggregations_with_alternative_unit
 (
     id                  BIGINT                      NOT NULL,
@@ -396,10 +402,10 @@ CREATE TABLE store_aggregations_with_alternative_unit
     supplier_id         VARCHAR(255),
     alternative_unit_id BIGINT,
     base_unit_id        BIGINT,
-    aggregations        TEXT[],
     produced_date       VARCHAR(255),
     expiration_date     VARCHAR(255),
     barcode             VARCHAR(255),
+    meta_data           JSONB,
     CONSTRAINT pk_store_aggregations_with_alternative_unit PRIMARY KEY (id)
 );
 
@@ -437,17 +443,16 @@ CREATE TABLE transport_label
 
 CREATE TABLE unit
 (
-    id                            BIGINT                      NOT NULL,
-    created_at                    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at                    TIMESTAMP WITHOUT TIME ZONE,
-    status                        VARCHAR(255)                NOT NULL,
-    created_by                    VARCHAR(255),
-    updated_by                    VARCHAR(255),
-    base_unit_id                  BIGINT                      NOT NULL,
-    alternative_unit_id           BIGINT                      NOT NULL,
-    base_conversion_factor        INTEGER                     NOT NULL,
-    alternative_conversion_factor INTEGER                     NOT NULL,
-    product_id                    BIGINT,
+    id                         BIGINT                      NOT NULL,
+    created_at                 TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at                 TIMESTAMP WITHOUT TIME ZONE,
+    status                     VARCHAR(255)                NOT NULL,
+    created_by                 VARCHAR(255),
+    updated_by                 VARCHAR(255),
+    code                       INTEGER,
+    name                       VARCHAR(255)                NOT NULL,
+    symbol                     VARCHAR(255)                NOT NULL,
+    international_abbreviation VARCHAR(255),
     CONSTRAINT pk_unit PRIMARY KEY (id)
 );
 
@@ -459,11 +464,11 @@ CREATE TABLE unit_conversion
     status                        VARCHAR(255)                NOT NULL,
     created_by                    VARCHAR(255),
     updated_by                    VARCHAR(255),
-    product_id                    BIGINT                      NOT NULL,
     base_unit_id                  BIGINT                      NOT NULL,
     alternative_unit_id           BIGINT                      NOT NULL,
     base_conversion_factor        INTEGER                     NOT NULL,
     alternative_conversion_factor INTEGER                     NOT NULL,
+    product_id                    BIGINT,
     CONSTRAINT pk_unit_conversion PRIMARY KEY (id)
 );
 
@@ -575,6 +580,9 @@ ALTER TABLE sector_characteristic
 ALTER TABLE sector
     ADD CONSTRAINT FK_SECTOR_ON_WAREHOUSE FOREIGN KEY (warehouse_id) REFERENCES warehouse (id);
 
+ALTER TABLE store_aggregations
+    ADD CONSTRAINT FK_STOREAGGREGATIONS_ON_STOREAGGREGATIONSWITHALTERNATIVEUNITENT FOREIGN KEY (store_agg_id) REFERENCES store_aggregations_with_alternative_unit (id);
+
 ALTER TABLE task
     ADD CONSTRAINT FK_TASK_ON_ASSIGNED_TO FOREIGN KEY (assigned_to) REFERENCES "user" (id);
 
@@ -595,12 +603,6 @@ ALTER TABLE unit_conversion
 
 ALTER TABLE unit_conversion
     ADD CONSTRAINT FK_UNIT_CONVERSION_ON_BASE_UNIT FOREIGN KEY (base_unit_id) REFERENCES unit (id);
-
-ALTER TABLE unit
-    ADD CONSTRAINT FK_UNIT_ON_ALTERNATIVE_UNIT FOREIGN KEY (alternative_unit_id) REFERENCES unit (id);
-
-ALTER TABLE unit
-    ADD CONSTRAINT FK_UNIT_ON_BASE_UNIT FOREIGN KEY (base_unit_id) REFERENCES unit (id);
 
 ALTER TABLE warehouse
     ADD CONSTRAINT FK_WAREHOUSE_ON_ADDRESS FOREIGN KEY (address_id) REFERENCES address (id);

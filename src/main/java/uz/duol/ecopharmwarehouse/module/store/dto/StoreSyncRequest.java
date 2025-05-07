@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.module.store.dto;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class StoreSyncRequest {
@@ -15,5 +16,6 @@ public class StoreSyncRequest {
     private String producedDate;
     private String expirationDate;
     private String barcode;
+    private Map<String, Object> metaData;
 
 }

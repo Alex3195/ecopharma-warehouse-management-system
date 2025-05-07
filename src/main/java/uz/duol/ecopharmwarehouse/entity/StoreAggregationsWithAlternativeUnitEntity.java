@@ -3,10 +3,12 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import uz.duol.ecopharmwarehouse.converter.JsonToMapConverter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 import java.util.List;
+import java.util.Map;
 
 @Table(name = TableNamesConstant.Tables.STORAGE_AGGREGATIONS_WITH_ALTERNATIVE_UNIT)
 @Entity
@@ -27,7 +29,9 @@ public class StoreAggregationsWithAlternativeUnitEntity extends BaseEntity {
     private Long alternativeUnitId;
     @Column(name = "base_unit_id")
     private Long baseUnitId;
-    @Column(name = "aggregations")
+    @ElementCollection
+    @CollectionTable(name = "store_aggregations", joinColumns = @JoinColumn(name = "store_agg_id"))
+    @Column(name = "aggregation_id")
     private List<String> aggregations;
     @Column(name = "produced_date")
     private String producedDate;
@@ -35,5 +39,8 @@ public class StoreAggregationsWithAlternativeUnitEntity extends BaseEntity {
     private String expirationDate;
     @Column(name = "barcode")
     private String barcode;
+    @Convert(converter = JsonToMapConverter.class)
+    @Column(name = "meta_data", columnDefinition = "jsonb")
+    private Map<String, Object> metaData;
 
 }
