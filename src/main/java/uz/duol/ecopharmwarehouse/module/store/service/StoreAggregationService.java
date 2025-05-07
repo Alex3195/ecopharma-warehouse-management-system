@@ -31,12 +31,14 @@ public class StoreAggregationService {
     }
 
     public StoreSyncRequest findById(Long id) {
-        StoreAggregationsWithAlternativeUnitEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED).orElseThrow(() -> new EntityNotFoundException("Store not found"));
+        StoreAggregationsWithAlternativeUnitEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+                .orElseThrow(() -> new EntityNotFoundException("Store not found"));
         return mapper.toDto(e);
     }
 
     public void delete(Long id) {
-        StoreAggregationsWithAlternativeUnitEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED).orElseThrow(() -> new EntityNotFoundException("Store not found"));
+        StoreAggregationsWithAlternativeUnitEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+                .orElseThrow(() -> new EntityNotFoundException("Store not found"));
         e.setStatus(Status.DELETED);
         repository.save(e);
     }
