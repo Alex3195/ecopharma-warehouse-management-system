@@ -41,8 +41,10 @@ public class EventListener {
         userDto.setLastName(event.getLastName());
         userDto.setEmail(event.getEmail());
         userDto.setPhone(event.getPhone());
+        userDto.setUsername(event.getUsername());
         userDto.setTelegramNickName(event.getTelegramNickName());
         userDto.setHikvisionAccessId(event.getHikvisionAccessId());
+        userDto.setPerformedBy(event.getPerformedBy());
         return userDto;
     }
 
@@ -60,6 +62,7 @@ public class EventListener {
         productDto.setName(event.getName());
         productDto.setDescription(event.getDescription());
         productDto.setProductType(event.getGroupName());
+        productDto.setPerformedBy(event.getPerformedBy());
         return productDto;
     }
 
@@ -77,7 +80,8 @@ public class EventListener {
         unitsDTO.setCode(event.getCode());
         unitsDTO.setSymbol(event.getSymbol());
         unitsDTO.setInternationalAbbreviation(event.getInternationalAbbreviation());
-        return null;
+        unitsDTO.setPerformedBy(event.getPerformedBy());
+        return unitsDTO;
     }
 
     @RabbitListener(queues = RabbitMQConfig.UNIT_CONVERSION_CREATED_QUEUE)
@@ -97,6 +101,7 @@ public class EventListener {
         dto.setAlternativeUnitSymbol(event.getAlternativeUnitSymbol());
         dto.setBaseConversionFactor(event.getBaseConversionFactor());
         dto.setAlternativeConversionFactor(event.getAlternativeConversionFactor());
+        dto.setPerformedBy(event.getPerformedBy());
         return dto;
     }
 

@@ -10,6 +10,7 @@ import uz.duol.ecopharmwarehouse.module.product.metadata.mapper.ProductMetadataM
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR, uses = {ProductMetadataMapper.class, LocationMapper.class})
 public interface ProductMapper {
+    @Mapping(target = "performedBy", ignore = true)
     ProductDTO toDto(ProductEntity product);
 
     @Mapping(target = "updatedBy", ignore = true)

@@ -102,6 +102,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.0'
 // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-amqp
     implementation 'org.springframework.boot:spring-boot-starter-amqp:3.4.4'
+
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'

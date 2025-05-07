@@ -21,6 +21,9 @@ public class UnitsService {
 
     public UnitsDTO create(UnitsDTO dto) {
         UnitsEntity entity = mapper.toEntity(dto);
+        if (dto.getPerformedBy() != null) {
+            entity.setCreatedBy(dto.getPerformedBy());
+        }
         return mapper.toDto(repository.save(entity));
     }
 

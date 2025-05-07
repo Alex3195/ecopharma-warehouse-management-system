@@ -21,6 +21,7 @@ public interface ConversionMapper {
     UnitConversionEntity toEntity(UnitConversionDto dto);
 
 
+    @Mapping(target = "performedBy", ignore = true)
     @Mapping(target = "baseUnitSymbol", ignore = true)
     @Mapping(target = "alternativeUnitSymbol", ignore = true)
     UnitConversionDto toDto(UnitConversionEntity entity);

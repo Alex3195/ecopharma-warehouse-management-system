@@ -23,6 +23,9 @@ public class ProductService {
     @Transactional
     public ProductDTO create(ProductDTO dto) {
         ProductEntity productEntity = mapper.toEntity(dto);
+        if (dto.getPerformedBy()!= null) {
+            productEntity.setCreatedBy(dto.getPerformedBy());
+        }
         return mapper.toDto(repository.save(productEntity));
     }
 

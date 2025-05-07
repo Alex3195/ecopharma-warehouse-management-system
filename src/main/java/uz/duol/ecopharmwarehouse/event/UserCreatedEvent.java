@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserCreatedEvent{
+public class UserCreatedEvent {
     private String id;
     private String firstName;
     private String lastName;
@@ -19,4 +19,5 @@ public class UserCreatedEvent{
     private String hikvisionAccessId;
     private String telegramNickName;
     private List<Long> departmentId;
+    private String performedBy;
 }

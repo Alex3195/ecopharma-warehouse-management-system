@@ -35,5 +35,6 @@ public class UnitConversionDto {
     @NotNull(message = "Alternative conversion factor is required")
     @Schema(name = "alternativeConversionFactor", example = "48")
     private Integer alternativeConversionFactor;
+    private String performedBy;
 
 }

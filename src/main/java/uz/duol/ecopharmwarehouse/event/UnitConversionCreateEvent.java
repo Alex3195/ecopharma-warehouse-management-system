@@ -16,4 +16,5 @@ public class UnitConversionCreateEvent {
     private String alternativeUnitSymbol;
     private Integer baseConversionFactor;
     private Integer alternativeConversionFactor;
+    private String performedBy;
 }

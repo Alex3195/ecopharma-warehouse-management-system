@@ -16,4 +16,5 @@ public class UserDTO {
     private String hikvisionAccessId;
     private String telegramNickName;
     private List<TaskDTO> tasks;
+    private String performedBy;
 }

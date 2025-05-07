@@ -27,6 +27,9 @@ public class UnitConversionService {
     @Transactional
     public UnitConversionDto create(UnitConversionDto dto) {
         UnitConversionEntity entity = mapper.toEntity(dto);
+        if (dto.getPerformedBy() != null) {
+            entity.setCreatedBy(dto.getPerformedBy());
+        }
         return mapper.toDto(repository.save(entity));
     }
 

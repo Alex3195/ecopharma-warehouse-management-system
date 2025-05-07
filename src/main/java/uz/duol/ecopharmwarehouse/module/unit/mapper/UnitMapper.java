@@ -8,6 +8,7 @@ import uz.duol.ecopharmwarehouse.module.unit.dto.UnitsDTO;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface UnitMapper {
+    @Mapping(target = "performedBy", ignore = true)
     UnitsDTO toDto(UnitsEntity entity);
 
     @Mapping(target = "updatedBy", ignore = true)

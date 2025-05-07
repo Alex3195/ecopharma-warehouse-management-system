@@ -25,6 +25,9 @@ public class UserService {
 
     public UserDTO create(UserDTO dto) {
         UserEntity e = mapper.toEntity(dto);
+        if (dto.getPerformedBy()!=null) {
+            e.setCreatedBy(dto.getPerformedBy());
+        }
         return mapper.toDto(repository.save(e));
     }
 

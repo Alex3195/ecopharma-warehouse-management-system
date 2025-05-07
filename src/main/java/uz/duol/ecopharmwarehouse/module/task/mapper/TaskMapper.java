@@ -17,7 +17,7 @@ public interface TaskMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "assignedToUser", ignore = true)
     TaskEntity toEntity(TaskDTO dto);
-
+    @Mapping(target = "assignedToUser.performedBy",ignore = true)
     TaskDTO toDto(TaskEntity entity);
 
 }

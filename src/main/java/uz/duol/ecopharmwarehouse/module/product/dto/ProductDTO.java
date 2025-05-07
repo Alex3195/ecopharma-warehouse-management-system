@@ -21,5 +21,6 @@ public class ProductDTO {
     private Integer quantity;
 
     private List<ProductMetadataDTO> productMetadata;
+    private String performedBy;
 
 }

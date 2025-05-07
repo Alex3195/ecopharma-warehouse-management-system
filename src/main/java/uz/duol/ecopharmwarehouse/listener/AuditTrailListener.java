@@ -19,8 +19,6 @@ import java.time.LocalDateTime;
 @Component
 public class AuditTrailListener {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     @PrePersist
     public void prePersist(Object entity) {
         saveAudit(entity, "INSERT", null);
@@ -55,8 +53,6 @@ public class AuditTrailListener {
         CustomUserDetails user = WMSUtils.getCurrentUserDetails();
         if (user != null) {
             audit.setPerformedById(user.getUserId());
-        } else {
-            audit.setPerformedById("SYSTEM");
         }
 
         getAuditTrailRepository().save(audit);
@@ -66,9 +62,13 @@ public class AuditTrailListener {
         return SpringContext.getBean(AuditTrailRepository.class);
     }
 
+    private ObjectMapper getObjectMapper() {
+        return SpringContext.getBean(ObjectMapper.class);
+    }
+
     private String toJson(Object obj) {
         try {
-            return objectMapper.writeValueAsString(obj);
+            return getObjectMapper().writeValueAsString(obj);
         } catch (JsonProcessingException e) {
             return "JSON_SERIALIZATION_ERROR: " + e.getMessage();
         }

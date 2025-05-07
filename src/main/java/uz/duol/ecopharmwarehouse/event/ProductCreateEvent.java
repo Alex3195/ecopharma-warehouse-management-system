@@ -22,4 +22,5 @@ public class ProductCreateEvent {
     private Integer validityPeriod;
     private Long storageDuration;
     private Integer quarantineStoreDuration;
+    private String performedBy;
 }

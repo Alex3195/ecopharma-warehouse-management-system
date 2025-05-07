@@ -8,6 +8,7 @@ import uz.duol.ecopharmwarehouse.module.users.dto.UserUpdateDto;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.ERROR, uses = {TaskMapper.class})
 public interface UserMapper {
+    @Mapping(target = "performedBy", ignore = true)
     UserDTO toDto(UserEntity userEntity);
 
     @Mapping(target = "updatedBy", ignore = true)

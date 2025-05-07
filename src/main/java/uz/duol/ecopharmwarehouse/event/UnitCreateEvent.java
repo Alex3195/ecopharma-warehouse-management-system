@@ -13,4 +13,5 @@ public class UnitCreateEvent {
     private String name;
     private String symbol;
     private String internationalAbbreviation;
+    private String performedBy;
 }

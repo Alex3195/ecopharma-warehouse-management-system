@@ -12,4 +12,5 @@ public class UnitsDTO {
     @NotBlank
     private String symbol;
     private String internationalAbbreviation;
+    private String performedBy;
 }
