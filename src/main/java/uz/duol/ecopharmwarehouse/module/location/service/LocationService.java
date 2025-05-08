@@ -13,6 +13,8 @@ import uz.duol.ecopharmwarehouse.module.location.mapper.LocationMapper;
 import uz.duol.ecopharmwarehouse.module.location.specification.LocationSpecification;
 import uz.duol.ecopharmwarehouse.repositories.LocationRepository;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class LocationService {
@@ -51,7 +53,12 @@ public class LocationService {
     }
 
     private String generateBarCode() {
-        return String.format("%020d", (long) (Math.random() * 1_000_000_000_000L));
+        int length = 20;
+        StringBuilder numeric = new StringBuilder();
+        while (numeric.length() < length) {
+            numeric.append(UUID.randomUUID().toString().replaceAll("[^0-9]", ""));
+        }
+        return numeric.substring(0, length);
     }
 
     public Page<LocationDTO> findAll(String name, Pageable pageable) {

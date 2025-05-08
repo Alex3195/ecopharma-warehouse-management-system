@@ -13,6 +13,8 @@ import uz.duol.ecopharmwarehouse.module.store.mapper.StoreAggregationWithAlterna
 import uz.duol.ecopharmwarehouse.module.store.specification.StoreAggregationWithAlternativeUnitSpecification;
 import uz.duol.ecopharmwarehouse.repositories.StoreAggregationWithAlternativeUnitRepository;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class StoreAggregationService {
@@ -60,6 +62,11 @@ public class StoreAggregationService {
     }
 
     private String generateBarCode() {
-        return String.format("%020d", (long) (Math.random() * 1_000_000_000_000L));
+        int length = 20;
+        StringBuilder numeric = new StringBuilder();
+        while (numeric.length() < length) {
+            numeric.append(UUID.randomUUID().toString().replaceAll("[^0-9]", ""));
+        }
+        return numeric.substring(0, length);
     }
 }
