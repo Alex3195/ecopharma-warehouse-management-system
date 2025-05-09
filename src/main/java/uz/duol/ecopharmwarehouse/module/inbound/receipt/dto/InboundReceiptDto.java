@@ -10,6 +10,8 @@ import uz.duol.ecopharmwarehouse.module.users.dto.UserDTO;
 
 import java.time.LocalDateTime;
 
+import static uz.duol.ecopharmwarehouse.enums.CrossDockTypeEnum.OPPORTUNISTIC;
+
 @Data
 public class InboundReceiptDto {
     private Long id;
@@ -24,6 +26,6 @@ public class InboundReceiptDto {
     private UnitsDTO unit; // Assuming a Unit entity exists
     private Long alternateStoreId;
 
-    private CrossDockTypeEnum crossDockType; // Assuming a CrossDockTypeEnum exists
+    private CrossDockTypeEnum crossDockType = OPPORTUNISTIC; // Assuming a CrossDockTypeEnum exists
     private LocalDateTime processingTime;
 }
