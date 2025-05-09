@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.StoreAggregationsWithAlternativeUnitEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.store.dto.StoreSyncRequest;
@@ -20,7 +21,7 @@ import java.util.UUID;
 public class StoreAggregationService {
     private final StoreAggregationWithAlternativeUnitRepository repository;
     private final StoreAggregationWithAlternativeUnitMapper mapper;
-
+    @Transactional
     public StoreSyncRequest createAndReturnBarCode(StoreSyncRequest request) {
         StoreAggregationsWithAlternativeUnitEntity e = mapper.toEntity(request);
         String barCode = generateBarCode();
@@ -32,19 +33,20 @@ public class StoreAggregationService {
         return mapper.toDto(e);
     }
 
+    @Transactional(readOnly = true)
     public StoreSyncRequest findById(Long id) {
         StoreAggregationsWithAlternativeUnitEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new EntityNotFoundException("Store not found"));
         return mapper.toDto(e);
     }
-
+    @Transactional
     public void delete(Long id) {
         StoreAggregationsWithAlternativeUnitEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new EntityNotFoundException("Store not found"));
         e.setStatus(Status.DELETED);
         repository.save(e);
     }
-
+    @Transactional
     public StoreSyncRequest update(Long id, StoreSyncRequest request) {
         findById(id);
         StoreAggregationsWithAlternativeUnitEntity e = mapper.toEntity(request);
@@ -52,7 +54,7 @@ public class StoreAggregationService {
         repository.save(e);
         return mapper.toDto(e);
     }
-
+    @Transactional(readOnly = true)
     public Page<StoreSyncRequest> findAll(String search, Pageable pageable) {
         Specification<StoreAggregationsWithAlternativeUnitEntity> spec = StoreAggregationWithAlternativeUnitSpecification.isActive();
         if (search != null && !search.isEmpty()) {

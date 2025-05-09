@@ -44,12 +44,14 @@ public class InboundReceiptService {
         return crossDockingEntity;
     }
 
+    @Transactional(readOnly = true)
     public InboundReceiptDto findById(Long id) {
         InboundReceiptEntity entity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("InboundReceiptEntity not found"));
         return mapper.toDto(entity);
     }
 
+    @Transactional
     public InboundReceiptDto update(Long id, InboundReceiptDto receipt) {
         InboundReceiptDto dto = findById(id);
         InboundReceiptEntity entity = mapper.toEntity(receipt);
@@ -58,6 +60,7 @@ public class InboundReceiptService {
         return mapper.toDto(entity);
     }
 
+    @Transactional
     public void delete(Long id) {
         InboundReceiptDto dto = findById(id);
         InboundReceiptEntity entity = mapper.toEntity(dto);
@@ -65,6 +68,7 @@ public class InboundReceiptService {
         repository.save(entity);
     }
 
+    @Transactional(readOnly = true)
     public Page<InboundReceiptDto> findAll(String search, Pageable pageable) {
 
         Specification<InboundReceiptEntity> spec = InboundReceiptSpecification.isActive();
