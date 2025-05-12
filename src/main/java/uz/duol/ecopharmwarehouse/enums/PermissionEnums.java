@@ -76,7 +76,12 @@ public enum PermissionEnums {
     //INVENTORY
     INVENTORY_READ(Category.INVENTORY),
     INVENTORY_CREATE(Category.INVENTORY),
-    INVENTORY_UPDATE(Category.INVENTORY);
+    INVENTORY_UPDATE(Category.INVENTORY),
+
+    GENERATE_TRANSPORT_LABEL(Category.TRANSPORT_LABEL),
+    TRANSPORT_LABEL_READ(Category.TRANSPORT_LABEL),
+    UPDATE_TRANSPORT_LABEL(Category.TRANSPORT_LABEL),
+    DELETE_TRANSPORT_LABEL(Category.TRANSPORT_LABEL);
 
     private final Category category;
 
@@ -99,5 +104,6 @@ public enum PermissionEnums {
         USER,
         AUDIT,
         INVENTORY,
+        TRANSPORT_LABEL,
     }
 }
