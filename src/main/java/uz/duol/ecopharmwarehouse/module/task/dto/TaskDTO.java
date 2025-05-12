@@ -8,6 +8,7 @@ import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
 import uz.duol.ecopharmwarehouse.module.users.dto.UserDTO;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class TaskDTO {
@@ -29,7 +30,7 @@ public class TaskDTO {
 
     private ProductDTO product;
 
-    private Long locationId;
+    private List<Long> locationId;
 
-    private LocationDTO location;
+    private List<LocationDTO> location;
 }

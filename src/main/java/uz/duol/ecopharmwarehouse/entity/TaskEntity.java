@@ -9,6 +9,7 @@ import uz.duol.ecopharmwarehouse.enums.TaskTypeEnum;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = TableNamesConstant.Tables.TASK)
@@ -51,9 +52,9 @@ public class TaskEntity extends BaseEntity {
     private ProductEntity product;
 
     @Column(name = "location_id")
-    private Long locationId;
+    private List<Long> locationId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private LocationEntity location;
+    private List<LocationEntity> location;
 }

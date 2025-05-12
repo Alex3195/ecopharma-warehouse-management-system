@@ -423,8 +423,14 @@ CREATE TABLE task
     assigned_to VARCHAR(255),
     due_date    TIMESTAMP WITHOUT TIME ZONE,
     product_id  BIGINT,
-    location_id BIGINT,
+    location_id BIGINT[],
     CONSTRAINT pk_task PRIMARY KEY (id)
+);
+
+CREATE TABLE task_location
+(
+    task_entity_id BIGINT NOT NULL,
+    location_id    BIGINT NOT NULL
 );
 
 CREATE TABLE transport_label
@@ -587,10 +593,13 @@ ALTER TABLE task
     ADD CONSTRAINT FK_TASK_ON_ASSIGNED_TO FOREIGN KEY (assigned_to) REFERENCES "user" (id);
 
 ALTER TABLE task
-    ADD CONSTRAINT FK_TASK_ON_LOCATION FOREIGN KEY (location_id) REFERENCES location (id);
-
-ALTER TABLE task
     ADD CONSTRAINT FK_TASK_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
+
+ALTER TABLE task_location
+    ADD CONSTRAINT FK_TASLOC_ON_LOCATION_ENTITY FOREIGN KEY (location_id) REFERENCES location (id);
+
+ALTER TABLE task_location
+    ADD CONSTRAINT FK_TASLOC_ON_TASK_ENTITY FOREIGN KEY (task_entity_id) REFERENCES task (id);
 
 ALTER TABLE transport_label
     ADD CONSTRAINT FK_TRANSPORT_LABEL_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
