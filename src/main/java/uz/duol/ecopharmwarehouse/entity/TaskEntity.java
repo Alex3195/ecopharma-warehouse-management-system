@@ -51,10 +51,11 @@ public class TaskEntity extends BaseEntity {
     @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ProductEntity product;
 
-    @Column(name = "location_id")
-    private List<Long> locationId;
-
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinTable(
+            name = "task_location", // name of the join table
+            joinColumns = @JoinColumn(name = "task_id"), // foreign key in join table referring to this entity
+            inverseJoinColumns = @JoinColumn(name = "location_id") // foreign key in join table referring to the other entity
+    )
     private List<LocationEntity> location;
 }

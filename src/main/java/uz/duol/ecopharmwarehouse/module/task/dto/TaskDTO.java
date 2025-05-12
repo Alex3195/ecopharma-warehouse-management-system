@@ -30,7 +30,5 @@ public class TaskDTO {
 
     private ProductDTO product;
 
-    private List<Long> locationId;
-
     private List<LocationDTO> location;
 }
