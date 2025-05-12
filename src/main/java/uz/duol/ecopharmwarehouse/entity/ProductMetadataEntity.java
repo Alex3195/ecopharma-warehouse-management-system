@@ -38,7 +38,7 @@ public class ProductMetadataEntity extends BaseEntity {
     @Column(name = "serial_number")
     private String serialNumber;
 
-    @Column(name = "quarantine_storage_duaration")
+    @Column(name = "quarantine_storage_duration")
     private Integer quarantineStorageDuration;
 
 }

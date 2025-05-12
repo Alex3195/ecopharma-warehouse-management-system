@@ -9,7 +9,9 @@ import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = TableNamesConstant.Tables.INVENTORY_SNAPSHOT)
+@Table(name = TableNamesConstant.Tables.INVENTORY_SNAPSHOT, indexes = {
+        @Index(name = "idx_product_snapshot_time", columnList = "product_id, snapshot_time")
+})
 @Setter
 @Getter
 @EntityListeners(AuditTrailListener.class)
@@ -46,5 +48,8 @@ public class InventorySnapshotEntity extends BaseEntity {
 
     @Column(name = "snapshot_time")
     private LocalDateTime snapshotTime;
+
+    @Column(name = "snapshot_version")
+    private Integer snapshotVersion;
 
 }

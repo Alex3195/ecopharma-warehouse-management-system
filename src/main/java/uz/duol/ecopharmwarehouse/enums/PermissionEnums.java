@@ -70,7 +70,13 @@ public enum PermissionEnums {
     USER_READ(Category.USER),
     USER_CREATE(Category.USER),
     USER_UPDATE(Category.USER),
-    USER_DELETE(Category.USER);
+    USER_DELETE(Category.USER),
+    //AUDIT
+    PERFORM_AUDIT(Category.AUDIT),
+    //INVENTORY
+    INVENTORY_READ(Category.INVENTORY),
+    INVENTORY_CREATE(Category.INVENTORY),
+    INVENTORY_UPDATE(Category.INVENTORY);
 
     private final Category category;
 
@@ -91,5 +97,7 @@ public enum PermissionEnums {
         CONVERSION,
         INBOUND_RECEIPT,
         USER,
+        AUDIT,
+        INVENTORY,
     }
 }

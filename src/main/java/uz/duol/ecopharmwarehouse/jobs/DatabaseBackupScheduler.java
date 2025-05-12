@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import uz.duol.ecopharmwarehouse.config.MinioProperties;
 import uz.duol.ecopharmwarehouse.entity.JobsEntity;
 import uz.duol.ecopharmwarehouse.repositories.JobsRepository;
@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.util.zip.GZIPOutputStream;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 public class DatabaseBackupScheduler {
     private final JobsRepository repository;

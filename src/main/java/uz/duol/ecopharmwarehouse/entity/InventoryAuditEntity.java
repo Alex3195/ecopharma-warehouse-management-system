@@ -31,14 +31,8 @@ public class InventoryAuditEntity extends BaseEntity {
     @JoinColumn(name = "product_id",referencedColumnName = "id", insertable = false, updatable = false)
     private ProductEntity product;
 
-    @Column(name = "sector_id")
-    private Long sectorId;
-
-    @Column(name = "rack_id")
-    private Long rackId;
-
-    @Column(name = "floor_id")
-    private Long floorId;
+    @Column(name = "location_id")
+    private Long locationId;
 
     @Column(name = "quantity")
     private Integer quantity;

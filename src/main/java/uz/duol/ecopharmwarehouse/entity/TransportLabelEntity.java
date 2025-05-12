@@ -12,7 +12,7 @@ import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 @Getter
 @EntityListeners(AuditTrailListener.class)
 public class TransportLabelEntity extends BaseEntity {
-
+    // Transport label entity for managing transport labels associated with products and shipments
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transport_label_seq_gen")

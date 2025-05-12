@@ -37,7 +37,7 @@ public class TableNamesConstant {
         public static final String USER_PERMISSIONS = "user_permissions";
         public static final String UNIT_CONVERSION = "unit_conversion";
         public static final String JOBS = "jobs";
-        public static final String PRODUCT_LOCATION_BY_BARCODE_AND_CELL_CODE = "product_location_by_barcode_and_cell_code";
+        public static final String INVENTORY = "inventory";
         public static final String STORAGE_AGGREGATIONS_WITH_ALTERNATIVE_UNIT = "store_aggregations_with_alternative_unit";
     }
 }

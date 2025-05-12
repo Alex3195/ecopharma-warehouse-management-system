@@ -169,37 +169,53 @@ CREATE TABLE inbound_receipt
     CONSTRAINT pk_inbound_receipt PRIMARY KEY (id)
 );
 
+CREATE TABLE inventory
+(
+    id               BIGINT                      NOT NULL,
+    created_at       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at       TIMESTAMP WITHOUT TIME ZONE,
+    status           VARCHAR(255)                NOT NULL,
+    created_by       VARCHAR(255),
+    updated_by       VARCHAR(255),
+    location_id      BIGINT,
+    location_barcode VARCHAR(255),
+    product_id       BIGINT,
+    product_barcode  VARCHAR(255),
+    unit_id          BIGINT,
+    quantity         INTEGER,
+    CONSTRAINT pk_inventory PRIMARY KEY (id)
+);
+
 CREATE TABLE inventory_audit
 (
-    id         BIGINT                      NOT NULL,
-    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    status     VARCHAR(255)                NOT NULL,
-    created_by VARCHAR(255),
-    updated_by VARCHAR(255),
-    audit_type VARCHAR(255),
-    product_id BIGINT,
-    sector_id  BIGINT,
-    rack_id    BIGINT,
-    floor_id   BIGINT,
-    quantity   INTEGER,
-    audit_time TIMESTAMP WITHOUT TIME ZONE,
+    id          BIGINT                      NOT NULL,
+    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at  TIMESTAMP WITHOUT TIME ZONE,
+    status      VARCHAR(255)                NOT NULL,
+    created_by  VARCHAR(255),
+    updated_by  VARCHAR(255),
+    audit_type  VARCHAR(255),
+    product_id  BIGINT,
+    location_id BIGINT,
+    quantity    INTEGER,
+    audit_time  TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_inventory_audit PRIMARY KEY (id)
 );
 
 CREATE TABLE inventory_snapshot
 (
-    id            BIGINT                      NOT NULL,
-    created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at    TIMESTAMP WITHOUT TIME ZONE,
-    status        VARCHAR(255)                NOT NULL,
-    created_by    VARCHAR(255),
-    updated_by    VARCHAR(255),
-    product_id    BIGINT,
-    location_id   BIGINT,
-    quantity      INTEGER,
-    unit_id       BIGINT,
-    snapshot_time TIMESTAMP WITHOUT TIME ZONE,
+    id               BIGINT                      NOT NULL,
+    created_at       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at       TIMESTAMP WITHOUT TIME ZONE,
+    status           VARCHAR(255)                NOT NULL,
+    created_by       VARCHAR(255),
+    updated_by       VARCHAR(255),
+    product_id       BIGINT,
+    location_id      BIGINT,
+    quantity         INTEGER,
+    unit_id          BIGINT,
+    snapshot_time    TIMESTAMP WITHOUT TIME ZONE,
+    snapshot_version INTEGER,
     CONSTRAINT pk_inventory_snapshot PRIMARY KEY (id)
 );
 
@@ -267,35 +283,19 @@ CREATE TABLE product
     CONSTRAINT pk_product PRIMARY KEY (id)
 );
 
-CREATE TABLE product_location_by_barcode_and_cell_code
-(
-    id               BIGINT                      NOT NULL,
-    created_at       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at       TIMESTAMP WITHOUT TIME ZONE,
-    status           VARCHAR(255)                NOT NULL,
-    created_by       VARCHAR(255),
-    updated_by       VARCHAR(255),
-    product_barcode  VARCHAR(255),
-    location_barcode VARCHAR(255),
-    unit_id          BIGINT,
-    quantity         INTEGER,
-    product_id       BIGINT,
-    CONSTRAINT pk_product_location_by_barcode_and_cell_code PRIMARY KEY (id)
-);
-
 CREATE TABLE product_meta_data
 (
-    id                           BIGINT                      NOT NULL,
-    created_at                   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at                   TIMESTAMP WITHOUT TIME ZONE,
-    status                       VARCHAR(255)                NOT NULL,
-    created_by                   VARCHAR(255),
-    updated_by                   VARCHAR(255),
-    product_id                   BIGINT,
-    batch_number                 VARCHAR(255),
-    expiry_date                  date,
-    serial_number                VARCHAR(255),
-    quarantine_storage_duaration INTEGER,
+    id                          BIGINT                      NOT NULL,
+    created_at                  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at                  TIMESTAMP WITHOUT TIME ZONE,
+    status                      VARCHAR(255)                NOT NULL,
+    created_by                  VARCHAR(255),
+    updated_by                  VARCHAR(255),
+    product_id                  BIGINT,
+    batch_number                VARCHAR(255),
+    expiry_date                 date,
+    serial_number               VARCHAR(255),
+    quarantine_storage_duration INTEGER,
     CONSTRAINT pk_product_meta_data PRIMARY KEY (id)
 );
 
@@ -524,6 +524,8 @@ CREATE TABLE warehouse
 
 ALTER TABLE "user"
     ADD CONSTRAINT UC_USER_USERNAME UNIQUE (username);
+
+CREATE INDEX idx_product_snapshot_time ON inventory_snapshot (product_id, snapshot_time);
 
 ALTER TABLE audit_trail
     ADD CONSTRAINT FK_AUDIT_TRAIL_ON_PERFORMED_BY FOREIGN KEY (performed_by) REFERENCES "user" (id);
