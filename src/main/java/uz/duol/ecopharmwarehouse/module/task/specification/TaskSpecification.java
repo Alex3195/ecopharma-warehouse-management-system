@@ -12,4 +12,8 @@ public class TaskSpecification {
     public static Specification<TaskEntity> hasText(String text) {
         return ((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), "%" + text + "%"));
     }
+
+    public static Specification<TaskEntity> hasAssignedTo(String assignedTo) {
+        return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("assignedTo"), assignedTo));
+    }
 }

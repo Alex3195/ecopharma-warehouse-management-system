@@ -49,11 +49,15 @@ public class TaskService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TaskDTO> findAll(String search, Pageable pageable) {
+    public Page<TaskDTO> findAll(String search, String assignedTo, Pageable pageable) {
         Specification<TaskEntity> spec = Specification.where(TaskSpecification.isActive());
         if (search != null) {
             spec = spec.and(TaskSpecification.hasText(search));
         }
+        if (assignedTo != null) {
+            spec = spec.and(TaskSpecification.hasAssignedTo(assignedTo));
+        }
         return repository.findAll(spec, pageable).map(mapper::toDto);
     }
+
 }

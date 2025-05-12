@@ -104,9 +104,10 @@ public class TaskController {
     )
     @PreAuthorize("hasAuthority('TASK_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/list")
-    public Page<TaskDTO> getAll(@RequestParam("search") String search,
+    public Page<TaskDTO> getAll(@RequestParam(value = "search", required = false) String search,
+                                @RequestParam(value = "assignedTo", required = false) String assignedTo,
                                 @PageableDefault
                                 Pageable pageable) {
-        return taskService.findAll(search, pageable);
+        return taskService.findAll(search,assignedTo, pageable);
     }
 }
