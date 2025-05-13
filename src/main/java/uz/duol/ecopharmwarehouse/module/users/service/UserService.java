@@ -25,7 +25,7 @@ public class UserService {
 
     public UserDTO create(UserDTO dto) {
         UserEntity e = mapper.toEntity(dto);
-        if (dto.getPerformedBy()!=null) {
+        if (dto.getPerformedBy() != null) {
             e.setCreatedBy(dto.getPerformedBy());
         }
         return mapper.toDto(repository.save(e));
@@ -48,10 +48,13 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(String id) {
+    public void delete(String id, String performedBy) {
         UserDTO dto = findById(id);
         UserEntity e = mapper.toEntity(dto);
         e.setStatus(Status.DELETED);
+        if (performedBy != null) {
+            e.setUpdatedBy(performedBy);
+        }
         repository.save(e);
     }
 

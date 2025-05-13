@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import uz.duol.ecopharmwarehouse.config.RabbitMQConfig;
-import uz.duol.ecopharmwarehouse.event.ProductCreateEvent;
-import uz.duol.ecopharmwarehouse.event.UnitConversionCreateEvent;
-import uz.duol.ecopharmwarehouse.event.UnitCreateEvent;
-import uz.duol.ecopharmwarehouse.event.UserCreatedEvent;
+import uz.duol.ecopharmwarehouse.event.*;
 import uz.duol.ecopharmwarehouse.module.conversion.dto.UnitConversionDto;
 import uz.duol.ecopharmwarehouse.module.conversion.service.UnitConversionService;
 import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
@@ -16,6 +13,7 @@ import uz.duol.ecopharmwarehouse.module.product.service.ProductService;
 import uz.duol.ecopharmwarehouse.module.unit.dto.UnitsDTO;
 import uz.duol.ecopharmwarehouse.module.unit.service.UnitsService;
 import uz.duol.ecopharmwarehouse.module.users.dto.UserDTO;
+import uz.duol.ecopharmwarehouse.module.users.dto.UserUpdateDto;
 import uz.duol.ecopharmwarehouse.module.users.service.UserService;
 
 @Slf4j
@@ -33,7 +31,6 @@ public class EventListener {
         UserDTO user = getUserDto(event);
         userService.create(user);
     }
-
     private UserDTO getUserDto(UserCreatedEvent event) {
         UserDTO userDto = new UserDTO();
         userDto.setId(event.getId());
@@ -47,6 +44,35 @@ public class EventListener {
         userDto.setPerformedBy(event.getPerformedBy());
         return userDto;
     }
+
+    @RabbitListener(queues = RabbitMQConfig.USER_UPDATED_QUEUE)
+    public void handleUserUpdated(UserUpdatedEvent event) {
+        log.info("Received user created event: {}", event);
+        UserUpdateDto user = getUserUpdateDto(event);
+        userService.update(event.getId(), user);
+    }
+
+
+    private UserUpdateDto getUserUpdateDto(UserUpdatedEvent event) {
+        UserUpdateDto user = new UserUpdateDto();
+        user.setFirstName(event.getFirstName());
+        user.setLastName(event.getLastName());
+        user.setEmail(event.getEmail());
+        user.setPhone(event.getPhone());
+        user.setUsername(event.getUsername());
+        user.setTelegramNickName(event.getTelegramNickName());
+        user.setHikvisionAccessId(event.getHikvisionAccessId());
+        return user;
+
+    }
+
+    @RabbitListener(queues = RabbitMQConfig.USER_DELETED_QUEUE)
+    public void handleUserDeleted(UserDeleteEvent event) {
+        log.info("Received user deleted event: {}", event);
+        userService.delete(event.getUserId(), event.getPerformedBy());
+    }
+
+
 
     @RabbitListener(queues = RabbitMQConfig.PRODUCT_CREATED_QUEUE)
     public void handleProductCreated(ProductCreateEvent event) {

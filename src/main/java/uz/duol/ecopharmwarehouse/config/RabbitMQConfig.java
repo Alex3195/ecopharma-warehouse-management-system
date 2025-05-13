@@ -14,20 +14,38 @@ public class RabbitMQConfig {
     public static final String PRODUCT_CREATED_QUEUE = "product.created.wms.queue";
     public static final String UNIT_CREATED_QUEUE = "unit.created.wms.queue";
     public static final String UNIT_CONVERSION_CREATED_QUEUE = "unit.conversion.created.wms.queue";
+    public static final String USER_UPDATED_QUEUE = "user.updated.wms.queue";
+    public static final String USER_DELETED_QUEUE = "user.deleted.wms.queue";
+
 
     public static final String USER_CREATED_EVENT_EXCHANGE = "user.events.exchange";
+    public static final String USER_UPDATED_EXCHANGE = "user.updated.exchange";
+    public static final String USER_DELETED_EXCHANGE = "user.deleted.exchange";
     public static final String PRODUCT_CREATED_EVENT_EXCHANGE = "product.events.exchange";
     public static final String UNIT_CREATED_EVENT_EXCHANGE = "unit.events.exchange";
     public static final String UNIT_CONVERSION_CREATED_EVENT_EXCHANGE = "unit.conversion.events.exchange";
 
     public static final String USER_CREATED_ROUTING_KEY = "user.created";
+    public static final String USER_UPDATED_ROUTING_KEY = "user.updated";
+    public static final String USER_DELETED_ROUTING_KEY = "user.deleted";
     public static final String PRODUCT_CREATED_ROUTING_KEY = "product.created";
     public static final String UNIT_CREATED_ROUTING_KEY = "unit.created";
     public static final String UNIT_CONVERSION_CREATED_ROUTING_KEY = "unit.conversion.created";
 
+
     @Bean
     public Queue userCreateQueue() {
         return new Queue(USER_CREATED_QUEUE, true);
+    }
+
+    @Bean
+    public Queue userUpdateQueue() {
+        return new Queue(USER_UPDATED_QUEUE, true);
+    }
+
+    @Bean
+    public Queue userDeleteQueue() {
+        return new Queue(USER_DELETED_QUEUE, true);
     }
 
     @Bean
@@ -51,6 +69,16 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public TopicExchange userUpdateExchange() {
+        return new TopicExchange(USER_UPDATED_EXCHANGE);
+    }
+
+    @Bean
+    public TopicExchange userDeleteExchange() {
+        return new TopicExchange(USER_DELETED_EXCHANGE);
+    }
+
+    @Bean
     public TopicExchange productCreateExchange() {
         return new TopicExchange(PRODUCT_CREATED_EVENT_EXCHANGE);
     }
@@ -71,6 +99,22 @@ public class RabbitMQConfig {
                 .bind(userCreateQueue())
                 .to(userCreateExchange())
                 .with(USER_CREATED_ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding bindingUserUpdate() {
+        return BindingBuilder
+                .bind(userUpdateQueue())
+                .to(userUpdateExchange())
+                .with(USER_UPDATED_ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding bindingUserDelete() {
+        return BindingBuilder
+                .bind(userDeleteQueue())
+                .to(userDeleteExchange())
+                .with(USER_DELETED_ROUTING_KEY);
     }
 
     @Bean
