@@ -20,25 +20,27 @@ public class OutboundShipmentService {
     private final OutboundShipmentRepository repository;
 
     public OutboundShipmentDto create(OutboundShipmentDto dto) {
-        return mapper.toDto(repository.save(mapper.toEntity(dto)));
+        var entity = mapper.toEntity(dto);
+        repository.save(entity);
+        return mapper.toDto(entity);
     }
 
     public OutboundShipmentDto findById(Long id) {
-        OutboundShipmentEntity entity = repository.findById(id)
+        var entity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Outbound shipment not found"));
         return mapper.toDto(entity);
     }
 
     public OutboundShipmentDto update(Long id, OutboundShipmentDto dto) {
         OutboundShipmentDto data = findById(id);
-        OutboundShipmentEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         entity.setId(data.getId());
         return mapper.toDto(repository.save(entity));
     }
 
     public void delete(Long id) {
         OutboundShipmentDto data = findById(id);
-        OutboundShipmentEntity entity = mapper.toEntity(data);
+        var entity = mapper.toEntity(data);
         entity.setStatus(Status.DELETED);
         repository.save(entity);
     }

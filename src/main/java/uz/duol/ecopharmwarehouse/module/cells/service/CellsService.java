@@ -20,26 +20,26 @@ public class CellsService {
     private final CellsMapper mapper;
 
     public CellDTO create(CellDTO dto) {
-        CellEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         return mapper.toDto(repository.save(e));
     }
 
     public CellDTO findById(Long id) {
-        CellEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new CellNotFoundException("Cell not found"));
         return mapper.toDto(e);
     }
 
     public CellDTO update(Long id, CellDTO dto) {
         findById(id);
-        CellEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setId(id);
         return mapper.toDto(repository.save(e));
     }
 
     public void delete(Long id) {
         CellDTO dto = findById(id);
-        CellEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setStatus(Status.DELETED);
         repository.save(e);
     }

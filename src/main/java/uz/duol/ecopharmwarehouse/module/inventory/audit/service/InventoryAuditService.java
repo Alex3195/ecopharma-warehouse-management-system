@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.duol.ecopharmwarehouse.entity.InventoryAuditEntity;
-import uz.duol.ecopharmwarehouse.entity.InventoryEntity;
 import uz.duol.ecopharmwarehouse.module.inventory.audit.dto.InventoryAuditDto;
 import uz.duol.ecopharmwarehouse.module.inventory.audit.mapper.InventoryAuditMapper;
 import uz.duol.ecopharmwarehouse.repositories.InventoryAuditRepository;
@@ -30,10 +28,10 @@ public class InventoryAuditService {
 
     @Transactional
     public void performAudit(InventoryAuditDto request) {
-        InventoryAuditEntity audit = mapper.toEntity(request);
+        var audit = mapper.toEntity(request);
         audit.setAuditTime(LocalDateTime.now());
         auditRepository.save(audit);
-        InventoryEntity systemInventory = inventoryRepository
+        var systemInventory = inventoryRepository
                 .findByProductIdAndLocationId(request.getProductId(), request.getLocationId())
                 .orElseThrow(() -> new EntityNotFoundException("Inventory not found"));
 

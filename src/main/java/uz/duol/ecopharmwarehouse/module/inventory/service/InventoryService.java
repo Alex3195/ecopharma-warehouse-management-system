@@ -27,7 +27,7 @@ public class InventoryService {
     public InventoryDto create(InventoryDto dto) {
         LocationDTO locationDTO = locationService.findByBarcode(dto.getLocationBarcode());
         if (locationDTO.getAvailable()) {
-            InventoryEntity e = mapper.toEntity(dto);
+            var e = mapper.toEntity(dto);
             repository.save(e);
             locationDTO.setAvailable(false);
             locationService.update(locationDTO.getId(), locationDTO);
@@ -39,13 +39,13 @@ public class InventoryService {
     }
 
     public String findLocationCodeByProductBarCode(String productBarCode) {
-        InventoryEntity entity = repository.findByProductBarcodeAndStatusIsNot(productBarCode, Status.DELETED)
+        var entity = repository.findByProductBarcodeAndStatusIsNot(productBarCode, Status.DELETED)
                 .orElseThrow(() -> new EntityNotFoundException("Product bar code not found"));
         return entity.getLocationBarcode();
     }
 
     public InventoryDto update(String productBarCode, String locationCode) {
-        InventoryEntity entity = repository.findByProductBarcodeAndStatusIsNot(productBarCode, Status.DELETED)
+        var entity = repository.findByProductBarcodeAndStatusIsNot(productBarCode, Status.DELETED)
                 .orElseThrow(() -> new EntityNotFoundException("Product bar code not found"));
         entity.setLocationBarcode(locationCode);
         repository.save(entity);

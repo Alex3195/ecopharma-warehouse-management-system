@@ -22,7 +22,7 @@ public class ProductService {
 
     @Transactional
     public ProductDTO create(ProductDTO dto) {
-        ProductEntity productEntity = mapper.toEntity(dto);
+        var productEntity = mapper.toEntity(dto);
         if (dto.getPerformedBy()!= null) {
             productEntity.setCreatedBy(dto.getPerformedBy());
         }
@@ -31,7 +31,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
-        ProductEntity productEntity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var productEntity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new ProductNotFundException("Product not found"));
         return mapper.toDto(productEntity);
     }
@@ -39,7 +39,7 @@ public class ProductService {
     @Transactional
     public ProductDTO update(Long id, ProductDTO dto) {
         findById(id);
-        ProductEntity productEntity = mapper.toEntity(dto);
+        var productEntity = mapper.toEntity(dto);
         productEntity.setId(id);
         return mapper.toDto(repository.save(productEntity));
 
@@ -48,7 +48,7 @@ public class ProductService {
     @Transactional
     public void delete(Long id) {
         ProductDTO productDTO = findById(id);
-        ProductEntity productEntity = mapper.toEntity(productDTO);
+        var productEntity = mapper.toEntity(productDTO);
         productEntity.setStatus(Status.DELETED);
         repository.save(productEntity);
     }

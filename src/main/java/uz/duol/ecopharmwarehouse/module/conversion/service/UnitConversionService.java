@@ -26,7 +26,7 @@ public class UnitConversionService {
 
     @Transactional
     public UnitConversionDto create(UnitConversionDto dto) {
-        UnitConversionEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         if (dto.getPerformedBy() != null) {
             entity.setCreatedBy(dto.getPerformedBy());
         }
@@ -38,7 +38,7 @@ public class UnitConversionService {
         repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Data not found"));
 
-        UnitConversionEntity updatedEntity = mapper.toEntity(dto);
+        var updatedEntity = mapper.toEntity(dto);
         updatedEntity.setId(id);
 
         return mapper.toDto(repository.save(updatedEntity));
@@ -46,7 +46,7 @@ public class UnitConversionService {
 
     @Transactional
     public void delete(Long id) {
-        UnitConversionEntity entity = repository.findById(id)
+        var entity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Data not found"));
 
         entity.setStatus(Status.DELETED);
@@ -60,7 +60,7 @@ public class UnitConversionService {
 
         List<UnitConversionEntity> entities = repository.findAll(spec);
         return entities.stream().map(item -> {
-            UnitConversionDto dto = mapper.toDto(item);
+            var dto = mapper.toDto(item);
             dto.setBaseUnitSymbol(item.getBaseUnit().getSymbol());
             dto.setAlternativeUnitSymbol(item.getAlternativeUnit().getSymbol());
             return dto;
@@ -72,7 +72,7 @@ public class UnitConversionService {
         Specification<UnitConversionEntity> spec = ConversionSpecification.isActive()
                 .and(ConversionSpecification.hasBaseUnitId(id));
         return repository.findAll(spec, pageable).map(item -> {
-            UnitConversionDto dto = mapper.toDto(item);
+            var dto = mapper.toDto(item);
             dto.setBaseUnitSymbol(item.getBaseUnit().getSymbol());
             dto.setAlternativeUnitSymbol(item.getAlternativeUnit().getSymbol());
             return dto;
@@ -81,7 +81,7 @@ public class UnitConversionService {
 
     @Transactional
     public void deleteAll(List<Long> ids) {
-        List<UnitConversionEntity> entities = repository.findAllById(ids);
+        var entities = repository.findAllById(ids);
         entities.forEach(entity -> entity.setStatus(Status.DELETED));
         repository.saveAll(entities);
     }

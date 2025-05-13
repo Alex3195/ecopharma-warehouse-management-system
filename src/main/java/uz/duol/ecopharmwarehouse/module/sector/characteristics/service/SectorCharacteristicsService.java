@@ -20,7 +20,7 @@ public class SectorCharacteristicsService {
     private final SectorCharacteristicsMapper mapper;
 
     public SectorCharacteristicDTO create(SectorCharacteristicDTO dto) {
-        SectorCharacteristicEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         return mapper.toDto(repository.save(e));
     }
 
@@ -31,14 +31,14 @@ public class SectorCharacteristicsService {
 
     public SectorCharacteristicDTO update(Long id, SectorCharacteristicDTO dto) {
         findById(id);
-        SectorCharacteristicEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         entity.setId(id);
         return mapper.toDto(repository.save(entity));
     }
 
     public void delete(Long id) {
         SectorCharacteristicDTO dto = findById(id);
-        SectorCharacteristicEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         entity.setStatus(Status.DELETED);
         repository.save(entity);
     }

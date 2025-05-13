@@ -24,7 +24,7 @@ public class UserService {
     private final UserMapper mapper;
 
     public UserDTO create(UserDTO dto) {
-        UserEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         if (dto.getPerformedBy() != null) {
             e.setCreatedBy(dto.getPerformedBy());
         }
@@ -33,14 +33,14 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserDTO findById(String id) {
-        UserEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED).orElseThrow(() -> new UserNotFoundException("User not found"));
+        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED).orElseThrow(() -> new UserNotFoundException("User not found"));
         return mapper.toDto(e);
     }
 
     @Transactional
     public UserDTO update(String id, UserUpdateDto request) {
         UserDTO dto = findById(id);
-        UserEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         mapper.updateUserFromDto(request, e);
         e.setId(id);
         repository.save(e);
@@ -50,7 +50,7 @@ public class UserService {
     @Transactional
     public void delete(String id, String performedBy) {
         UserDTO dto = findById(id);
-        UserEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setStatus(Status.DELETED);
         if (performedBy != null) {
             e.setUpdatedBy(performedBy);

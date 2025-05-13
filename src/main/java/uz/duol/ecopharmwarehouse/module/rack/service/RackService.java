@@ -33,7 +33,7 @@ public class RackService {
 
     @Transactional
     public RackDTO create(RackRequest request) {
-        RackEntity rackEntity = rackEntityFromRequest(request);
+        var rackEntity = rackEntityFromRequest(request);
         repository.save(rackEntity);
         createLocations(rackEntity);
         return mapper.toDto(rackEntity);
@@ -85,14 +85,15 @@ public class RackService {
 
     @Transactional(readOnly = true)
     public RackDTO findById(Long id) {
-        RackEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED).orElseThrow(() -> new RackNotFoundException("Rack not found"));
+        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+                .orElseThrow(() -> new RackNotFoundException("Rack not found"));
         return mapper.toDto(e);
     }
 
     @Transactional
     public RackDTO update(Long id, RackDTO rackDTO) {
         findById(id);
-        RackEntity e = mapper.toEntity(rackDTO);
+        var e = mapper.toEntity(rackDTO);
         e.setId(id);
         return mapper.toDto(repository.save(e));
     }
@@ -100,7 +101,7 @@ public class RackService {
     @Transactional
     public void delete(Long id) {
         RackDTO dto = findById(id);
-        RackEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setStatus(Status.DELETED);
         repository.save(e);
     }

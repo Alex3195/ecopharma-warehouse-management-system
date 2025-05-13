@@ -22,26 +22,26 @@ public class AddressService {
     private final AddressMapper mapper;
 
     public AddressDTO create(AddressDTO dto) {
-        AddressEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
 
     public AddressDTO findById(Long id) {
-        AddressEntity entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new AddressNotFoundException("Address not found"));
         return mapper.toDto(entity);
     }
 
     public AddressDTO update(Long id, AddressDTO dto) {
         findById(id);
-        AddressEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         entity.setId(id);
         return mapper.toDto(repository.save(entity));
     }
 
     public void delete(Long id) {
         AddressDTO dto = findById(id);
-        AddressEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         entity.setStatus(Status.DELETED);
         repository.save(entity);
     }

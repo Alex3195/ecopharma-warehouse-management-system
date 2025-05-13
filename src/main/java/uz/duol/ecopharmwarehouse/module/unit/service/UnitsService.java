@@ -20,7 +20,7 @@ public class UnitsService {
     private final UnitMapper mapper;
 
     public UnitsDTO create(UnitsDTO dto) {
-        UnitsEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         if (dto.getPerformedBy() != null) {
             entity.setCreatedBy(dto.getPerformedBy());
         }
@@ -28,21 +28,21 @@ public class UnitsService {
     }
 
     public UnitsDTO findById(Long id) {
-        UnitsEntity entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new UnitNotFoundException("Unit not found"));
         return mapper.toDto(entity);
     }
 
     public UnitsDTO update(Long id, UnitsDTO dto) {
         findById(id);
-        UnitsEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         entity.setId(id);
         return mapper.toDto(repository.save(entity));
     }
 
     public void delete(Long id) {
         UnitsDTO dto = findById(id);
-        UnitsEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         entity.setStatus(Status.DELETED);
         repository.save(entity);
     }

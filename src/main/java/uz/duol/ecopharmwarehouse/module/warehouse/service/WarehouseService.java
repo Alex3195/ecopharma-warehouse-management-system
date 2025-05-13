@@ -22,13 +22,13 @@ public class WarehouseService {
 
     @Transactional
     public WarehouseDTO create(WarehouseDTO dto) {
-        WarehouseEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         return mapper.toDto(repository.save(e));
     }
 
     @Transactional(readOnly = true)
     public WarehouseDTO findById(Long id) {
-        WarehouseEntity entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found"));
         return mapper.toDto(entity);
     }
@@ -36,7 +36,7 @@ public class WarehouseService {
     @Transactional
     public WarehouseDTO update(Long id, WarehouseDTO dto) {
         findById(id);
-        WarehouseEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setId(id);
         return mapper.toDto(repository.save(e));
     }
@@ -44,7 +44,7 @@ public class WarehouseService {
     @Transactional
     public void delete(Long id) {
         WarehouseDTO dto = findById(id);
-        WarehouseEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setStatus(Status.DELETED);
         repository.save(e);
     }

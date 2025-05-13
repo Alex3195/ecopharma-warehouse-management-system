@@ -30,7 +30,7 @@ public class UserPermissionService {
             repository.softDeleteByUserId(request.getUserId());
         }
         if (request.getPermissions() != null && !request.getPermissions().isEmpty()) {
-            List<UserPermissionsEntity> insertableData = request.getPermissions().stream().map(item -> {
+            var insertableData = request.getPermissions().stream().map(item -> {
                 UserPermissionsEntity entity = new UserPermissionsEntity();
                 entity.setUserId(request.getUserId());
                 entity.setPermission(item);

@@ -22,7 +22,7 @@ public class LocationService {
     private final LocationMapper mapper;
 
     public LocationDTO create(LocationDTO dto) {
-        LocationEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         String barcode = generateBarCode();
         while (repository.existsByBarcode(barcode)) {
             barcode = generateBarCode();
@@ -33,21 +33,21 @@ public class LocationService {
     }
 
     public LocationDTO findById(Long id) {
-        LocationEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new LocationNotFoundException("Location not found"));
         return mapper.toDto(e);
     }
 
     public LocationDTO update(Long id, LocationDTO dto) {
         findById(id);
-        LocationEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         entity.setId(id);
         return mapper.toDto(repository.save(entity));
     }
 
     public void delete(Long id) {
         LocationDTO dto = findById(id);
-        LocationEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         entity.setStatus(Status.DELETED);
         repository.save(entity);
     }
@@ -70,7 +70,7 @@ public class LocationService {
     }
 
     public LocationDTO findByBarcode(String locationBarcode) {
-        LocationEntity entity = repository.findByBarcodeAndStatusIsNot(locationBarcode, Status.DELETED)
+        var entity = repository.findByBarcodeAndStatusIsNot(locationBarcode, Status.DELETED)
                 .orElseThrow(() -> new LocationNotFoundException("Location not found"));
         return mapper.toDto(entity);
     }

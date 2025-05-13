@@ -20,26 +20,26 @@ public class SettingsService {
     private final SettingMapper mapper;
 
     public SettingsDTO create(SettingsDTO dto) {
-        SettingsEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         return mapper.toDto(repository.save(e));
     }
 
     public SettingsDTO findById(Long id) {
-        SettingsEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new SettingNotFoundException("Setting not found"));
         return mapper.toDto(e);
     }
 
     public SettingsDTO update(Long id, SettingsDTO dto) {
         findById(id);
-        SettingsEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setId(id);
         return mapper.toDto(repository.save(e));
     }
 
     public void delete(Long id) {
         SettingsDTO dto = findById(id);
-        SettingsEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setStatus(Status.DELETED);
         repository.save(e);
     }

@@ -3,7 +3,6 @@ package uz.duol.ecopharmwarehouse.module.product.metadata.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.duol.ecopharmwarehouse.entity.ProductMetadataEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.product.metadata.dto.ProductMetadataDTO;
 import uz.duol.ecopharmwarehouse.module.product.metadata.exception.ProductMetadataNotFoundException;
@@ -18,13 +17,13 @@ public class ProductMetaDataService {
 
     @Transactional
     public ProductMetadataDTO create(ProductMetadataDTO dto) {
-        ProductMetadataEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         return mapper.toDto(repository.save(e));
     }
 
     @Transactional(readOnly = true)
     public ProductMetadataDTO findById(Long id) {
-        ProductMetadataEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new ProductMetadataNotFoundException("Metadata not found"));
         return mapper.toDto(e);
     }
@@ -32,7 +31,7 @@ public class ProductMetaDataService {
     @Transactional
     public ProductMetadataDTO update(Long id, ProductMetadataDTO dto) {
         findById(id);
-        ProductMetadataEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setId(id);
         return mapper.toDto(repository.save(e));
     }
@@ -40,7 +39,7 @@ public class ProductMetaDataService {
     @Transactional
     public void delete(Long id) {
         ProductMetadataDTO dto = findById(id);
-        ProductMetadataEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setStatus(Status.DELETED);
         repository.save(e);
     }

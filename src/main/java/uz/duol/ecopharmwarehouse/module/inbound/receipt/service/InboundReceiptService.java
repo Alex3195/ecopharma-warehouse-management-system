@@ -27,10 +27,10 @@ public class InboundReceiptService {
 
     @Transactional
     public InboundReceiptDto create(InboundReceiptDto receipt) {
-        InboundReceiptEntity e = mapper.toEntity(receipt);
+        var e = mapper.toEntity(receipt);
         repository.save(e);
         if (receipt.getCrossDockType() != null) {
-            CrossDockingEntity crossDockingEntity = crossDockingEntityFromRequest(receipt);
+            var crossDockingEntity = crossDockingEntityFromRequest(receipt);
             crossDockingRepository.save(crossDockingEntity);
         }
         return mapper.toDto(e);
@@ -46,7 +46,7 @@ public class InboundReceiptService {
 
     @Transactional(readOnly = true)
     public InboundReceiptDto findById(Long id) {
-        InboundReceiptEntity entity = repository.findById(id)
+        var entity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("InboundReceiptEntity not found"));
         return mapper.toDto(entity);
     }
@@ -54,7 +54,7 @@ public class InboundReceiptService {
     @Transactional
     public InboundReceiptDto update(Long id, InboundReceiptDto receipt) {
         InboundReceiptDto dto = findById(id);
-        InboundReceiptEntity entity = mapper.toEntity(receipt);
+        var entity = mapper.toEntity(receipt);
         entity.setId(dto.getId());
         repository.save(entity);
         return mapper.toDto(entity);
@@ -63,7 +63,7 @@ public class InboundReceiptService {
     @Transactional
     public void delete(Long id) {
         InboundReceiptDto dto = findById(id);
-        InboundReceiptEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         entity.setStatus(Status.DELETED);
         repository.save(entity);
     }

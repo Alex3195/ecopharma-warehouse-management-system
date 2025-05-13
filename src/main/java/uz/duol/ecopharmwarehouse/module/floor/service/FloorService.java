@@ -22,13 +22,13 @@ public class FloorService {
 
     @Transactional
     public FloorDTO create(FloorDTO dto) {
-        FloorEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         return mapper.toDto(repository.save(e));
     }
 
     @Transactional(readOnly = true)
     public FloorDTO findById(Long id) {
-        FloorEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new FloorNotFoundException("Floor not found"));
         return mapper.toDto(e);
     }
@@ -36,7 +36,7 @@ public class FloorService {
     @Transactional
     public FloorDTO update(Long id, FloorDTO dto) {
         findById(id);
-        FloorEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setId(id);
         return mapper.toDto(repository.save(e));
     }
@@ -44,7 +44,7 @@ public class FloorService {
     @Transactional
     public void delete(Long id) {
         FloorDTO dto = findById(id);
-        FloorEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setStatus(Status.DELETED);
         repository.save(e);
     }

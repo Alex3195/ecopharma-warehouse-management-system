@@ -22,20 +22,20 @@ public class TaskService {
 
     @Transactional
     public TaskDTO create(TaskDTO taskDTO) {
-        TaskEntity e = mapper.toEntity(taskDTO);
+        var e = mapper.toEntity(taskDTO);
         return mapper.toDto(repository.save(e));
     }
 
     @Transactional(readOnly = true)
     public TaskDTO findById(Long id) {
-        TaskEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED).orElseThrow(() -> new TaskNotFoundException("Task not found"));
+        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED).orElseThrow(() -> new TaskNotFoundException("Task not found"));
         return mapper.toDto(e);
     }
 
     @Transactional
     public TaskDTO update(Long id, TaskDTO taskDTO) {
         findById(id);
-        TaskEntity e = mapper.toEntity(taskDTO);
+        var e = mapper.toEntity(taskDTO);
         e.setId(id);
         return mapper.toDto(repository.save(e));
     }
@@ -43,7 +43,7 @@ public class TaskService {
     @Transactional
     public void delete(Long id) {
         TaskDTO dto = findById(id);
-        TaskEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setStatus(Status.DELETED);
         repository.save(e);
     }

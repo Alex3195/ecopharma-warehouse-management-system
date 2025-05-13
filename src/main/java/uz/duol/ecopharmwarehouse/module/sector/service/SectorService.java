@@ -22,13 +22,13 @@ public class SectorService {
 
     @Transactional
     public SectorDTO create(SectorDTO dto) {
-        SectorEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
 
     @Transactional(readOnly = true)
     public SectorDTO findById(Long id) {
-        SectorEntity entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new SectorNotFoundException("Sector not found"));
         return mapper.toDto(entity);
     }
@@ -36,7 +36,7 @@ public class SectorService {
     @Transactional
     public SectorDTO update(Long id, SectorDTO dto) {
         findById(id);
-        SectorEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         entity.setId(id);
         return mapper.toDto(repository.save(entity));
     }
@@ -44,7 +44,7 @@ public class SectorService {
     @Transactional
     public void delete(Long id) {
         SectorDTO dto = findById(id);
-        SectorEntity entity = mapper.toEntity(dto);
+        var entity = mapper.toEntity(dto);
         entity.setStatus(Status.DELETED);
         repository.save(entity);
     }

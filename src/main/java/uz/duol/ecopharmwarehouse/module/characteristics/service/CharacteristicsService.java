@@ -22,26 +22,26 @@ public class CharacteristicsService {
     private final CharacteristicsMapper mapper;
 
     public CharacteristicsDTO create(CharacteristicsDTO dto) {
-        CharacteristicEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         return mapper.toDto(repository.save(e));
     }
 
     public CharacteristicsDTO findById(Long id) {
-        CharacteristicEntity e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new CharacteristicsNotFoundException("Characteristics not found"));
         return mapper.toDto(e);
     }
 
     public CharacteristicsDTO update(Long id, CharacteristicsDTO dto) {
         findById(id);
-        CharacteristicEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setId(id);
         return mapper.toDto(repository.save(e));
     }
 
     public void delete(Long id) {
         CharacteristicsDTO dto = findById(id);
-        CharacteristicEntity e = mapper.toEntity(dto);
+        var e = mapper.toEntity(dto);
         e.setStatus(Status.DELETED);
         repository.save(e);
     }
