@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
@@ -40,5 +41,6 @@ public class UserEntity extends BaseEntity {
     private String telegramNickName;
 
     @OneToMany(mappedBy = "assignedToUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Where(clause = "status != 'DELETED'")
     private List<TaskEntity> tasks;
 }
