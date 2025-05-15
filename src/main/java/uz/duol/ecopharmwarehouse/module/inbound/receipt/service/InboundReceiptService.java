@@ -8,13 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.duol.ecopharmwarehouse.entity.CrossDockingEntity;
 import uz.duol.ecopharmwarehouse.entity.InboundReceiptEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
+import uz.duol.ecopharmwarehouse.module.crossdocking.dto.CrossDockingDto;
+import uz.duol.ecopharmwarehouse.module.crossdocking.service.CrossDockingService;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.dto.InboundReceiptDto;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.mapper.InboundReceiptMapper;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.specification.InboundReceiptSpecification;
-import uz.duol.ecopharmwarehouse.repositories.CrossDockingRepository;
 import uz.duol.ecopharmwarehouse.repositories.InboundReceiptRepository;
 
 @Service
@@ -23,7 +23,7 @@ public class InboundReceiptService {
     private final InboundReceiptRepository repository;
     @Qualifier("inboundReceiptMapper")
     private final InboundReceiptMapper mapper;
-    private final CrossDockingRepository crossDockingRepository;
+    private final CrossDockingService crossDockingService;
 
     @Transactional
     public InboundReceiptDto create(InboundReceiptDto receipt) {
@@ -31,17 +31,17 @@ public class InboundReceiptService {
         repository.save(e);
         if (receipt.getCrossDockType() != null) {
             var crossDockingEntity = crossDockingEntityFromRequest(receipt);
-            crossDockingRepository.save(crossDockingEntity);
+            crossDockingService.create(crossDockingEntity);
         }
         return mapper.toDto(e);
     }
 
-    private CrossDockingEntity crossDockingEntityFromRequest(InboundReceiptDto request) {
-        CrossDockingEntity crossDockingEntity = new CrossDockingEntity();
-        crossDockingEntity.setInboundReceiptId(request.getId());
-        crossDockingEntity.setCrossDockType(request.getCrossDockType());
-        crossDockingEntity.setProcessingTime(request.getProcessingTime());
-        return crossDockingEntity;
+    private CrossDockingDto crossDockingEntityFromRequest(InboundReceiptDto request) {
+        CrossDockingDto crossDocking = new CrossDockingDto();
+        crossDocking.setInboundReceiptId(request.getId());
+        crossDocking.setCrossDockType(request.getCrossDockType());
+        crossDocking.setProcessingTime(request.getProcessingTime());
+        return crossDocking;
     }
 
     @Transactional(readOnly = true)
