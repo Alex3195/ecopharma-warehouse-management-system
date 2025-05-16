@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
+import uz.duol.ecopharmwarehouse.enums.OutputAlgorithmTypeEnum;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
 import java.util.List;
@@ -27,6 +28,9 @@ public class ProductEntity extends BaseEntity {
     private String productType; // bulk, box, unit, etc.
     @Column(name = "quantity")
     private Integer quantity = 0; // stock count
+    @Column(name = "output_algorithm_type")
+    @Enumerated(EnumType.STRING)
+    private OutputAlgorithmTypeEnum outputAlgorithmType = OutputAlgorithmTypeEnum.FIRST_IN_FIRST_OUT;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductMetadataEntity> productMetadata;

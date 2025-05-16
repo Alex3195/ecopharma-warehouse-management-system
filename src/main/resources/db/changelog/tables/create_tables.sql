@@ -24,8 +24,6 @@ CREATE SEQUENCE IF NOT EXISTS product_location_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS product_meta_data_seq START WITH 1 INCREMENT BY 1;
 
-CREATE SEQUENCE IF NOT EXISTS product_output_algorithm_seq START WITH 1 INCREMENT BY 1;
-
 CREATE SEQUENCE IF NOT EXISTS product_return_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS product_seq START WITH 1 INCREMENT BY 1;
@@ -270,16 +268,17 @@ CREATE TABLE outbound_shipment
 
 CREATE TABLE product
 (
-    id           BIGINT                      NOT NULL,
-    created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at   TIMESTAMP WITHOUT TIME ZONE,
-    status       VARCHAR(255)                NOT NULL,
-    created_by   VARCHAR(255),
-    updated_by   VARCHAR(255),
-    name         VARCHAR(255),
-    description  VARCHAR(255),
-    product_type VARCHAR(255),
-    quantity     INTEGER,
+    id                    BIGINT                      NOT NULL,
+    created_at            TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at            TIMESTAMP WITHOUT TIME ZONE,
+    status                VARCHAR(255)                NOT NULL,
+    created_by            VARCHAR(255),
+    updated_by            VARCHAR(255),
+    name                  VARCHAR(255),
+    description           VARCHAR(255),
+    product_type          VARCHAR(255),
+    quantity              INTEGER,
+    output_algorithm_type VARCHAR(255),
     CONSTRAINT pk_product PRIMARY KEY (id)
 );
 
@@ -297,19 +296,6 @@ CREATE TABLE product_meta_data
     serial_number               VARCHAR(255),
     quarantine_storage_duration INTEGER,
     CONSTRAINT pk_product_meta_data PRIMARY KEY (id)
-);
-
-CREATE TABLE product_output_algorithm
-(
-    id             BIGINT                      NOT NULL,
-    created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at     TIMESTAMP WITHOUT TIME ZONE,
-    status         VARCHAR(255)                NOT NULL,
-    created_by     VARCHAR(255),
-    updated_by     VARCHAR(255),
-    algorithm_type VARCHAR(255),
-    description    VARCHAR(255),
-    CONSTRAINT pk_product_output_algorithm PRIMARY KEY (id)
 );
 
 CREATE TABLE product_return

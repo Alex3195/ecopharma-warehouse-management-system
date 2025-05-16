@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
+import uz.duol.ecopharmwarehouse.enums.OutputAlgorithmTypeEnum;
 import uz.duol.ecopharmwarehouse.module.product.metadata.dto.ProductMetadataDTO;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class ProductDTO {
     private String productType;
     @NotNull
     private Integer quantity;
+    private OutputAlgorithmTypeEnum outputAlgorithmType;
 
     private List<ProductMetadataDTO> productMetadata;
     private String performedBy;
