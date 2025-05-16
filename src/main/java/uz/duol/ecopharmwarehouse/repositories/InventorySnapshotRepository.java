@@ -15,4 +15,5 @@ public interface InventorySnapshotRepository extends JpaRepository<InventorySnap
     @Transactional
     @Query("DELETE FROM InventorySnapshotEntity s WHERE s.snapshotTime < :cutoff")
     void deleteBySnapshotTimeBefore(@Param("cutoff") LocalDateTime cutoff);
+
 }

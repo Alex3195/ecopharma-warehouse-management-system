@@ -1,8 +1,6 @@
 package uz.duol.ecopharmwarehouse.module.inventory.snapshot.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import uz.duol.ecopharmwarehouse.entity.InventorySnapshotEntity;
 import uz.duol.ecopharmwarehouse.module.inventory.snapshot.dto.InventorySnapshotDto;
 import uz.duol.ecopharmwarehouse.module.location.mapper.LocationMapper;
@@ -19,4 +17,7 @@ public interface InventorySnapshotMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     InventorySnapshotEntity toEntity(InventorySnapshotDto dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateDto(@MappingTarget InventorySnapshotDto existing, InventorySnapshotDto dto);
 }

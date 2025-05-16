@@ -3,6 +3,8 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
@@ -15,6 +17,8 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @EntityListeners(AuditTrailListener.class)
+@SQLDelete(sql = "UPDATE inventory_snapshot SET status = 'DELETED' WHERE id = ?")
+@Where(clause = "status <> 'DELETED'")
 public class InventorySnapshotEntity extends BaseEntity {
 
     @Id
