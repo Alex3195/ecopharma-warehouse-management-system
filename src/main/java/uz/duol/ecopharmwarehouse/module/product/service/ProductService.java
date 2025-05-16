@@ -7,7 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.ProductEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
 import uz.duol.ecopharmwarehouse.module.product.exception.ProductNotFundException;
 import uz.duol.ecopharmwarehouse.module.product.mapper.ProductMapper;
@@ -23,7 +22,7 @@ public class ProductService {
     @Transactional
     public ProductDTO create(ProductDTO dto) {
         var productEntity = mapper.toEntity(dto);
-        if (dto.getPerformedBy()!= null) {
+        if (dto.getPerformedBy() != null) {
             productEntity.setCreatedBy(dto.getPerformedBy());
         }
         return mapper.toDto(repository.save(productEntity));
@@ -31,7 +30,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
-        var productEntity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var productEntity = repository.findById(id)
                 .orElseThrow(() -> new ProductNotFundException("Product not found"));
         return mapper.toDto(productEntity);
     }
@@ -48,14 +47,12 @@ public class ProductService {
     @Transactional
     public void delete(Long id) {
         ProductDTO productDTO = findById(id);
-        var productEntity = mapper.toEntity(productDTO);
-        productEntity.setStatus(Status.DELETED);
-        repository.save(productEntity);
+        repository.deleteById(productDTO.getId());
     }
 
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAll(String search, Pageable pageable) {
-        Specification<ProductEntity> spec = Specification.where(ProductSpecification.isActive());
+        Specification<ProductEntity> spec = Specification.where(null);
         if (search != null && !search.isEmpty()) {
             spec = spec.and(ProductSpecification.hasName(search));
         }

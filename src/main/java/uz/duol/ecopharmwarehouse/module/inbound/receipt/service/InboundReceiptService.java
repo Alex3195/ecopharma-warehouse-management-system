@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.InboundReceiptEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.crossdocking.dto.CrossDockingDto;
 import uz.duol.ecopharmwarehouse.module.crossdocking.service.CrossDockingService;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.dto.InboundReceiptDto;
@@ -63,15 +62,13 @@ public class InboundReceiptService {
     @Transactional
     public void delete(Long id) {
         InboundReceiptDto dto = findById(id);
-        var entity = mapper.toEntity(dto);
-        entity.setStatus(Status.DELETED);
-        repository.save(entity);
+        repository.deleteById(dto.getId());
     }
 
     @Transactional(readOnly = true)
     public Page<InboundReceiptDto> findAll(String search, Pageable pageable) {
 
-        Specification<InboundReceiptEntity> spec = InboundReceiptSpecification.isActive();
+        Specification<InboundReceiptEntity> spec = Specification.where(null);
         if (search != null) {
             spec = spec.and(InboundReceiptSpecification.hasText(search));
         }

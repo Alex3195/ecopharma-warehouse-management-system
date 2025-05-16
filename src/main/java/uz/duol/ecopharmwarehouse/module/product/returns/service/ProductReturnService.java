@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.duol.ecopharmwarehouse.entity.ProductReturnEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.product.returns.dto.ProductReturnDto;
 import uz.duol.ecopharmwarehouse.module.product.returns.mapper.ProductReturnMapper;
 import uz.duol.ecopharmwarehouse.module.product.returns.specification.ProductReturnSpecification;
@@ -26,12 +25,14 @@ public class ProductReturnService {
     }
 
     public ProductReturnDto findById(Long id) {
-        var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product return not found"));
+        var entity = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product return not found"));
         return mapper.toDto(entity);
     }
 
     public ProductReturnDto update(Long id, ProductReturnDto dto) {
-        var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product return not found"));
+        var entity = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product return not found"));
         mapper.updateEntity(entity, dto);
         repository.save(entity);
         return mapper.toDto(entity);
@@ -39,9 +40,7 @@ public class ProductReturnService {
 
     public void delete(Long id) {
         var dto = findById(id);
-        var entity = mapper.toEntity(dto);
-        entity.setStatus(Status.DELETED);
-        repository.delete(entity);
+        repository.deleteById(dto.getId());
     }
 
     public Page<ProductReturnDto> findAll(String search, Pageable pageable) {

@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.duol.ecopharmwarehouse.entity.CellEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.cells.dto.CellDTO;
 import uz.duol.ecopharmwarehouse.module.cells.exception.CellNotFoundException;
 import uz.duol.ecopharmwarehouse.module.cells.mapper.CellsMapper;
@@ -25,7 +24,7 @@ public class CellsService {
     }
 
     public CellDTO findById(Long id) {
-        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var e = repository.findById(id)
                 .orElseThrow(() -> new CellNotFoundException("Cell not found"));
         return mapper.toDto(e);
     }
@@ -39,13 +38,11 @@ public class CellsService {
 
     public void delete(Long id) {
         CellDTO dto = findById(id);
-        var e = mapper.toEntity(dto);
-        e.setStatus(Status.DELETED);
-        repository.save(e);
+        repository.deleteById(dto.getId());
     }
 
     public Page<CellDTO> findAll(String search, Pageable pageable) {
-        Specification<CellEntity> spec = Specification.where(CellSpecification.isActive());
+        Specification<CellEntity> spec = Specification.where(null);
         if (search != null && !search.isEmpty()) {
             spec = spec.and(CellSpecification.hasText(search));
         }

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.enums.RackTypeEnum;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
@@ -17,6 +19,8 @@ import java.util.List;
 @Setter
 @Getter
 @EntityListeners(AuditTrailListener.class)
+@SQLDelete(sql = "update racks set status = 'DELETED' where id = ?")
+@Where(clause = "status != 'DELETED'")
 public class RackEntity extends BaseEntity {
     @Id
     @Column(name = "id")

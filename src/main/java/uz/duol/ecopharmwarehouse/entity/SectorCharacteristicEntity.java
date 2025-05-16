@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
@@ -12,6 +14,8 @@ import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 @Setter
 @Getter
 @EntityListeners(AuditTrailListener.class)
+@SQLDelete(sql = "update sector_characteristic set status = 'DELETED' where id = ?")
+@Where(clause = "status != 'DELETED'")
 public class SectorCharacteristicEntity extends BaseEntity {
     @Id
     @Column(name = "id")
@@ -23,7 +27,7 @@ public class SectorCharacteristicEntity extends BaseEntity {
     private Long sectorId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "sector_id",referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "sector_id", referencedColumnName = "id", insertable = false, updatable = false)
     @JsonBackReference
     private SectorEntity sector;
 
@@ -31,7 +35,7 @@ public class SectorCharacteristicEntity extends BaseEntity {
     private Long characteristicId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "characteristic_id",referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "characteristic_id", referencedColumnName = "id", insertable = false, updatable = false)
     private CharacteristicEntity characteristic;
 
     @Column(nullable = false)

@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.duol.ecopharmwarehouse.entity.UnitsEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.unit.dto.UnitsDTO;
 import uz.duol.ecopharmwarehouse.module.unit.exception.UnitNotFoundException;
 import uz.duol.ecopharmwarehouse.module.unit.mapper.UnitMapper;
@@ -28,7 +27,7 @@ public class UnitsService {
     }
 
     public UnitsDTO findById(Long id) {
-        var entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var entity = repository.findById(id)
                 .orElseThrow(() -> new UnitNotFoundException("Unit not found"));
         return mapper.toDto(entity);
     }
@@ -42,9 +41,7 @@ public class UnitsService {
 
     public void delete(Long id) {
         UnitsDTO dto = findById(id);
-        var entity = mapper.toEntity(dto);
-        entity.setStatus(Status.DELETED);
-        repository.save(entity);
+        repository.deleteById(dto.getId());
     }
 
     public Page<UnitsDTO> findAll(String search, Pageable pageable) {

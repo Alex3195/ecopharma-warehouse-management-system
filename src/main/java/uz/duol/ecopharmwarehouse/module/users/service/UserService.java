@@ -33,7 +33,8 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserDTO findById(String id) {
-        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED).orElseThrow(() -> new UserNotFoundException("User not found"));
+        var e = repository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         return mapper.toDto(e);
     }
 

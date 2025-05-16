@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
@@ -12,6 +14,8 @@ import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 @EntityListeners(AuditTrailListener.class)
 @Setter
 @Getter
+@SQLDelete(sql = "update cell set status = 'DELETED' where id = ?")
+@Where(clause = "status != 'DELETED'")
 public class CellEntity extends BaseEntity {
     @Id
     @Column(name = "id")

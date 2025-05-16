@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.CellEntity;
 import uz.duol.ecopharmwarehouse.entity.FloorEntity;
 import uz.duol.ecopharmwarehouse.entity.RackEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 import uz.duol.ecopharmwarehouse.module.location.service.LocationService;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
@@ -85,7 +84,7 @@ public class RackService {
 
     @Transactional(readOnly = true)
     public RackDTO findById(Long id) {
-        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var e = repository.findById(id)
                 .orElseThrow(() -> new RackNotFoundException("Rack not found"));
         return mapper.toDto(e);
     }
@@ -101,14 +100,12 @@ public class RackService {
     @Transactional
     public void delete(Long id) {
         RackDTO dto = findById(id);
-        var e = mapper.toEntity(dto);
-        e.setStatus(Status.DELETED);
-        repository.save(e);
+        repository.deleteById(dto.getId());
     }
 
     @Transactional(readOnly = true)
     public Page<RackDTO> findAll(String search, Pageable pageable) {
-        Specification<RackEntity> spec = Specification.where(RackSpecification.isActive());
+        Specification<RackEntity> spec = Specification.where(null);
         if (search != null && !search.isEmpty()) {
             spec = spec.and(RackSpecification.hasText(search));
         }

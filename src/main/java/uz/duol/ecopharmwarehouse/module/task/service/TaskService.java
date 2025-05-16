@@ -7,7 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.TaskEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.task.dto.TaskDTO;
 import uz.duol.ecopharmwarehouse.module.task.exception.TaskNotFoundException;
 import uz.duol.ecopharmwarehouse.module.task.mapper.TaskMapper;
@@ -28,7 +27,8 @@ public class TaskService {
 
     @Transactional(readOnly = true)
     public TaskDTO findById(Long id) {
-        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED).orElseThrow(() -> new TaskNotFoundException("Task not found"));
+        var e = repository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
         return mapper.toDto(e);
     }
 
@@ -43,9 +43,7 @@ public class TaskService {
     @Transactional
     public void delete(Long id) {
         TaskDTO dto = findById(id);
-        var e = mapper.toEntity(dto);
-        e.setStatus(Status.DELETED);
-        repository.save(e);
+        repository.deleteById(dto.getId());
     }
 
     @Transactional(readOnly = true)

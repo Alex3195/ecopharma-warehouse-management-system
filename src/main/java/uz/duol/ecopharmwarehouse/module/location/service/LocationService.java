@@ -33,7 +33,7 @@ public class LocationService {
     }
 
     public LocationDTO findById(Long id) {
-        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var e = repository.findById(id)
                 .orElseThrow(() -> new LocationNotFoundException("Location not found"));
         return mapper.toDto(e);
     }
@@ -47,9 +47,7 @@ public class LocationService {
 
     public void delete(Long id) {
         LocationDTO dto = findById(id);
-        var entity = mapper.toEntity(dto);
-        entity.setStatus(Status.DELETED);
-        repository.save(entity);
+        repository.deleteById(dto.getId());
     }
 
     private String generateBarCode() {
@@ -62,7 +60,7 @@ public class LocationService {
     }
 
     public Page<LocationDTO> findAll(String name, Pageable pageable) {
-        Specification<LocationEntity> spec = Specification.where(LocationSpecification.isActive());
+        Specification<LocationEntity> spec = Specification.where(null);
         if (name != null && !name.isEmpty()) {
             spec = spec.and(LocationSpecification.hasText(name));
         }

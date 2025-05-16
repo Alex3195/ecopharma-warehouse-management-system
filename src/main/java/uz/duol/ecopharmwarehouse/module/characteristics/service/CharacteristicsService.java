@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.duol.ecopharmwarehouse.entity.CharacteristicEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.characteristics.dto.CharacteristicsDTO;
 import uz.duol.ecopharmwarehouse.module.characteristics.exception.CharacteristicsNotFoundException;
 import uz.duol.ecopharmwarehouse.module.characteristics.mapper.CharacteristicsMapper;
@@ -27,7 +26,7 @@ public class CharacteristicsService {
     }
 
     public CharacteristicsDTO findById(Long id) {
-        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var e = repository.findById(id)
                 .orElseThrow(() -> new CharacteristicsNotFoundException("Characteristics not found"));
         return mapper.toDto(e);
     }
@@ -41,13 +40,11 @@ public class CharacteristicsService {
 
     public void delete(Long id) {
         CharacteristicsDTO dto = findById(id);
-        var e = mapper.toEntity(dto);
-        e.setStatus(Status.DELETED);
-        repository.save(e);
+        repository.deleteById(dto.getId());
     }
 
     public Page<CharacteristicsDTO> findAll(String search, Pageable pageable) {
-        Specification<CharacteristicEntity> spec = Specification.where(CharacteristicSpecification.isActive());
+        Specification<CharacteristicEntity> spec = Specification.where(null);
         if (search != null && !search.isEmpty()) {
             spec = spec.and(CharacteristicSpecification.hasText(search));
         }

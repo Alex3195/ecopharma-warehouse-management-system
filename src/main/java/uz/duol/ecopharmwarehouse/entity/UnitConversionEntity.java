@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
@@ -14,6 +16,8 @@ import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 @ToString
 @EntityListeners(AuditTrailListener.class)
 @SequenceGenerator(name = "unit_conversion_seq_gen", sequenceName = "unit_conversion_seq", allocationSize = 1)
+@SQLDelete(sql = "update unit_conversion set status = 'DELETED' where id = ?")
+@Where(clause = "status != 'DELETED'")
 public class UnitConversionEntity extends BaseEntity {
     @Id
     @Column(name = "id")

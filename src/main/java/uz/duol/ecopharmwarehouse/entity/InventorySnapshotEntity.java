@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @EntityListeners(AuditTrailListener.class)
 @SQLDelete(sql = "UPDATE inventory_snapshot SET status = 'DELETED' WHERE id = ?")
-@Where(clause = "status <> 'DELETED'")
+@Where(clause = "status != 'DELETED'")
 public class InventorySnapshotEntity extends BaseEntity {
 
     @Id

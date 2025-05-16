@@ -3,6 +3,8 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.enums.ReceiptStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ReceiptTypeEnum;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
@@ -13,6 +15,8 @@ import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 @Getter
 @Setter
 @EntityListeners(AuditTrailListener.class)
+@SQLDelete(sql = "update inbound_receipt set status = 'DELETED' where id=?")
+@Where(clause = "status != 'DELETED'")
 public class InboundReceiptEntity extends BaseEntity {
 
     @Id

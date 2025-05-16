@@ -3,6 +3,8 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.enums.ShipmentStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ShipmentTypeEnum;
@@ -15,6 +17,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @EntityListeners(AuditTrailListener.class)
+@SQLDelete(sql = "update outbound_shipment set status = 'DELETED' where id = ?")
+@Where(clause = "status != 'DELETED'")
 public class OutboundShipmentEntity extends BaseEntity {
     @Id
     @Column(name = "id")

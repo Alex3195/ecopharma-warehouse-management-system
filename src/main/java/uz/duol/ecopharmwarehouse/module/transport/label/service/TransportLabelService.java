@@ -31,16 +31,14 @@ public class TransportLabelService {
     }
 
     public TransportLabelDto findById(Long id) {
-        var entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Transport label not found"));
         return mapper.toDto(entity);
     }
 
     public void delete(Long id) {
         var label = findById(id);
-        var entity = mapper.toEntity(label);
-        entity.setStatus(Status.DELETED);
-        repository.save(entity);
+        repository.deleteById(label.getId());
     }
 
     public Page<TransportLabelDto> findAll(String search, Pageable pageable) {

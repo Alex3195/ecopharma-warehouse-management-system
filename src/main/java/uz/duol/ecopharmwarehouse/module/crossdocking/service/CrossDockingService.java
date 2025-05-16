@@ -11,7 +11,6 @@ import uz.duol.ecopharmwarehouse.entity.CrossDockingEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.crossdocking.dto.CrossDockingDto;
 import uz.duol.ecopharmwarehouse.module.crossdocking.mapper.CrossDockingMapper;
-import uz.duol.ecopharmwarehouse.module.crossdocking.specification.CrossDockingSpecification;
 import uz.duol.ecopharmwarehouse.repositories.CrossDockingRepository;
 
 @Service
@@ -48,13 +47,12 @@ public class CrossDockingService {
     public void delete(Long id) {
         var entity = crossDockingRepository.findByIdAndStatusIsNot(id, Status.DELETED)
                 .orElseThrow(() -> new EntityNotFoundException("Cross docking not found"));
-        entity.setStatus(Status.DELETED);
-        crossDockingRepository.save(entity);
+        crossDockingRepository.deleteById(entity.getId());
     }
 
     @Transactional(readOnly = true)
     public Page<CrossDockingDto> findAll(Pageable pageable) {
-        Specification<CrossDockingEntity> spec = CrossDockingSpecification.isActive();
+        Specification<CrossDockingEntity> spec = Specification.where(null);
         return crossDockingRepository.findAll(spec, pageable)
                 .map(crossDockingMapper::toDto);
     }

@@ -7,7 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.WarehouseEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.warehouse.dto.WarehouseDTO;
 import uz.duol.ecopharmwarehouse.module.warehouse.exception.WarehouseNotFoundException;
 import uz.duol.ecopharmwarehouse.module.warehouse.mapper.WarehouseMapper;
@@ -28,7 +27,7 @@ public class WarehouseService {
 
     @Transactional(readOnly = true)
     public WarehouseDTO findById(Long id) {
-        var entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var entity = repository.findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found"));
         return mapper.toDto(entity);
     }
@@ -44,9 +43,7 @@ public class WarehouseService {
     @Transactional
     public void delete(Long id) {
         WarehouseDTO dto = findById(id);
-        var e = mapper.toEntity(dto);
-        e.setStatus(Status.DELETED);
-        repository.save(e);
+        repository.deleteById(dto.getId());
     }
 
     @Transactional(readOnly = true)

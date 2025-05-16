@@ -7,11 +7,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.FloorEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.floor.dto.FloorDTO;
 import uz.duol.ecopharmwarehouse.module.floor.exception.FloorNotFoundException;
 import uz.duol.ecopharmwarehouse.module.floor.mapper.FloorMapper;
-import uz.duol.ecopharmwarehouse.module.floor.specification.FloorSpecification;
 import uz.duol.ecopharmwarehouse.repositories.FloorRepository;
 
 @Service
@@ -28,7 +26,7 @@ public class FloorService {
 
     @Transactional(readOnly = true)
     public FloorDTO findById(Long id) {
-        var e = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var e = repository.findById(id)
                 .orElseThrow(() -> new FloorNotFoundException("Floor not found"));
         return mapper.toDto(e);
     }
@@ -44,14 +42,12 @@ public class FloorService {
     @Transactional
     public void delete(Long id) {
         FloorDTO dto = findById(id);
-        var e = mapper.toEntity(dto);
-        e.setStatus(Status.DELETED);
-        repository.save(e);
+        repository.deleteById(dto.getId());
     }
 
     @Transactional(readOnly = true)
     public Page<FloorDTO> findAll(Pageable pageable) {
-        Specification<FloorEntity> spec = Specification.where((FloorSpecification.isActive()));
+        Specification<FloorEntity> spec = Specification.where(null);
 
         return repository.findAll(spec, pageable).map(mapper::toDto);
     }

@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.duol.ecopharmwarehouse.entity.SectorCharacteristicEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.sector.characteristics.dto.SectorCharacteristicDTO;
 import uz.duol.ecopharmwarehouse.module.sector.characteristics.exception.SectorCharacteristicsNotFoundException;
 import uz.duol.ecopharmwarehouse.module.sector.characteristics.mapper.SectorCharacteristicsMapper;
@@ -25,7 +24,8 @@ public class SectorCharacteristicsService {
     }
 
     public SectorCharacteristicDTO findById(Long id) {
-        SectorCharacteristicEntity entity = repository.findByIdAndStatusIsNot(id, Status.DELETED).orElseThrow(() -> new SectorCharacteristicsNotFoundException("Sector characteristic not found"));
+        SectorCharacteristicEntity entity = repository.findById(id)
+                .orElseThrow(() -> new SectorCharacteristicsNotFoundException("Sector characteristic not found"));
         return mapper.toDto(entity);
     }
 
@@ -38,13 +38,11 @@ public class SectorCharacteristicsService {
 
     public void delete(Long id) {
         SectorCharacteristicDTO dto = findById(id);
-        var entity = mapper.toEntity(dto);
-        entity.setStatus(Status.DELETED);
-        repository.save(entity);
+        repository.deleteById(dto.getId());
     }
 
     public Page<SectorCharacteristicDTO> findAll(String search, Pageable pageable) {
-        Specification<SectorCharacteristicEntity> spec = Specification.where(SectorCharacteristicsSpecification.isActive());
+        Specification<SectorCharacteristicEntity> spec = Specification.where(null);
         if (search != null && !search.isEmpty()) {
             spec = spec.and(SectorCharacteristicsSpecification.hasText(search));
         }

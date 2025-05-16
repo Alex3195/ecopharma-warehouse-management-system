@@ -22,7 +22,7 @@ public class InventoryAuditService {
 
 
     private void logDiscrepancy(Long productId, int systemQty, int auditedQty, Long locationId) {
-        log.info("❗ Discrepancy detected for Product {} at Location :{}  → System: {}, Audit: {}/n",
+        log.info("Discrepancy detected for Product {} at Location :{}  → System: {}, Audit: {}/n",
                 productId, locationId, systemQty, auditedQty);
     }
 

@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.duol.ecopharmwarehouse.entity.AddressEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.address.dto.AddressDTO;
 import uz.duol.ecopharmwarehouse.module.address.exception.AddressNotFoundException;
 import uz.duol.ecopharmwarehouse.module.address.mapper.AddressMapper;
@@ -27,7 +26,7 @@ public class AddressService {
     }
 
     public AddressDTO findById(Long id) {
-        var entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var entity = repository.findById(id)
                 .orElseThrow(() -> new AddressNotFoundException("Address not found"));
         return mapper.toDto(entity);
     }
@@ -41,13 +40,11 @@ public class AddressService {
 
     public void delete(Long id) {
         AddressDTO dto = findById(id);
-        var entity = mapper.toEntity(dto);
-        entity.setStatus(Status.DELETED);
-        repository.save(entity);
+        repository.deleteById(dto.getId());
     }
 
     public Page<AddressDTO> findAll(String search, Pageable pageable) {
-        Specification<AddressEntity> spec = Specification.where(AddressSpecification.isActive());
+        Specification<AddressEntity> spec = Specification.where(null);
         if (search != null && !search.isEmpty()) {
             spec = spec.and(AddressSpecification.hasText(search));
         }

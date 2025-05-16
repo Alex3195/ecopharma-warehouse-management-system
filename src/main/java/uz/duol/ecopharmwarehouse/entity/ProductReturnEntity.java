@@ -3,6 +3,8 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
@@ -11,6 +13,8 @@ import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 @Setter
 @Getter
 @EntityListeners(AuditTrailListener.class)
+@SQLDelete(sql = "update product_return set status = 'DELETE' where id = ?")
+@Where(clause = "status != 'DELETE'")
 public class ProductReturnEntity extends BaseEntity {
 
     @Id

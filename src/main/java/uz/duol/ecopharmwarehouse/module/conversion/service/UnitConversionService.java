@@ -49,14 +49,13 @@ public class UnitConversionService {
         var entity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Data not found"));
 
-        entity.setStatus(Status.DELETED);
-        repository.save(entity);
+        repository.deleteById(entity.getId());
     }
 
     @Transactional(readOnly = true)
     public List<UnitConversionDto> get(Long baseUnitId, Long alternativeUnitId) {
-        Specification<UnitConversionEntity> spec = ConversionSpecification.isActive()
-                .and(ConversionSpecification.hasBaseUnitIdAndAlternativeUnitId(baseUnitId, alternativeUnitId));
+        Specification<UnitConversionEntity> spec = Specification.where(null);
+        spec = spec.and(ConversionSpecification.hasBaseUnitIdAndAlternativeUnitId(baseUnitId, alternativeUnitId));
 
         List<UnitConversionEntity> entities = repository.findAll(spec);
         return entities.stream().map(item -> {

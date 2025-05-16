@@ -53,11 +53,17 @@ public class InventoryService {
     }
 
     public Page<InventoryDto> getProductLocationByItsBarcode(String search, Pageable pageable) {
-        Specification<InventoryEntity> spec = InventorySpecification.isActive();
+        Specification<InventoryEntity> spec = Specification.where(null);
         if (!search.isBlank()) {
             spec = spec.and(InventorySpecification.hasText(search));
         }
         Page<InventoryEntity> entities = repository.findAll(spec, pageable);
         return entities.map(mapper::toDto);
+    }
+
+    public void delete(Long id) {
+        var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        repository.deleteById(entity.getId());
     }
 }
