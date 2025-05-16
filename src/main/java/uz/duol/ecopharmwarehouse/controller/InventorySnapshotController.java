@@ -1,14 +1,15 @@
 package uz.duol.ecopharmwarehouse.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.duol.ecopharmwarehouse.module.inventory.snapshot.dto.InventorySnapshotDto;
 import uz.duol.ecopharmwarehouse.module.inventory.snapshot.servcie.InventorySnapshotService;
 
@@ -19,16 +20,80 @@ import uz.duol.ecopharmwarehouse.module.inventory.snapshot.servcie.InventorySnap
 public class InventorySnapshotController {
     private final InventorySnapshotService inventorySnapshotService;
 
+    @Operation(summary = "Get All Inventory Snapshots",
+            description = "Get all inventory snapshots",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Inventory snapshots retrieved successfully"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+            })
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('INVENTORY_SNAPSHOT_READ') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('INVENTORY_SNAPSHOT_GET') or hasRole('SUPER_ADMIN')")
     public Page<InventorySnapshotDto> findAll(@RequestParam(value = "search", required = false) String search,
                                               @PageableDefault Pageable pageable) {
         return inventorySnapshotService.findAll(search, pageable);
     }
 
+    @Operation(summary = "Get Inventory Snapshot by ID",
+            description = "Get inventory snapshot by ID",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Inventory snapshot retrieved successfully"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+            })
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('INVENTORY_SNAPSHOT_READ') or hasRole('SUPER_ADMIN')")
-    public InventorySnapshotDto findById(@RequestParam Long id) {
+    @PreAuthorize("hasAuthority('INVENTORY_SNAPSHOT_GET') or hasRole('SUPER_ADMIN')")
+    public InventorySnapshotDto findById(@PathVariable Long id) {
         return inventorySnapshotService.findById(id);
+    }
+
+    @PostMapping
+    @Operation(summary = "Create Inventory Snapshot",
+            description = "Create a new inventory snapshot",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Inventory snapshot created successfully"),
+                    @ApiResponse(responseCode = "400", description = "Bad request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+            })
+    @PreAuthorize("hasAuthority('INVENTORY_SNAPSHOT_CREATE') or hasRole('SUPER_ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
+    public InventorySnapshotDto create(@RequestBody InventorySnapshotDto inventorySnapshotDto) {
+        return inventorySnapshotService.create(inventorySnapshotDto);
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Update Inventory Snapshot",
+            description = "Update an existing inventory snapshot",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Inventory snapshot updated successfully"),
+                    @ApiResponse(responseCode = "400", description = "Bad request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Inventory snapshot not found"),
+            })
+    @PreAuthorize("hasAuthority('INVENTORY_SNAPSHOT_UPDATE') or hasRole('SUPER_ADMIN')")
+    public InventorySnapshotDto update(@PathVariable Long id, @RequestBody InventorySnapshotDto inventorySnapshotDto) {
+        return inventorySnapshotService.update(id, inventorySnapshotDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete Inventory Snapshot",
+            description = "Delete an inventory snapshot by ID",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Inventory snapshot deleted successfully"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Inventory snapshot not found"),
+            })
+    @PreAuthorize("hasAuthority('INVENTORY_SNAPSHOT_DELETE') or hasRole('SUPER_ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        inventorySnapshotService.delete(id);
     }
 }
