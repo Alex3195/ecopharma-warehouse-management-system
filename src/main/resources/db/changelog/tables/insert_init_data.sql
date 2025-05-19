@@ -1,0 +1,2 @@
+insert into "user"(id, created_at, updated_at, status, username, first_name, last_name)
+values ('4a6b7165-2e61-4b35-9afb-5f576ee13049', '2023-01-01 00:00:00', '2023-01-01 00:00:00', 'CREATED', 'bingo', 'admin', 'admin')
