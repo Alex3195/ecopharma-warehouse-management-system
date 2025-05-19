@@ -21,7 +21,7 @@ spring:
           batch_size: 30
         order_updates: true
         order_insert: true
-        generate_statistics: true
+        generate_statistics: false
   datasource:
     driver-class-name: org.postgresql.Driver
   liquibase:
