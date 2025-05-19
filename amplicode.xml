@@ -3,7 +3,7 @@
   <component name="AmplicodeDatabaseMigrationSettings" lastSelectedDirectory="src\main\java\uz\duol\ecopharmwarehouse\entity" liquibaseFileType="SQL" />
   <component name="AmplicodePersistenceUnitSettings">
     <persistence-units>
-      <persistence-unit name="Default" defaultIncludeChangeLogFile="src/main/resources/db/changelog/db.changelog-master.yaml" defaultSearchScope="Selected Entities">
+      <persistence-unit name="Default" defaultIncludeChangeLogFile="src/main/resources/db/changelog/db.changelog-master.yaml">
         <packages>
           <package value="uz.duol.ecopharmwarehouse" />
         </packages>

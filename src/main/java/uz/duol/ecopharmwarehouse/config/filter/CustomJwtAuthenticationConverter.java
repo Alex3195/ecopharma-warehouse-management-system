@@ -10,8 +10,10 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import uz.duol.ecopharmwarehouse.config.security.CustomUserDetails;
+import uz.duol.ecopharmwarehouse.entity.rbac.RoleDefaultPermissionsEntity;
 import uz.duol.ecopharmwarehouse.module.permissions.dto.UserPermissionDto;
 import uz.duol.ecopharmwarehouse.module.permissions.service.UserPermissionService;
+import uz.duol.ecopharmwarehouse.repositories.RoleDefaultPermissionRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +28,7 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
     private String realm;
 
     private final UserPermissionService userPermissionService;
+    private final RoleDefaultPermissionRepository roleDefaultPermissionRepository;
 
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
@@ -69,6 +72,10 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
                     .map(role -> "ROLE_" + role) // Add the ROLE_ prefix
                     .map(SimpleGrantedAuthority::new)
                     .toList());
+            roles.forEach(role -> {
+                List<SimpleGrantedAuthority> permissions = loadPermissionsByRole(role);
+                authorities.addAll(permissions);
+            });
         }
     }
 
@@ -76,6 +83,13 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
         List<UserPermissionDto> userPermissions = userPermissionService.findUserPermissionByUserId(userId);
         return userPermissions.stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.getPermission().name()))
+                .toList();
+    }
+
+    private List<SimpleGrantedAuthority> loadPermissionsByRole(String role) {
+        List<RoleDefaultPermissionsEntity> permissions = roleDefaultPermissionRepository.findByRole(role);
+        return permissions.stream().map(permission ->
+                        new SimpleGrantedAuthority(permission.getPermission()))
                 .toList();
     }
 }

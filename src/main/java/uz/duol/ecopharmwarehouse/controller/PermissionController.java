@@ -39,4 +39,9 @@ public class PermissionController {
         return service.getUserPermissions(userId, locale);
     }
 
+    @GetMapping("/role-default-permissions")
+    public List<PermissionResponseGroupBy> roleDefaultPermissions(@RequestParam(value = "role", required = false) String name, Locale locale) {
+        log.info("Request to get role default permissions: {}", name);
+        return service.getRoleDefaultPermissions(name, locale);
+    }
 }

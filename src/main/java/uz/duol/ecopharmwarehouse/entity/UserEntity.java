@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @Getter
 @EntityListeners(AuditTrailListener.class)
-@SQLDelete(sql = "update \"user\" set status = 'DELETED' where id = ?")
+@SQLDelete(sql = "update users set status = 'DELETED' where id = ?")
 @Where(clause = "status != 'DELETED'")
 public class UserEntity extends BaseEntity {
     @Id

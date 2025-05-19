@@ -5,7 +5,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TableNamesConstant {
-    public static final String REQUEST_ID_HEADER_NAME = "X-Request-Id";
+//    public static final String REQUEST_ID_HEADER_NAME = "X-Request-Id";
+    public static final String DEFAULT_PERMISSION = "default_permission";
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public final static class Tables {
@@ -16,12 +17,11 @@ public class TableNamesConstant {
         public static final String OUTBOUND_SHIPMENT = "outbound_shipment";
         public static final String TASK = "task";
         public static final String INVENTORY_SNAPSHOT = "inventory_snapshot";
-        public static final String PRODUCT_OUTPUT_ALGORITHM = "product_output_algorithm";
         public static final String TRANSPORT_LABEL = "transport_label";
         public static final String INVENTORY_AUDIT = "inventory_audit";
         public static final String PRODUCT_RETURN = "product_return";
         public static final String AUDIT_TRAIL = "audit_trail";
-        public static final String USER = "user";
+        public static final String USER = "users";
 
         public static final String SECTOR = "sector";
         public static final String UNIT = "unit";
@@ -39,5 +39,7 @@ public class TableNamesConstant {
         public static final String JOBS = "jobs";
         public static final String INVENTORY = "inventory";
         public static final String STORAGE_AGGREGATIONS_WITH_ALTERNATIVE_UNIT = "store_aggregations_with_alternative_unit";
+        public static final String ROLE_DEFAULT_PERMISSIONS = "role_default_permissions";
+        public static final String ROLE = "role";
     }
 }

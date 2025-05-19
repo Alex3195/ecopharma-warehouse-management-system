@@ -1,4 +1,3 @@
--- changeset alex:create_shedlock_001 runOnChange=true
 CREATE TABLE shedlock
 (
     name       VARCHAR(64)  NOT NULL,
@@ -7,5 +6,3 @@ CREATE TABLE shedlock
     locked_by  VARCHAR(255) NOT NULL,
     PRIMARY KEY (name)
 );
-
--- rollback DROP TABLE shedlock;

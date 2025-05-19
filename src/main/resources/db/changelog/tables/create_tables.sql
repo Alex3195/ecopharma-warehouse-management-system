@@ -1,4 +1,3 @@
-
 CREATE SEQUENCE IF NOT EXISTS address_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS audit_trail_seq START WITH 1 INCREMENT BY 1;
@@ -31,6 +30,8 @@ CREATE SEQUENCE IF NOT EXISTS product_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS rack_seq START WITH 1 INCREMENT BY 1;
 
+CREATE SEQUENCE IF NOT EXISTS role_default_permissions_seq START WITH 1 INCREMENT BY 1;
+
 CREATE SEQUENCE IF NOT EXISTS sector_characteristics_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS sector_seq START WITH 1 INCREMENT BY 1;
@@ -51,7 +52,7 @@ CREATE SEQUENCE IF NOT EXISTS user_permission_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS warehouse_seq START WITH 1 INCREMENT BY 1;
 
-CREATE TABLE IF NOT EXISTS address
+CREATE TABLE address
 (
     id              BIGINT                      NOT NULL,
     created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -70,7 +71,7 @@ CREATE TABLE IF NOT EXISTS address
     CONSTRAINT pk_address PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS audit_trail
+CREATE TABLE audit_trail
 (
     id           BIGINT                      NOT NULL,
     created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -88,7 +89,7 @@ CREATE TABLE IF NOT EXISTS audit_trail
     CONSTRAINT pk_audit_trail PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS cell
+CREATE TABLE cell
 (
     id         BIGINT                      NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -107,7 +108,7 @@ CREATE TABLE IF NOT EXISTS cell
     CONSTRAINT pk_cell PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS characteristic
+CREATE TABLE characteristic
 (
     id          BIGINT                      NOT NULL,
     created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -121,7 +122,7 @@ CREATE TABLE IF NOT EXISTS characteristic
     CONSTRAINT pk_characteristic PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS cross_docking
+CREATE TABLE cross_docking
 (
     id                   BIGINT                      NOT NULL,
     created_at           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -136,7 +137,14 @@ CREATE TABLE IF NOT EXISTS cross_docking
     CONSTRAINT pk_cross_docking PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS floor
+CREATE TABLE default_permission
+(
+    name        VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
+    CONSTRAINT pk_default_permission PRIMARY KEY (name)
+);
+
+CREATE TABLE floor
 (
     id         BIGINT                      NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -150,7 +158,7 @@ CREATE TABLE IF NOT EXISTS floor
     CONSTRAINT pk_floor PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS inbound_receipt
+CREATE TABLE inbound_receipt
 (
     id                 BIGINT                      NOT NULL,
     created_at         TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -168,7 +176,7 @@ CREATE TABLE IF NOT EXISTS inbound_receipt
     CONSTRAINT pk_inbound_receipt PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS inventory
+CREATE TABLE inventory
 (
     id               BIGINT                      NOT NULL,
     created_at       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -185,7 +193,7 @@ CREATE TABLE IF NOT EXISTS inventory
     CONSTRAINT pk_inventory PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS inventory_audit
+CREATE TABLE inventory_audit
 (
     id          BIGINT                      NOT NULL,
     created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -201,7 +209,7 @@ CREATE TABLE IF NOT EXISTS inventory_audit
     CONSTRAINT pk_inventory_audit PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS inventory_snapshot
+CREATE TABLE inventory_snapshot
 (
     id               BIGINT                      NOT NULL,
     created_at       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -218,7 +226,7 @@ CREATE TABLE IF NOT EXISTS inventory_snapshot
     CONSTRAINT pk_inventory_snapshot PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS jobs
+CREATE TABLE jobs
 (
     id         BIGINT                      NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -231,7 +239,7 @@ CREATE TABLE IF NOT EXISTS jobs
     CONSTRAINT pk_jobs PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS location
+CREATE TABLE location
 (
     id           BIGINT                      NOT NULL,
     created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -250,7 +258,7 @@ CREATE TABLE IF NOT EXISTS location
     CONSTRAINT pk_location PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS outbound_shipment
+CREATE TABLE outbound_shipment
 (
     id              BIGINT                      NOT NULL,
     created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -267,7 +275,7 @@ CREATE TABLE IF NOT EXISTS outbound_shipment
     CONSTRAINT pk_outbound_shipment PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS product
+CREATE TABLE product
 (
     id                    BIGINT                      NOT NULL,
     created_at            TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -283,7 +291,7 @@ CREATE TABLE IF NOT EXISTS product
     CONSTRAINT pk_product PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS product_meta_data
+CREATE TABLE product_meta_data
 (
     id                          BIGINT                      NOT NULL,
     created_at                  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -299,7 +307,7 @@ CREATE TABLE IF NOT EXISTS product_meta_data
     CONSTRAINT pk_product_meta_data PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS product_return
+CREATE TABLE product_return
 (
     id            BIGINT                      NOT NULL,
     created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -313,7 +321,7 @@ CREATE TABLE IF NOT EXISTS product_return
     CONSTRAINT pk_product_return PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS racks
+CREATE TABLE racks
 (
     id         BIGINT                      NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -330,7 +338,32 @@ CREATE TABLE IF NOT EXISTS racks
     CONSTRAINT pk_racks PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS sector
+CREATE TABLE role
+(
+    name        VARCHAR(255)                NOT NULL,
+    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at  TIMESTAMP WITHOUT TIME ZONE,
+    status      VARCHAR(255)                NOT NULL,
+    created_by  VARCHAR(255),
+    updated_by  VARCHAR(255),
+    description VARCHAR(255),
+    CONSTRAINT pk_role PRIMARY KEY (name)
+);
+
+CREATE TABLE role_default_permissions
+(
+    id         BIGINT                      NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    status     VARCHAR(255)                NOT NULL,
+    created_by VARCHAR(255),
+    updated_by VARCHAR(255),
+    role       VARCHAR(255),
+    permission VARCHAR(255),
+    CONSTRAINT pk_role_default_permissions PRIMARY KEY (id)
+);
+
+CREATE TABLE sector
 (
     id           BIGINT                      NOT NULL,
     created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -344,7 +377,7 @@ CREATE TABLE IF NOT EXISTS sector
     CONSTRAINT pk_sector PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS sector_characteristic
+CREATE TABLE sector_characteristic
 (
     id                BIGINT                      NOT NULL,
     created_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -358,7 +391,7 @@ CREATE TABLE IF NOT EXISTS sector_characteristic
     CONSTRAINT pk_sector_characteristic PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS settings
+CREATE TABLE settings
 (
     id         BIGINT                      NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -371,13 +404,13 @@ CREATE TABLE IF NOT EXISTS settings
     CONSTRAINT pk_settings PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS store_aggregations
+CREATE TABLE store_aggregations
 (
     store_agg_id   BIGINT NOT NULL,
     aggregation_id VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS store_aggregations_with_alternative_unit
+CREATE TABLE store_aggregations_with_alternative_unit
 (
     id                  BIGINT                      NOT NULL,
     created_at          TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -396,7 +429,7 @@ CREATE TABLE IF NOT EXISTS store_aggregations_with_alternative_unit
     CONSTRAINT pk_store_aggregations_with_alternative_unit PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS task
+CREATE TABLE task
 (
     id          BIGINT                      NOT NULL,
     created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -413,13 +446,13 @@ CREATE TABLE IF NOT EXISTS task
     CONSTRAINT pk_task PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS task_location
+CREATE TABLE task_location
 (
     location_id BIGINT NOT NULL,
     task_id     BIGINT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS transport_label
+CREATE TABLE transport_label
 (
     id          BIGINT                      NOT NULL,
     created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -433,7 +466,7 @@ CREATE TABLE IF NOT EXISTS transport_label
     CONSTRAINT pk_transport_label PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS unit
+CREATE TABLE unit
 (
     id                         BIGINT                      NOT NULL,
     created_at                 TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -448,7 +481,7 @@ CREATE TABLE IF NOT EXISTS unit
     CONSTRAINT pk_unit PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS unit_conversion
+CREATE TABLE unit_conversion
 (
     id                            BIGINT                      NOT NULL,
     created_at                    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -464,7 +497,33 @@ CREATE TABLE IF NOT EXISTS unit_conversion
     CONSTRAINT pk_unit_conversion PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS "user"
+CREATE TABLE user_permission
+(
+    id         BIGINT                      NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    status     VARCHAR(255)                NOT NULL,
+    created_by VARCHAR(255),
+    updated_by VARCHAR(255),
+    user_id    VARCHAR(255)                NOT NULL,
+    name       VARCHAR(255)                NOT NULL,
+    CONSTRAINT pk_user_permission PRIMARY KEY (id)
+);
+
+CREATE TABLE user_permissions
+(
+    id         BIGINT                      NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    status     VARCHAR(255)                NOT NULL,
+    created_by VARCHAR(255),
+    updated_by VARCHAR(255),
+    user_id    VARCHAR(255),
+    permission VARCHAR(255),
+    CONSTRAINT pk_user_permissions PRIMARY KEY (id)
+);
+
+CREATE TABLE users
 (
     id                  VARCHAR(255)                NOT NULL,
     created_at          TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -479,23 +538,10 @@ CREATE TABLE IF NOT EXISTS "user"
     phone               VARCHAR(255),
     hikvision_access_id VARCHAR(255),
     telegram_nick_name  VARCHAR(255),
-    CONSTRAINT pk_user PRIMARY KEY (id)
+    CONSTRAINT pk_users PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS user_permissions
-(
-    id         BIGINT                      NOT NULL,
-    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    status     VARCHAR(255)                NOT NULL,
-    created_by VARCHAR(255),
-    updated_by VARCHAR(255),
-    user_id    VARCHAR(255),
-    permission VARCHAR(255),
-    CONSTRAINT pk_user_permissions PRIMARY KEY (id)
-);
-
-CREATE TABLE IF NOT EXISTS warehouse
+CREATE TABLE warehouse
 (
     id          BIGINT                      NOT NULL,
     created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -509,49 +555,52 @@ CREATE TABLE IF NOT EXISTS warehouse
     CONSTRAINT pk_warehouse PRIMARY KEY (id)
 );
 
-ALTER TABLE  "user"
-    ADD CONSTRAINT  UC_USER_USERNAME UNIQUE (username);
+ALTER TABLE users
+    ADD CONSTRAINT UC_USERS_USERNAME UNIQUE (username);
 
-CREATE INDEX  idx_product_snapshot_time ON inventory_snapshot (product_id, snapshot_time);
+ALTER TABLE user_permission
+    ADD CONSTRAINT uc_5102f0442555fb102482fbeae UNIQUE (user_id, name);
 
-ALTER TABLE  audit_trail
-    ADD CONSTRAINT  FK_AUDIT_TRAIL_ON_PERFORMED_BY FOREIGN KEY (performed_by) REFERENCES "user" (id);
+CREATE INDEX idx_product_snapshot_time ON inventory_snapshot (product_id, snapshot_time);
 
-ALTER TABLE  cell
-    ADD CONSTRAINT  FK_CELL_ON_FLOOR FOREIGN KEY (floor_id) REFERENCES floor (id);
+ALTER TABLE audit_trail
+    ADD CONSTRAINT FK_AUDIT_TRAIL_ON_PERFORMED_BY FOREIGN KEY (performed_by) REFERENCES users (id);
 
-ALTER TABLE  cross_docking
-    ADD CONSTRAINT  FK_CROSS_DOCKING_ON_INBOUND_RECEIPT FOREIGN KEY (inbound_receipt_id) REFERENCES inbound_receipt (id);
+ALTER TABLE cell
+    ADD CONSTRAINT FK_CELL_ON_FLOOR FOREIGN KEY (floor_id) REFERENCES floor (id);
 
-ALTER TABLE  cross_docking
-    ADD CONSTRAINT  FK_CROSS_DOCKING_ON_OUTBOUND_SHIPMENT FOREIGN KEY (outbound_shipment_id) REFERENCES outbound_shipment (id);
+ALTER TABLE cross_docking
+    ADD CONSTRAINT FK_CROSS_DOCKING_ON_INBOUND_RECEIPT FOREIGN KEY (inbound_receipt_id) REFERENCES inbound_receipt (id);
 
-ALTER TABLE  floor
-    ADD CONSTRAINT  FK_FLOOR_ON_RACK FOREIGN KEY (rack_id) REFERENCES racks (id);
+ALTER TABLE cross_docking
+    ADD CONSTRAINT FK_CROSS_DOCKING_ON_OUTBOUND_SHIPMENT FOREIGN KEY (outbound_shipment_id) REFERENCES outbound_shipment (id);
 
-ALTER TABLE  inbound_receipt
-    ADD CONSTRAINT  FK_INBOUND_RECEIPT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
+ALTER TABLE floor
+    ADD CONSTRAINT FK_FLOOR_ON_RACK FOREIGN KEY (rack_id) REFERENCES racks (id);
 
-ALTER TABLE  inbound_receipt
-    ADD CONSTRAINT  FK_INBOUND_RECEIPT_ON_SUPPLIER FOREIGN KEY (supplier_id) REFERENCES "user" (id);
+ALTER TABLE inbound_receipt
+    ADD CONSTRAINT FK_INBOUND_RECEIPT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
-ALTER TABLE  inbound_receipt
-    ADD CONSTRAINT  FK_INBOUND_RECEIPT_ON_UNIT FOREIGN KEY (unit_id) REFERENCES unit (id);
+ALTER TABLE inbound_receipt
+    ADD CONSTRAINT FK_INBOUND_RECEIPT_ON_SUPPLIER FOREIGN KEY (supplier_id) REFERENCES users (id);
 
-ALTER TABLE  inventory_audit
-    ADD CONSTRAINT  FK_INVENTORY_AUDIT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
+ALTER TABLE inbound_receipt
+    ADD CONSTRAINT FK_INBOUND_RECEIPT_ON_UNIT FOREIGN KEY (unit_id) REFERENCES unit (id);
 
-ALTER TABLE  inventory_snapshot
-    ADD CONSTRAINT  FK_INVENTORY_SNAPSHOT_ON_LOCATION FOREIGN KEY (location_id) REFERENCES location (id);
+ALTER TABLE inventory_audit
+    ADD CONSTRAINT FK_INVENTORY_AUDIT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
-ALTER TABLE  inventory_snapshot
-    ADD CONSTRAINT  FK_INVENTORY_SNAPSHOT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
+ALTER TABLE inventory_snapshot
+    ADD CONSTRAINT FK_INVENTORY_SNAPSHOT_ON_LOCATION FOREIGN KEY (location_id) REFERENCES location (id);
+
+ALTER TABLE inventory_snapshot
+    ADD CONSTRAINT FK_INVENTORY_SNAPSHOT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
 
 ALTER TABLE inventory_snapshot
     ADD CONSTRAINT FK_INVENTORY_SNAPSHOT_ON_UNIT FOREIGN KEY (unit_id) REFERENCES unit (id);
 
 ALTER TABLE outbound_shipment
-    ADD CONSTRAINT FK_OUTBOUND_SHIPMENT_ON_CUSTOMER FOREIGN KEY (customer_id) REFERENCES "user" (id);
+    ADD CONSTRAINT FK_OUTBOUND_SHIPMENT_ON_CUSTOMER FOREIGN KEY (customer_id) REFERENCES users (id);
 
 ALTER TABLE outbound_shipment
     ADD CONSTRAINT FK_OUTBOUND_SHIPMENT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
@@ -578,7 +627,7 @@ ALTER TABLE store_aggregations
     ADD CONSTRAINT FK_STOREAGGREGATIONS_ON_STOREAGGREGATIONSWITHALTERNATIVEUNITENT FOREIGN KEY (store_agg_id) REFERENCES store_aggregations_with_alternative_unit (id);
 
 ALTER TABLE task
-    ADD CONSTRAINT FK_TASK_ON_ASSIGNED_TO FOREIGN KEY (assigned_to) REFERENCES "user" (id);
+    ADD CONSTRAINT FK_TASK_ON_ASSIGNED_TO FOREIGN KEY (assigned_to) REFERENCES users (id);
 
 ALTER TABLE task
     ADD CONSTRAINT FK_TASK_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);

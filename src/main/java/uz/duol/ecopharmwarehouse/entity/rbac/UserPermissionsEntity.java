@@ -1,10 +1,11 @@
-package uz.duol.ecopharmwarehouse.entity;
+package uz.duol.ecopharmwarehouse.entity.rbac;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import uz.duol.ecopharmwarehouse.entity.BaseEntity;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.enums.PermissionEnums;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
