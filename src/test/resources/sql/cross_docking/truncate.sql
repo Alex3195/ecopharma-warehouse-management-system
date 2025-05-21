@@ -1,0 +1,1 @@
+truncate table cross_docking cascade ;

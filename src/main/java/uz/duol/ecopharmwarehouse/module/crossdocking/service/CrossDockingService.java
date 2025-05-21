@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.CrossDockingEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.crossdocking.dto.CrossDockingDto;
 import uz.duol.ecopharmwarehouse.module.crossdocking.mapper.CrossDockingMapper;
 import uz.duol.ecopharmwarehouse.repositories.CrossDockingRepository;
@@ -36,16 +35,17 @@ public class CrossDockingService {
 
     @Transactional
     public CrossDockingDto update(Long id, CrossDockingDto crossDockingDto) {
-        var entity = crossDockingRepository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var entity = crossDockingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cross docking not found"));
 
         crossDockingMapper.updateEntity(entity, crossDockingDto);
+        crossDockingRepository.save(entity);
         return crossDockingMapper.toDto(entity);
     }
 
     @Transactional
     public void delete(Long id) {
-        var entity = crossDockingRepository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var entity = crossDockingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cross docking not found"));
         crossDockingRepository.deleteById(entity.getId());
     }

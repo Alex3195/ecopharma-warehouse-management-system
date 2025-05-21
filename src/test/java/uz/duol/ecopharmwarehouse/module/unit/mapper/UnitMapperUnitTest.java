@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class UnitMapperUnitTest extends BaseUnitTest {
-    private UnitMapper mapper = Mappers.getMapper(UnitMapper.class);
+    private final UnitMapper mapper = Mappers.getMapper(UnitMapper.class);
 
     private UnitsDTO dto;
     private UnitsEntity entity;
@@ -21,13 +21,13 @@ public class UnitMapperUnitTest extends BaseUnitTest {
         dto = new UnitsDTO();
         dto.setId(1L);
         dto.setName("Kilogram");
-        dto.setDescription("Kilogram");
+        dto.setCode(11);
         dto.setSymbol("KG");
 
         entity = new UnitsEntity();
         entity.setId(1L);
         entity.setName("Kilogram");
-        entity.setDescription("Kilogram");
+        entity.setCode(11);
         entity.setSymbol("KG");
     }
 

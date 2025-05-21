@@ -57,13 +57,10 @@ public class ProductServiceUnitTest extends BaseUnitTest {
         LocationDTO location = new LocationDTO();
         location.setId(1L);
         location.setName("Warehouse");
-        location.setProduct(dto);
-        location.setProductId(1L);
         location.setSector(21L);
         location.setRack(10L);
         location.setCell(1L);
 
-        dto.setLocations(List.of(location));
 
         entity = new ProductEntity();
 
@@ -82,13 +79,10 @@ public class ProductServiceUnitTest extends BaseUnitTest {
         LocationEntity locationEntity = new LocationEntity();
         locationEntity.setId(1L);
         locationEntity.setName("Warehouse");
-        locationEntity.setProduct(entity);
-        locationEntity.setProductId(1L);
         locationEntity.setSector(21L);
         locationEntity.setRack(10L);
         locationEntity.setCell(1L);
 
-        entity.setLocations(List.of(locationEntity));
     }
 
     @Test

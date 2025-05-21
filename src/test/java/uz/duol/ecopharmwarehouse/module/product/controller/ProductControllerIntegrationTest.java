@@ -45,12 +45,10 @@ public class ProductControllerIntegrationTest extends BaseControllerIntegrationT
         LocationDTO location = new LocationDTO();
         location.setId(1L);
         location.setName("Warehouse");
-        location.setProductId(8001L);
         location.setSector(21L);
         location.setRack(10L);
         location.setCell(1L);
 
-        dto.setLocations(List.of(location));
     }
 
     @Sql(scripts = {

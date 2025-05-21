@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 public class CrossDockingDto {
     private Long id;
+
     private Long inboundReceiptId;
 
     private InboundReceiptDto inboundReceipt;

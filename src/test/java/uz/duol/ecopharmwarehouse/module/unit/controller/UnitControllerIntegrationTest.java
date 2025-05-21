@@ -24,7 +24,7 @@ public class UnitControllerIntegrationTest extends BaseControllerIntegrationTest
         dto = new UnitsDTO();
         dto.setId(1L);
         dto.setName("Kilogram");
-        dto.setDescription("Kilogram");
+        dto.setCode(1215);
         dto.setSymbol("KG");
     }
 

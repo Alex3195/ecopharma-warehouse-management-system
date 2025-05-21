@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditTrailListener.class)
 @SQLDelete(sql = "update cross_docking set status = 'DELETED' where id = ?")
 @Where(clause = "status != 'DELETED'")
+@ToString
 public class CrossDockingEntity extends BaseEntity {
     @Id
     @Column(name = "id")
@@ -29,6 +31,7 @@ public class CrossDockingEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "inbound_receipt_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ToString.Exclude
     private InboundReceiptEntity inboundReceipt;
 
     @Column(name = "outbound_shipment_id")
@@ -36,6 +39,7 @@ public class CrossDockingEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "outbound_shipment_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ToString.Exclude
     private OutboundShipmentEntity outboundShipment;
 
     @Column(name = "cross_dock_type")

@@ -60,8 +60,12 @@ public class UnitConversionService {
         List<UnitConversionEntity> entities = repository.findAll(spec);
         return entities.stream().map(item -> {
             var dto = mapper.toDto(item);
-            dto.setBaseUnitSymbol(item.getBaseUnit().getSymbol());
-            dto.setAlternativeUnitSymbol(item.getAlternativeUnit().getSymbol());
+            if (item.getBaseUnit() != null) {
+                dto.setBaseUnitSymbol(item.getBaseUnit().getSymbol());
+            }
+            if (item.getAlternativeUnit() != null) {
+                dto.setAlternativeUnitSymbol(item.getAlternativeUnit().getSymbol());
+            }
             return dto;
         }).toList();
     }
@@ -72,8 +76,12 @@ public class UnitConversionService {
                 .and(ConversionSpecification.hasBaseUnitId(id));
         return repository.findAll(spec, pageable).map(item -> {
             var dto = mapper.toDto(item);
-            dto.setBaseUnitSymbol(item.getBaseUnit().getSymbol());
-            dto.setAlternativeUnitSymbol(item.getAlternativeUnit().getSymbol());
+            if (item.getBaseUnit() != null) {
+                dto.setBaseUnitSymbol(item.getBaseUnit().getSymbol());
+            }
+            if (item.getAlternativeUnit() != null) {
+                dto.setAlternativeUnitSymbol(item.getAlternativeUnit().getSymbol());
+            }
             return dto;
         });
     }

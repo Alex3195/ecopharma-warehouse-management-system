@@ -116,7 +116,7 @@ public class UnitConversionController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             })
     @PreAuthorize("hasAuthority('CONVERSION_DELETE') or hasRole('SUPER_ADMIN')")
-    @DeleteMapping("/deleteAll")
+    @DeleteMapping("/delete-all")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAll(@RequestParam("ids") List<Long> ids) {
         log.info("Deleting units conversion {}", ids);

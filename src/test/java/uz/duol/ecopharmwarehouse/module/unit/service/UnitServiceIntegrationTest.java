@@ -22,7 +22,7 @@ public class UnitServiceIntegrationTest extends BaseServiceIntegrationTest {
         dto = new UnitsDTO();
         dto.setId(1L);
         dto.setName("Kilogram");
-        dto.setDescription("Kilogram");
+        dto.setCode(11);
         dto.setSymbol("KG");
     }
 

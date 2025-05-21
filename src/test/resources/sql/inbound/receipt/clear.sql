@@ -1,0 +1,1 @@
+truncate table inbound_receipt cascade ;

@@ -1,0 +1,1 @@
+truncate table outbound_shipment cascade ;
