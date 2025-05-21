@@ -54,7 +54,7 @@ public class InventoryService {
 
     public Page<InventoryDto> getProductLocationByItsBarcode(String search, Pageable pageable) {
         Specification<InventoryEntity> spec = Specification.where(null);
-        if (!search.isBlank()) {
+        if (search != null && !search.isBlank()) {
             spec = spec.and(InventorySpecification.hasText(search));
         }
         Page<InventoryEntity> entities = repository.findAll(spec, pageable);

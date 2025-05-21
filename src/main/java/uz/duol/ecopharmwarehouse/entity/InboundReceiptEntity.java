@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.enums.ReceiptStatusEnum;
@@ -17,6 +18,7 @@ import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 @EntityListeners(AuditTrailListener.class)
 @SQLDelete(sql = "update inbound_receipt set status = 'DELETED' where id=?")
 @Where(clause = "status != 'DELETED'")
+@ToString
 public class InboundReceiptEntity extends BaseEntity {
 
     @Id
@@ -29,6 +31,7 @@ public class InboundReceiptEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ToString.Exclude
     private ProductEntity product;
 
     @Column(name = "receipt_type")
@@ -43,6 +46,7 @@ public class InboundReceiptEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "supplier_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ToString.Exclude
     private UserEntity supplier; // Assuming a Supplier entity exists
 
     @Column(name = "receipt_status")
@@ -54,6 +58,7 @@ public class InboundReceiptEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "unit_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ToString.Exclude
     private UnitsEntity unit; // Assuming a Unit entity exists
 
     @Column(name = "alternate_store_id")
