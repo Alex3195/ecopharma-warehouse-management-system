@@ -1,0 +1,1 @@
+truncate table inventory_snapshot;

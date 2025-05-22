@@ -29,6 +29,7 @@ public class StoreAggregationController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             })
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public StoreSyncRequest storeSync(@RequestBody StoreSyncRequest request) {
         return storeAggregationService.createAndReturnBarCode(request);
     }

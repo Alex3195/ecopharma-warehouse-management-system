@@ -497,19 +497,6 @@ CREATE TABLE unit_conversion
     CONSTRAINT pk_unit_conversion PRIMARY KEY (id)
 );
 
-CREATE TABLE user_permission
-(
-    id         BIGINT                      NOT NULL,
-    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    status     VARCHAR(255)                NOT NULL,
-    created_by VARCHAR(255),
-    updated_by VARCHAR(255),
-    user_id    VARCHAR(255)                NOT NULL,
-    name       VARCHAR(255)                NOT NULL,
-    CONSTRAINT pk_user_permission PRIMARY KEY (id)
-);
-
 CREATE TABLE user_permissions
 (
     id         BIGINT                      NOT NULL,
@@ -557,9 +544,6 @@ CREATE TABLE warehouse
 
 ALTER TABLE users
     ADD CONSTRAINT UC_USERS_USERNAME UNIQUE (username);
-
-ALTER TABLE user_permission
-    ADD CONSTRAINT uc_5102f0442555fb102482fbeae UNIQUE (user_id, name);
 
 CREATE INDEX idx_product_snapshot_time ON inventory_snapshot (product_id, snapshot_time);
 

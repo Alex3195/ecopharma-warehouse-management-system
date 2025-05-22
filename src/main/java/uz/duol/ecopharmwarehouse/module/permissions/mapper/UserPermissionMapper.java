@@ -9,7 +9,6 @@ import uz.duol.ecopharmwarehouse.module.permissions.dto.UserPermissionDto;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface UserPermissionMapper {
 
-    @Mapping(target = "permission", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "status", ignore = true)

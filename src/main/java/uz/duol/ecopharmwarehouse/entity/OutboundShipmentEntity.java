@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditTrailListener.class)
 @SQLDelete(sql = "update outbound_shipment set status = 'DELETED' where id = ?")
 @Where(clause = "status != 'DELETED'")
+@ToString
 public class OutboundShipmentEntity extends BaseEntity {
     @Id
     @Column(name = "id")
@@ -31,6 +33,7 @@ public class OutboundShipmentEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    @ToString.Exclude
     private ProductEntity product;
 
     @Column(name = "shipment_type")
@@ -45,6 +48,7 @@ public class OutboundShipmentEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ToString.Exclude
     private UserEntity customer; // Assuming a Customer entity exists
 
     @Column(name = "scheduled_for")

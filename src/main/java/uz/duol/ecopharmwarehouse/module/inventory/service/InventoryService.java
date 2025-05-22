@@ -44,7 +44,7 @@ public class InventoryService {
         return entity.getLocationBarcode();
     }
 
-    public InventoryDto update(String productBarCode, String locationCode) {
+    public InventoryDto updateProductLocation(String productBarCode, String locationCode) {
         var entity = repository.findByProductBarcodeAndStatusIsNot(productBarCode, Status.DELETED)
                 .orElseThrow(() -> new EntityNotFoundException("Product bar code not found"));
         entity.setLocationBarcode(locationCode);

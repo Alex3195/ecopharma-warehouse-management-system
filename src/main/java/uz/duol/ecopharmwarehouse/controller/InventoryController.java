@@ -63,7 +63,7 @@ public class InventoryController {
     @PreAuthorize("hasAuthority('UPDATE_INVENTORY') or hasRole('SUPER_ADMIN')")
     @PutMapping("/{barcode}/{locationCode}")
     public InventoryDto updateProductLocation(@PathVariable String barcode, @PathVariable String locationCode) {
-        return service.update(barcode, locationCode);
+        return service.updateProductLocation(barcode, locationCode);
     }
 
     @Operation(summary = "Get Product Location List",

@@ -22,7 +22,8 @@ public class TaskService {
     @Transactional
     public TaskDTO create(TaskDTO taskDTO) {
         var e = mapper.toEntity(taskDTO);
-        return mapper.toDto(repository.save(e));
+        repository.save(e);
+        return mapper.toDto(e);
     }
 
     @Transactional(readOnly = true)

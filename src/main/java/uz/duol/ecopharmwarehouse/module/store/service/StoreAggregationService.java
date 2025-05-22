@@ -22,14 +22,17 @@ public class StoreAggregationService {
     @Transactional
     public StoreSyncRequest createAndReturnBarCode(StoreSyncRequest request) {
         var e = mapper.toEntity(request);
+
         String barCode = generateBarCode();
         while (repository.existsByBarcode(barCode)) {
             barCode = generateBarCode();
         }
-        e.setBarcode(generateBarCode());
+
+        e.setBarcode(barCode);
         repository.save(e);
         return mapper.toDto(e);
     }
+
 
     @Transactional(readOnly = true)
     public StoreSyncRequest findById(Long id) {

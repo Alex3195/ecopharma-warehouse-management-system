@@ -20,7 +20,7 @@ public class TaskDTO {
 
     private TaskStatusEnum taskStatus;
 
-    private Long assignedTo;
+    private String assignedTo;
 
     private UserDTO assignedToUser;
 

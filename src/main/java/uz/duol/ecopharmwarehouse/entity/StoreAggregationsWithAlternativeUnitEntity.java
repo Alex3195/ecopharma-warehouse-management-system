@@ -3,9 +3,11 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import uz.duol.ecopharmwarehouse.converter.JsonToMapConverter;
+import org.hibernate.type.SqlTypes;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
@@ -20,6 +22,7 @@ import java.util.Map;
 @SequenceGenerator(name = "store_aggregations_with_alternative_unit_seq_gen", sequenceName = "store_aggregations_with_alternative_unit_seq", allocationSize = 1)
 @SQLDelete(sql = "update store_aggregations_with_alternative_unit set status = 'DELETED' where id = ?")
 @Where(clause = "status != 'DELETED'")
+@ToString
 public class StoreAggregationsWithAlternativeUnitEntity extends BaseEntity {
     @Id
     @Column(name = "id")
@@ -43,7 +46,8 @@ public class StoreAggregationsWithAlternativeUnitEntity extends BaseEntity {
     private String expirationDate;
     @Column(name = "barcode")
     private String barcode;
-    @Convert(converter = JsonToMapConverter.class)
+
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "meta_data", columnDefinition = "jsonb")
     private Map<String, Object> metaData;
 

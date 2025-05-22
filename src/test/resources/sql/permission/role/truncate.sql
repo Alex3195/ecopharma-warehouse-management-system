@@ -1,0 +1,1 @@
+truncate table role_default_permissions;

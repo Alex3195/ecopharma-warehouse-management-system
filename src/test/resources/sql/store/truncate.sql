@@ -1,0 +1,1 @@
+truncate table store_aggregations_with_alternative_unit cascade;

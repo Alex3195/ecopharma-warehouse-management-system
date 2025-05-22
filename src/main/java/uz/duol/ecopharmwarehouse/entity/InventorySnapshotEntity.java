@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditTrailListener.class)
 @SQLDelete(sql = "UPDATE inventory_snapshot SET status = 'DELETED' WHERE id = ?")
 @Where(clause = "status != 'DELETED'")
+@ToString
 public class InventorySnapshotEntity extends BaseEntity {
 
     @Id
@@ -31,6 +33,7 @@ public class InventorySnapshotEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    @ToString.Exclude
     private ProductEntity product;
 
     @Column(name = "location_id")
@@ -38,6 +41,7 @@ public class InventorySnapshotEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ToString.Exclude
     private LocationEntity location;
 
     @Column(name = "quantity")
@@ -48,6 +52,7 @@ public class InventorySnapshotEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "unit_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ToString.Exclude
     private UnitsEntity unit;
 
     @Column(name = "snapshot_time")

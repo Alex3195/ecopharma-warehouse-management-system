@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
@@ -20,6 +21,7 @@ import java.util.List;
 @EntityListeners(AuditTrailListener.class)
 @SQLDelete(sql = "update task set status = 'DELETED' where id = ?")
 @Where(clause = "status != 'DELETED'")
+@ToString
 public class TaskEntity extends BaseEntity {
     @Id
     @Column(name = "id")
@@ -43,6 +45,7 @@ public class TaskEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "assigned_to", referencedColumnName = "id", insertable = false, updatable = false)
+    @ToString.Exclude
     private UserEntity assignedToUser;
 
     @Column(name = "due_date")
@@ -53,6 +56,7 @@ public class TaskEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ToString.Exclude
     private ProductEntity product;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -61,5 +65,6 @@ public class TaskEntity extends BaseEntity {
             joinColumns = @JoinColumn(name = "task_id"), // foreign key in join table referring to this entity
             inverseJoinColumns = @JoinColumn(name = "location_id") // foreign key in join table referring to the other entity
     )
+    @ToString.Exclude
     private List<LocationEntity> location;
 }

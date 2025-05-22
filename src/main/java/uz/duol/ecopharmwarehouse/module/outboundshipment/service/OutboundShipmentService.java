@@ -47,9 +47,10 @@ public class OutboundShipmentService {
         repository.deleteById(data.getId());
     }
 
+    @Transactional(readOnly = true)
     public Page<OutboundShipmentDto> findAll(String search, Pageable pageable) {
         Specification<OutboundShipmentEntity> spec = Specification.where(null);
-        if (!search.isBlank()) {
+        if (search != null && !search.isBlank()) {
             spec = spec.and(OutboundShipmentSpecification.hasText(search));
         }
         return repository.findAll(spec, pageable).map(mapper::toDto);

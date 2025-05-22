@@ -54,11 +54,13 @@ public class InventorySnapshotService {
     public Page<InventorySnapshotDto> findAll(String search, Pageable pageable) {
         Specification<InventorySnapshotEntity> spec = Specification.where(null);
 
-        if (DateTimeUtils.isDate(search) || DateTimeUtils.isDateTime(search)) {
-            LocalDateTime date = DateTimeUtils.parseDateTime(search);
-            spec = spec.and(InventorySnapshotSpecification.hasSnapshotTime(date));
-        } else if (search != null && !search.isEmpty()) {
-            spec = spec.and(InventorySnapshotSpecification.productNameContains(search));
+        if (search != null && !search.isBlank()) {
+            if (DateTimeUtils.isDate(search) || DateTimeUtils.isDateTime(search)) {
+                LocalDateTime date = DateTimeUtils.parseDateTime(search);
+                spec = spec.and(InventorySnapshotSpecification.hasSnapshotTime(date));
+            } else {
+                spec = spec.and(InventorySnapshotSpecification.productNameContains(search));
+            }
         }
 
         return repository.findAll(spec, pageable).map(mapper::toDto);

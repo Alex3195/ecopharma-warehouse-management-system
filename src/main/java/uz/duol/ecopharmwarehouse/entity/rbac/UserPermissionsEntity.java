@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.entity.rbac;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.BaseEntity;
@@ -17,6 +18,7 @@ import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 @EntityListeners(AuditTrailListener.class)
 @SQLDelete(sql = "UPDATE user_permissions SET status = 'DELETED' WHERE id = ?")
 @Where(clause = "status != 'DELETED'")
+@ToString
 public class UserPermissionsEntity extends BaseEntity {
     @Id
     @Column(name = "id")

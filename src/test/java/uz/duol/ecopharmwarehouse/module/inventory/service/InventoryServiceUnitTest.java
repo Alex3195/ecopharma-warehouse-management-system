@@ -84,12 +84,12 @@ public class InventoryServiceUnitTest extends BaseUnitTest {
     }
 
     @Test
-    void testUpdate() {
+    void testUpdateProductLocation() {
         when(repository.findByProductBarcodeAndStatusIsNot(anyString(), any(Status.class))).thenReturn(Optional.of(entity));
         when(repository.save(any(InventoryEntity.class))).thenReturn(entity);
         when(mapper.toDto(entity)).thenReturn(dto);
 
-        InventoryDto actual = service.update(dto.getProductBarcode(), location.getBarcode());
+        InventoryDto actual = service.updateProductLocation(dto.getProductBarcode(), location.getBarcode());
         assertEquals(dto.toString(), actual.toString());
         verify(repository, times(1)).save(any(InventoryEntity.class));
     }
