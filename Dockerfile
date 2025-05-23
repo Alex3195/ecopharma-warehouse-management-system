@@ -3,8 +3,8 @@ FROM gradle:8.6.0-jdk21-alpine AS build
 WORKDIR /app
 
 # Copy only build-related files first for efficient layer caching
-COPY build.gradle.kts settings.gradle.kts gradle.properties ./
-COPY gradle /app/gradle
+COPY build.gradle settings.gradle ./
+COPY gradle/ gradle/
 
 # Download dependencies to cache them
 RUN gradle dependencies --no-daemon || true
