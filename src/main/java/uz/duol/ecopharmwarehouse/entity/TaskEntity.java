@@ -1,5 +1,6 @@
 package uz.duol.ecopharmwarehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +46,7 @@ public class TaskEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "assigned_to", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonManagedReference
     @ToString.Exclude
     private UserEntity assignedToUser;
 

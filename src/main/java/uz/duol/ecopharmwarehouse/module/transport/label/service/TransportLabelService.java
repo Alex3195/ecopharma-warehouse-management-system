@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.transport.label.dto.TransportLabelDto;
 import uz.duol.ecopharmwarehouse.module.transport.label.mapper.TransportLabelMapper;
 import uz.duol.ecopharmwarehouse.module.transport.label.specification.TransportLabelSpecification;
@@ -23,7 +22,7 @@ public class TransportLabelService {
     }
 
     public TransportLabelDto update(Long id, TransportLabelDto dto) {
-        var entity = repository.findByIdAndStatusIsNot(id, Status.DELETED)
+        var entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Transport label not found"));
         mapper.updateEntity(entity, dto);
         var updatedEntity = repository.save(entity);

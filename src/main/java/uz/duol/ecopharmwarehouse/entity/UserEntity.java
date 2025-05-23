@@ -1,8 +1,10 @@
 package uz.duol.ecopharmwarehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
@@ -17,6 +19,7 @@ import java.util.List;
 @EntityListeners(AuditTrailListener.class)
 @SQLDelete(sql = "update users set status = 'DELETED' where id = ?")
 @Where(clause = "status != 'DELETED'")
+@ToString
 public class UserEntity extends BaseEntity {
     @Id
     @Column(name = "id")
@@ -45,5 +48,7 @@ public class UserEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "assignedToUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Where(clause = "status != 'DELETED'")
+    @JsonBackReference
+    @ToString.Exclude
     private List<TaskEntity> tasks;
 }

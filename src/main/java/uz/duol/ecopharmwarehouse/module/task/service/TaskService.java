@@ -11,6 +11,7 @@ import uz.duol.ecopharmwarehouse.module.task.dto.TaskDTO;
 import uz.duol.ecopharmwarehouse.module.task.exception.TaskNotFoundException;
 import uz.duol.ecopharmwarehouse.module.task.mapper.TaskMapper;
 import uz.duol.ecopharmwarehouse.module.task.specification.TaskSpecification;
+import uz.duol.ecopharmwarehouse.module.users.mapper.UserMapper;
 import uz.duol.ecopharmwarehouse.repositories.TaskRepository;
 
 @Service
@@ -18,6 +19,7 @@ import uz.duol.ecopharmwarehouse.repositories.TaskRepository;
 public class TaskService {
     private final TaskRepository repository;
     private final TaskMapper mapper;
+    private final UserMapper userMapper;
 
     @Transactional
     public TaskDTO create(TaskDTO taskDTO) {
@@ -30,15 +32,20 @@ public class TaskService {
     public TaskDTO findById(Long id) {
         var e = repository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException("Task not found"));
-        return mapper.toDto(e);
+        var dto = mapper.toDto(e);
+        dto.setAssignedToUser(userMapper.toDto(e.getAssignedToUser()));
+        return dto;
     }
 
     @Transactional
     public TaskDTO update(Long id, TaskDTO taskDTO) {
-        findById(id);
-        var e = mapper.toEntity(taskDTO);
-        e.setId(id);
-        return mapper.toDto(repository.save(e));
+        var e = repository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
+        mapper.updateEntity(e, taskDTO);
+        repository.save(e);
+        var dto = mapper.toDto(e);
+        dto.setAssignedToUser(userMapper.toDto(e.getAssignedToUser()));
+        return dto;
     }
 
     @Transactional
@@ -56,7 +63,11 @@ public class TaskService {
         if (assignedTo != null) {
             spec = spec.and(TaskSpecification.hasAssignedTo(assignedTo));
         }
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+        return repository.findAll(spec, pageable).map(item -> {
+            var dto = mapper.toDto(item);
+            dto.setAssignedToUser(userMapper.toDto(item.getAssignedToUser()));
+            return dto;
+        });
     }
 
 }

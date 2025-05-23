@@ -1,8 +1,6 @@
 package uz.duol.ecopharmwarehouse.module.task.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import uz.duol.ecopharmwarehouse.entity.TaskEntity;
 import uz.duol.ecopharmwarehouse.module.location.mapper.LocationMapper;
 import uz.duol.ecopharmwarehouse.module.product.mapper.ProductMapper;
@@ -17,7 +15,10 @@ public interface TaskMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "assignedToUser", ignore = true)
     TaskEntity toEntity(TaskDTO dto);
-    @Mapping(target = "assignedToUser.performedBy",ignore = true)
+
+    @Mapping(target = "assignedToUser", ignore = true)
     TaskDTO toDto(TaskEntity entity);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+    void updateEntity(@MappingTarget TaskEntity e, TaskDTO taskDTO);
 }

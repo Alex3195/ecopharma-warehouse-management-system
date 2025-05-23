@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
@@ -15,6 +16,7 @@ import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 @EntityListeners(AuditTrailListener.class)
 @SQLDelete(sql = "update transport_label set status = 'DELETED' where id = ?")
 @Where(clause = "status != 'DELETED'")
+@ToString
 public class TransportLabelEntity extends BaseEntity {
     // Transport label entity for managing transport labels associated with products and shipments
     @Id
@@ -27,6 +29,7 @@ public class TransportLabelEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ToString.Exclude
     private ProductEntity product;
 
     @Column(name = "shipment_id")
@@ -34,6 +37,7 @@ public class TransportLabelEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "shipment_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ToString.Exclude
     private OutboundShipmentEntity shipment;
 
     @Column(name = "label")
