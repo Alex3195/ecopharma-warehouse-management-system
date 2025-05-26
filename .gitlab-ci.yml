@@ -71,7 +71,7 @@ deploy:
     # Create directory on server
     - ssh $SERVER_USER@$SERVER_IP "mkdir -p gitlab-runner-api/eco-pharma-api && chmod 755 gitlab-runner-api/eco-pharma-api"
 
-    # Copy docker-compose file
+    # Copy a docker compose file
     - scp docker-compose-wms.yml $SERVER_USER@$SERVER_IP:gitlab-runner-api/eco-pharma-api
 
     # Stop existing containers
