@@ -70,15 +70,13 @@ deploy:
   script:
     - ssh $SERVER_USER@$SERVER_IP "mkdir -p gitlab-runner-api/eco-pharma-api && chmod 755 gitlab-runner-api/eco-pharma-api"
     - scp docker-compose-wms.yml $SERVER_USER@$SERVER_IP:gitlab-runner-api/eco-pharma-api
-    - ssh $SERVER_USER@$SERVER_IP <<'EOF'
-      cd gitlab-runner-api/eco-pharma-api
-      docker compose -f docker-compose-wms.yml down || true
-      docker compose -f docker-compose-wms.yml pull
-      docker compose -f docker-compose-wms.yml up -d
-      docker image prune -f --filter "until=24h" || true
-      docker container prune -f || true
-      docker system prune -f --volumes --filter "label!=keep=true" || true
-      EOF
+    - ssh $SERVER_USER@$SERVER_IP  "cd gitlab-runner-api/eco-pharma-api"
+    - ssh $SERVER_USER@$SERVER_IP  "docker compose -f docker-compose-wms.yml down || true"
+    - ssh $SERVER_USER@$SERVER_IP  "docker compose -f docker-compose-wms.yml pull"
+    - ssh $SERVER_USER@$SERVER_IP  "docker compose -f docker-compose-wms.yml up -d"
+    - ssh $SERVER_USER@$SERVER_IP  "docker image prune -f --filter \"until=24h\" || true"
+    - ssh $SERVER_USER@$SERVER_IP  "docker container prune -f || true"
+    - ssh $SERVER_USER@$SERVER_IP  "docker system prune -f --volumes --filter \"label!=keep=true\" || true"
   only:
     - main
     - dev
