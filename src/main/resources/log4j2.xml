@@ -22,52 +22,52 @@
             <DirectWriteRolloverStrategy/>
         </RollingFile>
 
-        <!-- Socket Appender for Logstash -->
-        <Socket name="Logstash" host="192.168.7.12" port="5000" protocol="tcp">
-            <JsonLayout compact="true" eventEol="true" properties="true" />
-        </Socket>
+<!--        &lt;!&ndash; Socket Appender for Logstash &ndash;&gt;-->
+<!--        <Socket name="Logstash" host="192.168.7.12" port="5000" protocol="tcp">-->
+<!--            <JsonLayout compact="true" eventEol="true" properties="true" />-->
+<!--        </Socket>-->
     </Appenders>
 
     <Loggers>
         <!-- Root Logger -->
         <Root level="ERROR">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="Logstash"/>
+<!--            <AppenderRef ref="Logstash"/>-->
         </Root>
 
         <!-- Logger for org.springframework.boot package -->
         <Logger name="org.springframework" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile" level="DEBUG"/>
-            <AppenderRef ref="Logstash"/>
+<!--            <AppenderRef ref="Logstash"/>-->
         </Logger>
 
         <!-- Logger for org.apache.catalina package -->
         <Logger name="org.apache.catalina" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile" level="DEBUG"/>
-            <AppenderRef ref="Logstash"/>
+<!--            <AppenderRef ref="Logstash"/>-->
         </Logger>
 
         <!-- Logger for org.hibernate package -->
         <Logger name="org.hibernate" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile" level="DEBUG"/>
-            <AppenderRef ref="Logstash"/>
+<!--            <AppenderRef ref="Logstash"/>-->
         </Logger>
 
         <!-- Logger for com.zaxxer.hikari package -->
         <Logger name="com.zaxxer.hikari" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile" level="DEBUG"/>
-            <AppenderRef ref="Logstash"/>
+<!--            <AppenderRef ref="Logstash"/>-->
         </Logger>
 
         <!-- Logger for uz.duol.ecopharmwarehouse package -->
         <Logger name="uz.duol.ecopharmwarehouse" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
-            <AppenderRef ref="Logstash"/>
+<!--            <AppenderRef ref="Logstash"/>-->
         </Logger>
     </Loggers>
 </Configuration>

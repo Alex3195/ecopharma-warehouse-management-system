@@ -41,11 +41,9 @@ public class SectorCharacteristicsService {
         repository.deleteById(dto.getId());
     }
 
-    public Page<SectorCharacteristicDTO> findAll(String search, Pageable pageable) {
-        Specification<SectorCharacteristicEntity> spec = Specification.where(null);
-        if (search != null && !search.isEmpty()) {
-            spec = spec.and(SectorCharacteristicsSpecification.hasText(search));
-        }
+    public Page<SectorCharacteristicDTO> findAll(String search, Long sectorId, Pageable pageable) {
+        Specification<SectorCharacteristicEntity> spec = Specification.where(SectorCharacteristicsSpecification.hasText(search));
+        spec = spec.and(SectorCharacteristicsSpecification.hasSectorId(sectorId));
         return repository.findAll(spec, pageable).map(mapper::toDto);
     }
 }

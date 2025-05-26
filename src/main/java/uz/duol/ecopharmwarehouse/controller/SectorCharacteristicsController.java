@@ -34,8 +34,9 @@ public class SectorCharacteristicsController {
     @GetMapping("/list")
     @PreAuthorize("hasAuthority('SECTOR_CHARACTERISTICS_GET') or hasRole('SUPER_ADMIN')")
     public Page<SectorCharacteristicDTO> getAll(@RequestParam(value = "search", required = false) String search,
+                                                @RequestParam(value = "sectorId", required = false) Long sectorId,
                                                 @PageableDefault Pageable pageable) {
-        return sectorCharacteristicsService.findAll(search, pageable);
+        return sectorCharacteristicsService.findAll(search, sectorId,pageable);
     }
 
     @Operation(summary = "Create sector characteristic",
