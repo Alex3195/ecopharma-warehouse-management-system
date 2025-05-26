@@ -13,6 +13,7 @@ import uz.duol.ecopharmwarehouse.module.settings.dto.SettingsDTO;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @Transactional
 public class SettingsControllerIntegrationTest extends BaseControllerIntegrationTest {
     @Autowired
@@ -40,6 +41,7 @@ public class SettingsControllerIntegrationTest extends BaseControllerIntegration
     @Test
     @WithMockUser(authorities = "SETTING_CREATE")
     public void testCreate_ThenBadRequest() throws Exception {
+        dto.setName(null);
         mockMvc.perform(post("/api/v1/wms/setting")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new SettingsDTO())))

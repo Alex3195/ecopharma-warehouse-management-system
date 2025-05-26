@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @Transactional
 public class ProductServiceIntegrationTest extends BaseServiceIntegrationTest {
     @Autowired
@@ -60,17 +61,20 @@ public class ProductServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
             "classpath:sql/product/metadata/clear-product-metadata.sql",
 
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/product/insert-product.sql",
             "classpath:sql/location/insert-location.sql",
             "classpath:sql/product/metadata/insert-product-metadata.sql"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
@@ -92,17 +96,20 @@ public class ProductServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
             "classpath:sql/product/metadata/clear-product-metadata.sql",
 
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/product/insert-product.sql",
             "classpath:sql/location/insert-location.sql",
             "classpath:sql/product/metadata/insert-product-metadata.sql"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
@@ -122,17 +129,20 @@ public class ProductServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
             "classpath:sql/product/metadata/clear-product-metadata.sql",
 
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/product/insert-product.sql",
             "classpath:sql/location/insert-location.sql",
             "classpath:sql/product/metadata/insert-product-metadata.sql"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
@@ -153,17 +163,20 @@ public class ProductServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
             "classpath:sql/product/metadata/clear-product-metadata.sql",
 
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/product/insert-product.sql",
             "classpath:sql/location/insert-location.sql",
             "classpath:sql/product/metadata/insert-product-metadata.sql"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/location/clear-location.sql",
             "classpath:sql/product/clear-product.sql",
@@ -174,7 +187,7 @@ public class ProductServiceIntegrationTest extends BaseServiceIntegrationTest {
         Page<ProductDTO> result = service.findAll("", PageRequest.of(0, 10));
 
         assertNotNull(result);
-        assertEquals(14, result.getTotalElements());
+        assertEquals(20, result.getTotalElements());
         assertEquals(10, result.getNumberOfElements());
         assertEquals(2, result.getTotalPages());
     }

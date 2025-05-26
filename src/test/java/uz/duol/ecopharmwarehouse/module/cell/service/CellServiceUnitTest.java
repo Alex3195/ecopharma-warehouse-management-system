@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
 import uz.duol.ecopharmwarehouse.entity.CellEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.cells.dto.CellDTO;
 import uz.duol.ecopharmwarehouse.module.cells.exception.CellNotFoundException;
 import uz.duol.ecopharmwarehouse.module.cells.mapper.CellsMapper;
@@ -77,7 +76,7 @@ public class CellServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
         when(mapper.toEntity(dto)).thenReturn(entity);
         when(repository.save(entity)).thenReturn(entity);
@@ -90,7 +89,7 @@ public class CellServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdateNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         CellNotFoundException e = assertThrows(CellNotFoundException.class, () -> service.update(1L, dto));
         assertEquals("Cell not found", e.getMessage());
@@ -98,7 +97,7 @@ public class CellServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindById() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
 
         CellDTO result = service.findById(1L);
@@ -108,7 +107,7 @@ public class CellServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindByIdNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         CellNotFoundException e = assertThrows(CellNotFoundException.class, () -> service.findById(1L));
         assertEquals("Cell not found", e.getMessage());
@@ -130,20 +129,18 @@ public class CellServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testDelete() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
-        when(mapper.toEntity(dto)).thenReturn(entity);
-        when(repository.save(entity)).thenReturn(entity);
+        doNothing().when(repository).deleteById(anyLong());
 
         service.delete(1L);
 
-        assertEquals(Status.DELETED, entity.getStatus());
-        verify(repository, times(1)).save(entity);
+        verify(repository, times(1)).deleteById(anyLong());
     }
 
     @Test
     void testDeleteNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         CellNotFoundException e = assertThrows(CellNotFoundException.class, () -> service.delete(1L));
         assertEquals("Cell not found", e.getMessage());

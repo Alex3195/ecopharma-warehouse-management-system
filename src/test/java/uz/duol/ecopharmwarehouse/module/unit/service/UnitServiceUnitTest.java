@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
 import uz.duol.ecopharmwarehouse.entity.UnitsEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.unit.dto.UnitsDTO;
 import uz.duol.ecopharmwarehouse.module.unit.exception.UnitNotFoundException;
 import uz.duol.ecopharmwarehouse.module.unit.mapper.UnitMapper;
@@ -63,7 +62,7 @@ public class UnitServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindById() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(any(UnitsEntity.class))).thenReturn(dto);
 
         UnitsDTO actual = service.findById(1L);
@@ -73,7 +72,7 @@ public class UnitServiceUnitTest extends BaseUnitTest {
 
     @Test
     void findById_ThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
         UnitNotFoundException e = assertThrows(UnitNotFoundException.class, () -> service.findById(1L));
 
         assertEquals("Unit not found", e.getMessage());
@@ -81,7 +80,7 @@ public class UnitServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(any(UnitsEntity.class))).thenReturn(dto);
         when(mapper.toEntity(any(UnitsDTO.class))).thenReturn(entity);
         when(repository.save(any(UnitsEntity.class))).thenReturn(entity);
@@ -94,26 +93,24 @@ public class UnitServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate_ThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
         UnitNotFoundException e = assertThrows(UnitNotFoundException.class, () -> service.update(1L, dto));
         assertEquals("Unit not found", e.getMessage());
     }
 
     @Test
     void testDelete() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(any(UnitsEntity.class))).thenReturn(dto);
-        when(mapper.toEntity(any(UnitsDTO.class))).thenReturn(entity);
-        when(repository.save(any(UnitsEntity.class))).thenReturn(entity);
+        doNothing().when(repository).deleteById(anyLong());
 
         service.delete(1L);
-        assertEquals(Status.DELETED, entity.getStatus());
-        verify(repository, times(1)).save(entity);
+        verify(repository, times(1)).deleteById(anyLong());
     }
 
     @Test
     void testDelete_ThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
         UnitNotFoundException e = assertThrows(UnitNotFoundException.class, () -> service.delete(1L));
         assertEquals("Unit not found", e.getMessage());
     }

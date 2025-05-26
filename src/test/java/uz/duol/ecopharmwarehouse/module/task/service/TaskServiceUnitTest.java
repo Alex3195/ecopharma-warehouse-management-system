@@ -17,6 +17,7 @@ import uz.duol.ecopharmwarehouse.enums.TaskTypeEnum;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 import uz.duol.ecopharmwarehouse.module.task.dto.TaskDTO;
 import uz.duol.ecopharmwarehouse.module.task.mapper.TaskMapper;
+import uz.duol.ecopharmwarehouse.module.users.mapper.UserMapper;
 import uz.duol.ecopharmwarehouse.repositories.TaskRepository;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,8 @@ import static org.mockito.Mockito.*;
 public class TaskServiceUnitTest extends BaseUnitTest {
     @InjectMocks
     private TaskService service;
+    @Mock
+    private UserMapper userMapper;
     @Mock
     private TaskRepository repository;
     @Mock
@@ -102,7 +105,7 @@ public class TaskServiceUnitTest extends BaseUnitTest {
     void testUpdate() {
         when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(any(TaskEntity.class))).thenReturn(dto);
-        when(mapper.toEntity(any(TaskDTO.class))).thenReturn(entity);
+        doNothing().when(mapper).updateEntity(any(TaskEntity.class), any(TaskDTO.class));
         when(repository.save(any(TaskEntity.class))).thenReturn(entity);
 
         TaskDTO actual = service.update(566954L, dto);

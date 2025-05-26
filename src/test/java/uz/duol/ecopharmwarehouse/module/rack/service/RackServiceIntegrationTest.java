@@ -83,17 +83,23 @@ public class RackServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
             "classpath:sql/floor/floor_clear.sql",
             "classpath:sql/cell/cell_clear.sql",
 
+            "classpath:sql/address/address_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/rack/rack_insert.sql",
             "classpath:sql/floor/floor_insert.sql",
             "classpath:sql/cell/cell_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
             "classpath:sql/floor/floor_clear.sql",
@@ -114,17 +120,23 @@ public class RackServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
             "classpath:sql/floor/floor_clear.sql",
             "classpath:sql/cell/cell_clear.sql",
 
+            "classpath:sql/address/address_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/rack/rack_insert.sql",
             "classpath:sql/floor/floor_insert.sql",
             "classpath:sql/cell/cell_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
             "classpath:sql/floor/floor_clear.sql",
@@ -135,22 +147,28 @@ public class RackServiceIntegrationTest extends BaseServiceIntegrationTest {
         Page<RackDTO> page = service.findAll("", PageRequest.of(0, 10));
         assertNotNull(page);
         assertEquals(10, page.getNumberOfElements());
-        assertEquals(14, page.getTotalElements());
+        assertEquals(20, page.getTotalElements());
         assertEquals(2, page.getTotalPages());
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
             "classpath:sql/floor/floor_clear.sql",
             "classpath:sql/cell/cell_clear.sql",
 
+            "classpath:sql/address/address_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/rack/rack_insert.sql",
             "classpath:sql/floor/floor_insert.sql",
             "classpath:sql/cell/cell_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
             "classpath:sql/floor/floor_clear.sql",
@@ -171,17 +189,23 @@ public class RackServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
             "classpath:sql/floor/floor_clear.sql",
             "classpath:sql/cell/cell_clear.sql",
 
+            "classpath:sql/address/address_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/rack/rack_insert.sql",
             "classpath:sql/floor/floor_insert.sql",
             "classpath:sql/cell/cell_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
             "classpath:sql/floor/floor_clear.sql",

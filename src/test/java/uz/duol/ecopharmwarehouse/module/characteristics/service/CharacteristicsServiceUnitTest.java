@@ -12,7 +12,6 @@ import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
 import uz.duol.ecopharmwarehouse.entity.CharacteristicEntity;
 import uz.duol.ecopharmwarehouse.enums.CharacteristicType;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.characteristics.dto.CharacteristicsDTO;
 import uz.duol.ecopharmwarehouse.module.characteristics.exception.CharacteristicsNotFoundException;
 import uz.duol.ecopharmwarehouse.module.characteristics.mapper.CharacteristicsMapper;
@@ -65,7 +64,7 @@ public class CharacteristicsServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(any(CharacteristicEntity.class))).thenReturn(dto);
         when(mapper.toEntity(any(CharacteristicsDTO.class))).thenReturn(entity);
         when(repository.save(any(CharacteristicEntity.class))).thenReturn(entity);
@@ -78,26 +77,24 @@ public class CharacteristicsServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate_ThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
         CharacteristicsNotFoundException e = assertThrows(CharacteristicsNotFoundException.class, () -> service.update(1L, dto));
         assertEquals("Characteristics not found", e.getMessage());
     }
 
     @Test
     void testDelete() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(any(CharacteristicEntity.class))).thenReturn(dto);
-        when(mapper.toEntity(any(CharacteristicsDTO.class))).thenReturn(entity);
 
         service.delete(1L);
 
-        verify(repository, times(1)).save(any(CharacteristicEntity.class));
-        assertEquals(Status.DELETED, entity.getStatus());
+        verify(repository, times(1)).deleteById(anyLong());
     }
 
     @Test
     void testDelete_ThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
         CharacteristicsNotFoundException e = assertThrows(CharacteristicsNotFoundException.class, () -> service.delete(1L));
         assertEquals("Characteristics not found", e.getMessage());
     }
@@ -118,7 +115,7 @@ public class CharacteristicsServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindById() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(any(CharacteristicEntity.class))).thenReturn(dto);
 
         CharacteristicsDTO actual = service.findById(1L);
@@ -129,7 +126,7 @@ public class CharacteristicsServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindById_ThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
         CharacteristicsNotFoundException e = assertThrows(CharacteristicsNotFoundException.class, () -> service.findById(1L));
         assertEquals("Characteristics not found", e.getMessage());
     }

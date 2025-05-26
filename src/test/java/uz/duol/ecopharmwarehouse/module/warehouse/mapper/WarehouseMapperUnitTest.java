@@ -3,7 +3,6 @@ package uz.duol.ecopharmwarehouse.module.warehouse.mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
 import uz.duol.ecopharmwarehouse.entity.WarehouseEntity;
@@ -14,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 public class WarehouseMapperUnitTest extends BaseUnitTest {
-    @Qualifier("warehouseMapper")
     @Autowired
     private WarehouseMapper mapper;
     private WarehouseDTO dto;
@@ -40,7 +38,7 @@ public class WarehouseMapperUnitTest extends BaseUnitTest {
         WarehouseEntity actual = mapper.toEntity(dto);
 
         assertNotNull(actual);
-        assertEquals(entity.toString(), dto.toString());
+        assertEquals(entity.toString(), actual.toString());
     }
 
     @Test

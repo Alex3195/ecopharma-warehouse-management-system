@@ -17,6 +17,7 @@ import uz.duol.ecopharmwarehouse.module.sector.exception.SectorNotFoundException
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @Transactional
 public class SectorServiceIntegrationTest extends BaseServiceIntegrationTest {
     @Autowired
@@ -50,13 +51,16 @@ public class SectorServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
 
-            "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
+            "classpath:sql/sector/sector_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -73,13 +77,16 @@ public class SectorServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
 
-            "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
+            "classpath:sql/sector/sector_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -97,13 +104,16 @@ public class SectorServiceIntegrationTest extends BaseServiceIntegrationTest {
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
 
-            "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
+            "classpath:sql/sector/sector_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -114,17 +124,20 @@ public class SectorServiceIntegrationTest extends BaseServiceIntegrationTest {
         assertNotNull(actual);
         assertEquals(10, actual.getNumberOfElements());
         assertEquals(2, actual.getTotalPages());
-        assertEquals(14, actual.getTotalElements());
+        assertEquals(20, actual.getTotalElements());
     }
 
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
 
-            "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/address/address_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
+            "classpath:sql/sector/sector_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)

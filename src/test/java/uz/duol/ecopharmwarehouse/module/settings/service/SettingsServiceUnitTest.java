@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
 import uz.duol.ecopharmwarehouse.entity.SettingsEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.settings.dto.SettingsDTO;
 import uz.duol.ecopharmwarehouse.module.settings.exception.SettingNotFoundException;
 import uz.duol.ecopharmwarehouse.module.settings.mapper.SettingMapper;
@@ -63,7 +62,7 @@ public class SettingsServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
         when(mapper.toEntity(dto)).thenReturn(entity);
         when(repository.save(entity)).thenReturn(entity);
@@ -76,34 +75,33 @@ public class SettingsServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate_ThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
         SettingNotFoundException exception = assertThrows(SettingNotFoundException.class, () -> service.update(1L, dto));
         assertEquals("Setting not found", exception.getMessage());
     }
 
     @Test
     void testDelete() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
-        when(mapper.toEntity(dto)).thenReturn(entity);
-        when(repository.save(entity)).thenReturn(entity);
+
+        doNothing().when(repository).deleteById(anyLong());
 
         service.delete(1L);
 
-        verify(repository, times(1)).save(entity);
-        assertEquals(Status.DELETED, entity.getStatus());
+        verify(repository, times(1)).deleteById(anyLong());
     }
 
     @Test
     void testDelete_ThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
         SettingNotFoundException exception = assertThrows(SettingNotFoundException.class, () -> service.delete(1L));
         assertEquals("Setting not found", exception.getMessage());
     }
 
     @Test
     void testFindById() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
 
         SettingsDTO result = service.findById(1L);
@@ -113,7 +111,7 @@ public class SettingsServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindByIdNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         SettingNotFoundException e = assertThrows(SettingNotFoundException.class, () -> service.findById(1L));
 

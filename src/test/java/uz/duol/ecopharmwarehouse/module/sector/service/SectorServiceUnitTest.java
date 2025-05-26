@@ -12,7 +12,6 @@ import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
 import uz.duol.ecopharmwarehouse.entity.SectorCharacteristicEntity;
 import uz.duol.ecopharmwarehouse.entity.SectorEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.sector.characteristics.dto.SectorCharacteristicDTO;
 import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
 import uz.duol.ecopharmwarehouse.module.sector.exception.SectorNotFoundException;
@@ -79,7 +78,7 @@ public class SectorServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toEntity(dto)).thenReturn(entity);
         when(repository.save(entity)).thenReturn(entity);
         when(mapper.toDto(entity)).thenReturn(dto);
@@ -93,14 +92,14 @@ public class SectorServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdateThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
         SectorNotFoundException e = assertThrows(SectorNotFoundException.class, () -> sectorService.update(1L, dto));
         assertEquals("Sector not found", e.getMessage());
     }
 
     @Test
     void testFindById() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
 
         SectorDTO found = sectorService.findById(1L);
@@ -110,26 +109,25 @@ public class SectorServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindByIdThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
         SectorNotFoundException e = assertThrows(SectorNotFoundException.class, () -> sectorService.findById(1L));
         assertEquals("Sector not found", e.getMessage());
     }
 
     @Test
     void testDelete() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(any(SectorEntity.class))).thenReturn(dto);
-        when(mapper.toEntity(dto)).thenReturn(entity);
+        doNothing().when(repository).deleteById(anyLong());
 
         sectorService.delete(1L);
 
-        assertEquals(Status.DELETED, entity.getStatus());
-        verify(repository, times(1)).save(entity);
+        verify(repository, times(1)).deleteById(anyLong());
     }
 
     @Test
     void testDeleteThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
         SectorNotFoundException e = assertThrows(SectorNotFoundException.class, () -> sectorService.delete(1L));
         assertEquals("Sector not found", e.getMessage());
     }

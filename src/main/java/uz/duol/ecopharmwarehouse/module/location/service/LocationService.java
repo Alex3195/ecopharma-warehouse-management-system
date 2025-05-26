@@ -1,6 +1,5 @@
 package uz.duol.ecopharmwarehouse.module.location.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +40,7 @@ public class LocationService {
 
     public LocationDTO update(Long id, LocationDTO dto) {
         var existing = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Location not found"));
+                .orElseThrow(() -> new LocationNotFoundException("Location not found"));
         mapper.update(existing, dto);
         repository.save(existing);
         return mapper.toDto(existing);

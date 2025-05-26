@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,11 +28,11 @@ public class SettingsController {
             summary = "Get setting by id",
             security = @SecurityRequirement(name = "bearerAuth"),
             responses = {
-                    @ApiResponse(responseCode = "200",description = "Success"),
-                    @ApiResponse(responseCode = "400",description = "Bad request - Invalid id"),
-                    @ApiResponse(responseCode = "401",description = "Unauthorized - Invalid credential"),
-                    @ApiResponse(responseCode = "403",description = "Access denied - Bad role or permission"),
-                    @ApiResponse(responseCode = "404",description = "Not found - Data not found"),
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "400", description = "Bad request - Invalid id"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid credential"),
+                    @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
+                    @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
     @PreAuthorize("hasAuthority('SETTING_GET') or hasRole('SUPER_ADMIN')")
@@ -44,9 +45,9 @@ public class SettingsController {
             summary = "Get settings list",
             security = @SecurityRequirement(name = "bearerAuth"),
             responses = {
-                    @ApiResponse(responseCode = "200",description = "Success"),
-                    @ApiResponse(responseCode = "401",description = "Unauthorized - Invalid credential"),
-                    @ApiResponse(responseCode = "403",description = "Access denied - Bad role or permission"),
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid credential"),
+                    @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
     @PreAuthorize("hasAuthority('SETTING_GET') or hasRole('SUPER_ADMIN')")
@@ -60,16 +61,16 @@ public class SettingsController {
             summary = "Create setting",
             security = @SecurityRequirement(name = "bearerAuth"),
             responses = {
-                    @ApiResponse(responseCode = "201",description = "Success"),
-                    @ApiResponse(responseCode = "400",description = "Bad request - Invalid id"),
-                    @ApiResponse(responseCode = "401",description = "Unauthorized - Invalid credential"),
-                    @ApiResponse(responseCode = "403",description = "Access denied - Bad role or permission"),
+                    @ApiResponse(responseCode = "201", description = "Success"),
+                    @ApiResponse(responseCode = "400", description = "Bad request - Invalid id"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid credential"),
+                    @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
     @PreAuthorize("hasAuthority('SETTING_CREATE') or hasRole('SUPER_ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SettingsDTO create(@RequestBody SettingsDTO dto) {
+    public SettingsDTO create(@RequestBody @Valid SettingsDTO dto) {
         return service.create(dto);
     }
 
@@ -77,16 +78,16 @@ public class SettingsController {
             summary = "Update setting by id",
             security = @SecurityRequirement(name = "bearerAuth"),
             responses = {
-                    @ApiResponse(responseCode = "200",description = "Success"),
-                    @ApiResponse(responseCode = "400",description = "Bad request - Invalid id"),
-                    @ApiResponse(responseCode = "401",description = "Unauthorized - Invalid credential"),
-                    @ApiResponse(responseCode = "403",description = "Access denied - Bad role or permission"),
-                    @ApiResponse(responseCode = "404",description = "Not found - Data not found"),
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "400", description = "Bad request - Invalid id"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid credential"),
+                    @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
+                    @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
     @PreAuthorize("hasAuthority('SETTING_UPDATE') or hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
-    public SettingsDTO update(@PathVariable Long id, @RequestBody SettingsDTO dto) {
+    public SettingsDTO update(@PathVariable Long id, @RequestBody @Valid SettingsDTO dto) {
         return service.update(id, dto);
     }
 
@@ -94,11 +95,11 @@ public class SettingsController {
             summary = "DELETE setting by id",
             security = @SecurityRequirement(name = "bearerAuth"),
             responses = {
-                    @ApiResponse(responseCode = "204",description = "Success"),
-                    @ApiResponse(responseCode = "400",description = "Bad request - Invalid id"),
-                    @ApiResponse(responseCode = "401",description = "Unauthorized - Invalid credential"),
-                    @ApiResponse(responseCode = "403",description = "Access denied - Bad role or permission"),
-                    @ApiResponse(responseCode = "404",description = "Not found - Data not found"),
+                    @ApiResponse(responseCode = "204", description = "Success"),
+                    @ApiResponse(responseCode = "400", description = "Bad request - Invalid id"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid credential"),
+                    @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
+                    @ApiResponse(responseCode = "404", description = "Not found - Data not found"),
             }
     )
     @PreAuthorize("hasAuthority('SETTING_DELETE') or hasRole('SUPER_ADMIN')")

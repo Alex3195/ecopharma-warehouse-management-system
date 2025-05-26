@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import uz.duol.ecopharmwarehouse.entity.LocationEntity;
 import uz.duol.ecopharmwarehouse.entity.ProductEntity;
 import uz.duol.ecopharmwarehouse.entity.ProductMetadataEntity;
+import uz.duol.ecopharmwarehouse.enums.OutputAlgorithmTypeEnum;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
 import uz.duol.ecopharmwarehouse.module.product.metadata.dto.ProductMetadataDTO;
@@ -32,6 +33,7 @@ public class ProductMapperUnitTest {
         dto.setDescription("Trimol");
         dto.setProductType("PHARMACY");
         dto.setQuantity(1000);
+        dto.setOutputAlgorithmType(OutputAlgorithmTypeEnum.FIRST_IN_FIRST_OUT);
 
         ProductMetadataDTO metadata = new ProductMetadataDTO();
         metadata.setId(1L);

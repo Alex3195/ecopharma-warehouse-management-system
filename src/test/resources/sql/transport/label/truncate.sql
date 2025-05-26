@@ -1,0 +1,1 @@
+truncate table transport_label cascade;

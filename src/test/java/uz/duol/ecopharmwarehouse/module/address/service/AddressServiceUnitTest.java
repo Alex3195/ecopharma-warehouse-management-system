@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
 import uz.duol.ecopharmwarehouse.entity.AddressEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.address.dto.AddressDTO;
 import uz.duol.ecopharmwarehouse.module.address.exception.AddressNotFoundException;
 import uz.duol.ecopharmwarehouse.module.address.mapper.AddressMapper;
@@ -77,7 +76,7 @@ public class AddressServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindById() {
-        when(addressRepository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(addressRepository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(addressMapper.toDto(any(AddressEntity.class))).thenReturn(dto);
 
         AddressDTO actual = addressService.findById(1L);
@@ -89,14 +88,14 @@ public class AddressServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindByIdThenNotFound() {
-        when(addressRepository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(addressRepository.findById(anyLong())).thenReturn(Optional.empty());
         AddressNotFoundException e = assertThrows(AddressNotFoundException.class, () -> addressService.findById(1L));
         assertEquals("Address not found", e.getMessage());
     }
 
     @Test
     void testUpdate() {
-        when(addressRepository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(addressRepository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(addressMapper.toDto(any(AddressEntity.class))).thenReturn(dto);
         when(addressRepository.save(any(AddressEntity.class))).thenReturn(entity);
         when(addressMapper.toEntity(any(AddressDTO.class))).thenReturn(entity);
@@ -107,28 +106,27 @@ public class AddressServiceUnitTest extends BaseUnitTest {
         assertEquals(dto.toString(), actual.toString());
         verify(addressRepository, times(1)).save(any(AddressEntity.class));
     }
+
     @Test
-    void testUpdateThenNotFound(){
-        when(addressRepository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+    void testUpdateThenNotFound() {
+        when(addressRepository.findById(anyLong())).thenReturn(Optional.empty());
         AddressNotFoundException e = assertThrows(AddressNotFoundException.class, () -> addressService.delete(1L));
         assertEquals("Address not found", e.getMessage());
     }
 
     @Test
     void testDelete() {
-        when(addressRepository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(addressRepository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(addressMapper.toDto(any(AddressEntity.class))).thenReturn(dto);
-        when(addressMapper.toEntity(any(AddressDTO.class))).thenReturn(entity);
 
         addressService.delete(1L);
 
-        verify(addressRepository, times(1)).save(any(AddressEntity.class));
-        assertEquals(Status.DELETED, entity.getStatus());
+        verify(addressRepository, times(1)).deleteById(anyLong());
     }
 
     @Test
     void testDeleteThenNotFound() {
-        when(addressRepository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(addressRepository.findById(anyLong())).thenReturn(Optional.empty());
         AddressNotFoundException e = assertThrows(AddressNotFoundException.class, () -> addressService.delete(1L));
         assertEquals("Address not found", e.getMessage());
     }

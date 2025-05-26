@@ -14,12 +14,15 @@ import uz.duol.ecopharmwarehouse.entity.CellEntity;
 import uz.duol.ecopharmwarehouse.entity.FloorEntity;
 import uz.duol.ecopharmwarehouse.entity.RackEntity;
 import uz.duol.ecopharmwarehouse.enums.RackTypeEnum;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.floor.dto.FloorDTO;
+import uz.duol.ecopharmwarehouse.module.location.service.LocationService;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackRequest;
 import uz.duol.ecopharmwarehouse.module.rack.exception.RackNotFoundException;
 import uz.duol.ecopharmwarehouse.module.rack.mapper.RackMapper;
+import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
+import uz.duol.ecopharmwarehouse.module.sector.service.SectorService;
+import uz.duol.ecopharmwarehouse.module.warehouse.dto.WarehouseDTO;
 import uz.duol.ecopharmwarehouse.repositories.RackRepository;
 
 import java.util.ArrayList;
@@ -33,6 +36,10 @@ import static org.mockito.Mockito.*;
 public class RackServiceUnitTest extends BaseUnitTest {
     @InjectMocks
     private RackService service;
+    @Mock
+    private SectorService sectorService;
+    @Mock
+    private LocationService locationService;
     @Mock
     private RackRepository repository;
     @Mock
@@ -76,12 +83,19 @@ public class RackServiceUnitTest extends BaseUnitTest {
         request.setSectorId(10L);
         request.setFloors(2);
         request.setCells(3);
-
+        WarehouseDTO warehouse = new WarehouseDTO();
+        warehouse.setName("Warehouse A");
+        SectorDTO sector = new SectorDTO();
+        sector.setId(10L);
+        sector.setName("Sector A");
+        sector.setWarehouseId(1L);
+        sector.setWarehouseId(2L);
+        sector.setWarehouse(warehouse);
 
         List<FloorEntity> floors = getFloorEntities(request);
         entity.setFloors(floors);
 
-
+        when(sectorService.findById(anyLong())).thenReturn(sector);
         when(repository.save(any(RackEntity.class))).thenReturn(entity);
         when(mapper.toDto(any(RackEntity.class))).thenReturn(dto);
 
@@ -124,7 +138,7 @@ public class RackServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindById() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(any(RackEntity.class))).thenReturn(dto);
 
         RackDTO result = service.findById(1L);
@@ -135,7 +149,7 @@ public class RackServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindByIdNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         RackNotFoundException e = assertThrows(RackNotFoundException.class, () -> service.findById(1L));
 
@@ -157,7 +171,7 @@ public class RackServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toEntity(any(RackDTO.class))).thenReturn(entity);
         when(repository.save(any(RackEntity.class))).thenReturn(entity);
         when(mapper.toDto(any(RackEntity.class))).thenReturn(dto);
@@ -169,7 +183,7 @@ public class RackServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdateNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         RackNotFoundException e = assertThrows(RackNotFoundException.class, () -> service.update(1L, dto));
 
@@ -179,19 +193,17 @@ public class RackServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testDelete() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(any(RackEntity.class))).thenReturn(dto);
-        when(mapper.toEntity(any(RackDTO.class))).thenReturn(entity);
-
+        doNothing().when(repository).deleteById(anyLong());
         service.delete(1L);
 
-        assertEquals(Status.DELETED, entity.getStatus());
-        verify(repository, times(1)).save(entity);
+        verify(repository, times(1)).deleteById(anyLong());
     }
 
     @Test
     void testDeleteNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         RackNotFoundException e = assertThrows(RackNotFoundException.class, () -> service.delete(1L));
 

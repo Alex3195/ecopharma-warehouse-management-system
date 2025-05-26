@@ -49,8 +49,8 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
             "classpath:sql/sector/sector_clear.sql",
 
             "classpath:sql/address/address_insert.sql",
-            "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
+            "classpath:sql/sector/sector_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
             "classpath:sql/address/address_clear.sql",
@@ -99,8 +99,8 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
             "classpath:sql/sector/sector_clear.sql",
 
             "classpath:sql/address/address_insert.sql",
-            "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
+            "classpath:sql/sector/sector_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
             "classpath:sql/address/address_clear.sql",
@@ -127,8 +127,8 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
             "classpath:sql/sector/sector_clear.sql",
 
             "classpath:sql/address/address_insert.sql",
-            "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
+            "classpath:sql/sector/sector_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
             "classpath:sql/address/address_clear.sql",
@@ -161,8 +161,8 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
             "classpath:sql/sector/sector_clear.sql",
 
             "classpath:sql/address/address_insert.sql",
-            "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
+            "classpath:sql/sector/sector_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
             "classpath:sql/address/address_clear.sql",
@@ -219,8 +219,8 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
             "classpath:sql/sector/sector_clear.sql",
 
             "classpath:sql/address/address_insert.sql",
-            "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
+            "classpath:sql/sector/sector_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
             "classpath:sql/address/address_clear.sql",
@@ -268,8 +268,8 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
             "classpath:sql/sector/sector_clear.sql",
 
             "classpath:sql/address/address_insert.sql",
-            "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
+            "classpath:sql/sector/sector_insert.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
             "classpath:sql/address/address_clear.sql",

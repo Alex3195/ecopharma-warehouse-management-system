@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.duol.ecopharmwarehouse.module.inventory.dto.InventoryDto;
@@ -32,6 +33,7 @@ public class InventoryController {
             })
     @PreAuthorize("hasAuthority('CREATE_INVENTORY') or hasRole('SUPER_ADMIN')")
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public InventoryDto createProductLocation(@RequestBody InventoryDto dto) {
         return service.create(dto);
     }

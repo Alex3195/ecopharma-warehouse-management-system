@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
 import uz.duol.ecopharmwarehouse.entity.LocationEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 import uz.duol.ecopharmwarehouse.module.location.exception.LocationNotFoundException;
 import uz.duol.ecopharmwarehouse.module.location.mapper.LocationMapper;
@@ -70,10 +69,10 @@ public class LocationServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
-        when(mapper.toDto(entity)).thenReturn(dto);
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
+        doNothing().when(mapper).update(any(LocationEntity.class), any(LocationDTO.class));
         when(repository.save(entity)).thenReturn(entity);
-        when(mapper.toEntity(dto)).thenReturn(entity);
+        when(mapper.toDto(entity)).thenReturn(dto);
 
         LocationDTO result = service.update(1L, dto);
 
@@ -83,7 +82,7 @@ public class LocationServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate_ThenNotFoundException() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         LocationNotFoundException e = assertThrows(LocationNotFoundException.class, () -> service.update(1L, dto));
         assertEquals("Location not found", e.getMessage());
@@ -91,20 +90,17 @@ public class LocationServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testDelete() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
-        when(mapper.toEntity(dto)).thenReturn(entity);
-        when(repository.save(entity)).thenReturn(entity);
 
         service.delete(1L);
 
-        assertEquals(Status.DELETED, entity.getStatus());
-        verify(repository, times(1)).save(entity);
+        verify(repository, times(1)).deleteById(anyLong());
     }
 
     @Test
     void testDelete_ThenNotFoundException() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         LocationNotFoundException e = assertThrows(LocationNotFoundException.class, () -> service.delete(1L));
         assertEquals("Location not found", e.getMessage());
@@ -112,7 +108,7 @@ public class LocationServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindById() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
 
         LocationDTO result = service.findById(1L);
@@ -122,7 +118,7 @@ public class LocationServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindById_ThenNotFoundException() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         LocationNotFoundException e = assertThrows(LocationNotFoundException.class, () -> service.findById(1L));
         assertEquals("Location not found", e.getMessage());

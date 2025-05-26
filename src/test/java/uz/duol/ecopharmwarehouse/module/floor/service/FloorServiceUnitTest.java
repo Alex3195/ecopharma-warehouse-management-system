@@ -12,7 +12,6 @@ import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
 import uz.duol.ecopharmwarehouse.entity.CellEntity;
 import uz.duol.ecopharmwarehouse.entity.FloorEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.cells.dto.CellDTO;
 import uz.duol.ecopharmwarehouse.module.floor.dto.FloorDTO;
 import uz.duol.ecopharmwarehouse.module.floor.exception.FloorNotFoundException;
@@ -69,7 +68,7 @@ public class FloorServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toEntity(dto)).thenReturn(entity);
         when(repository.save(entity)).thenReturn(entity);
         when(mapper.toDto(entity)).thenReturn(dto);
@@ -82,7 +81,7 @@ public class FloorServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate_ThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(),any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         FloorNotFoundException e = assertThrows(FloorNotFoundException.class, () -> service.update(dto.getId(), dto));
         assertEquals("Floor not found", e.getMessage());
@@ -90,7 +89,7 @@ public class FloorServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindById() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
 
         FloorDTO result = service.findById(dto.getId());
@@ -100,7 +99,7 @@ public class FloorServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindById_ThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         FloorNotFoundException e = assertThrows(FloorNotFoundException.class, () -> service.findById(dto.getId()));
         assertEquals("Floor not found", e.getMessage());
@@ -108,20 +107,17 @@ public class FloorServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testDelete() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
-        when(mapper.toEntity(dto)).thenReturn(entity);
-        when(repository.save(entity)).thenReturn(entity);
 
         service.delete(dto.getId());
 
-        assertEquals(Status.DELETED, entity.getStatus());
-        verify(repository, times(1)).save(entity);
+        verify(repository, times(1)).deleteById(anyLong());
     }
 
     @Test
     void testDelete_ThenNotFound() {
-        when(repository.findByIdAndStatusIsNot(anyLong(),any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         FloorNotFoundException e = assertThrows(FloorNotFoundException.class, () -> service.delete(dto.getId()));
         assertEquals("Floor not found", e.getMessage());
@@ -133,7 +129,7 @@ public class FloorServiceUnitTest extends BaseUnitTest {
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(entity)).thenReturn(dto);
 
-        Page<FloorDTO> result = service.findAll( PageRequest.of(0, 10));
+        Page<FloorDTO> result = service.findAll(PageRequest.of(0, 10));
 
         assertEquals(1, result.getNumberOfElements());
         assertEquals(1, result.getTotalElements());

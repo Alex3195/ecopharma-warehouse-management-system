@@ -13,7 +13,6 @@ import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
 import uz.duol.ecopharmwarehouse.entity.LocationEntity;
 import uz.duol.ecopharmwarehouse.entity.ProductEntity;
 import uz.duol.ecopharmwarehouse.entity.ProductMetadataEntity;
-import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
 import uz.duol.ecopharmwarehouse.module.product.exception.ProductNotFundException;
@@ -100,7 +99,7 @@ public class ProductServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toEntity(dto)).thenReturn(entity);
         when(mapper.toEntity(dto)).thenReturn(entity);
         when(repository.save(entity)).thenReturn(entity);
@@ -115,7 +114,7 @@ public class ProductServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindById() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
 
         ProductDTO result = service.findById(8001L);
@@ -126,15 +125,13 @@ public class ProductServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testDelete() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.of(entity));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
-        when(mapper.toEntity(dto)).thenReturn(entity);
-        when(repository.save(entity)).thenReturn(entity);
+        doNothing().when(repository).deleteById(anyLong());
 
         service.delete(8001L);
 
-        assertEquals(Status.DELETED, entity.getStatus());
-        verify(repository, times(1)).save(entity);
+        verify(repository, times(1)).deleteById(anyLong());
     }
 
     @Test
@@ -154,7 +151,7 @@ public class ProductServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindById_ThenNotFoundException() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         ProductNotFundException e = assertThrows(ProductNotFundException.class, () -> service.findById(8001L));
         assertEquals("Product not found", e.getMessage());
@@ -162,7 +159,7 @@ public class ProductServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testUpdate_ThenNotFoundException() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         ProductNotFundException e = assertThrows(ProductNotFundException.class, () -> service.update(8001L, dto));
         assertEquals("Product not found", e.getMessage());
@@ -170,7 +167,7 @@ public class ProductServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testDelete_ThenNotFoundException() {
-        when(repository.findByIdAndStatusIsNot(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         ProductNotFundException e = assertThrows(ProductNotFundException.class, () -> service.delete(8001L));
         assertEquals("Product not found", e.getMessage());
