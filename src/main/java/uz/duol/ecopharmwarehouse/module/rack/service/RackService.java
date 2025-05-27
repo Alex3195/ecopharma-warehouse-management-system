@@ -16,6 +16,7 @@ import uz.duol.ecopharmwarehouse.module.floor.mapper.FloorMapper;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 import uz.duol.ecopharmwarehouse.module.location.service.LocationService;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
+import uz.duol.ecopharmwarehouse.module.rack.dto.RackInfo;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackRequest;
 import uz.duol.ecopharmwarehouse.module.rack.exception.RackNotFoundException;
 import uz.duol.ecopharmwarehouse.module.rack.mapper.RackMapper;
@@ -26,6 +27,7 @@ import uz.duol.ecopharmwarehouse.repositories.CellsRepository;
 import uz.duol.ecopharmwarehouse.repositories.FloorRepository;
 import uz.duol.ecopharmwarehouse.repositories.RackRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,8 +45,47 @@ public class RackService {
 
     @Transactional
     public RackDTO create(RackRequest request) {
-        var rackEntity = rackEntityFromRequest(request);
-        repository.save(rackEntity);
+        // First save just the rack to get its ID
+        RackEntity rackEntity = new RackEntity();
+        rackEntity.setName(request.getName());
+        rackEntity.setDepth(request.getDepth());
+        rackEntity.setHeight(request.getHeight());
+        rackEntity.setWidth(request.getWidth());
+        rackEntity.setType(request.getType());
+        rackEntity.setSectorId(request.getSectorId());
+        rackEntity = repository.saveAndFlush(rackEntity);
+
+        // Now create floors
+        for (int i = 0; i < request.getFloors(); i++) {
+            FloorEntity floor = new FloorEntity();
+            floor.setLevel(i);
+            floor.setHeight(request.getHeight() / request.getFloors());
+            floor.setRack(rackEntity);
+            floor.setRackId(rackEntity.getId());
+
+            // Save floor to get its ID
+            floor = floorRepository.saveAndFlush(floor);
+
+            // Now create cells with the floor's ID
+            List<CellEntity> cells = new ArrayList<>();
+            for (int j = 0; j < request.getCells(); j++) {
+                CellEntity cell = new CellEntity();
+                cell.setCode(request.getName() + "-" + i + "-" + j);
+                cell.setWidth(request.getWidth() / request.getCells());
+                cell.setHeight(request.getHeight() / request.getFloors());
+                cell.setIsEmpty(true);
+                cell.setDepth(request.getDepth());
+                cell.setFloor(floor);
+                cell.setFloorId(floor.getId()); // Now floor has an ID
+                cells.add(cell);
+            }
+
+            // Save all cells for this floor
+            cells = cellsRepository.saveAll(cells);
+            floor.setCells(cells);
+            rackEntity.getFloors().add(floor);
+        }
+
         createLocations(rackEntity);
         return rackMapper.toDto(rackEntity);
     }
@@ -65,33 +106,6 @@ public class RackService {
         }));
     }
 
-
-    private RackEntity rackEntityFromRequest(RackRequest request) {
-        RackEntity rackEntity = new RackEntity();
-        rackEntity.setId(request.getId());
-        rackEntity.setName(request.getName());
-        rackEntity.setDepth(request.getDepth());
-        rackEntity.setHeight(request.getHeight());
-        rackEntity.setWidth(request.getWidth());
-        rackEntity.setType(request.getType());
-        rackEntity.setSectorId(request.getSectorId());
-        for (int i = 0; i < request.getFloors(); i++) {
-            FloorEntity floor = new FloorEntity();
-            floor.setLevel(i);
-            floor.setHeight(request.getHeight() / request.getFloors());
-            for (int j = 0; j < request.getCells(); j++) {
-                CellEntity cell = new CellEntity();
-                cell.setCode(request.getName() + "-" + i + "-" + j);
-                cell.setWidth(request.getWidth() / request.getCells());
-                cell.setHeight(request.getHeight() / request.getFloors());
-                cell.setIsEmpty(true);
-                cell.setDepth(request.getDepth());
-                floor.getCells().add(cell);
-            }
-            rackEntity.getFloors().add(floor);
-        }
-        return rackEntity;
-    }
 
     @Transactional(readOnly = true)
     public RackDTO findById(Long id) {
@@ -117,7 +131,7 @@ public class RackService {
     }
 
     @Transactional(readOnly = true)
-    public Page<RackDTO> findAll(String search, Pageable pageable) {
+    public Page<RackInfo> findAll(String search, Pageable pageable) {
         Specification<RackEntity> spec = Specification.where(null);
         if (search != null && !search.isEmpty()) {
             spec = spec.and(RackSpecification.hasText(search));
@@ -125,13 +139,32 @@ public class RackService {
         return repository.findAll(spec, pageable).map(item -> {
             var dto = rackMapper.toDto(item);
             var floors = floorRepository.findByRackIdAndStatusIsNot(item.getId(), Status.DELETED);
-            return getRackDTO(dto, floors);
+            var rackDto = getRackDTO(dto, floors);
+
+            return getRackInfo(rackDto);
         });
+    }
+
+    private RackInfo getRackInfo(RackDTO rackDto) {
+        var rackInfo = new RackInfo();
+        rackInfo.setId(rackDto.getId());
+        rackInfo.setName(rackDto.getName());
+        rackInfo.setType(rackDto.getType());
+        rackInfo.setHeight(rackDto.getHeight());
+        rackInfo.setWidth(rackDto.getWidth());
+        rackInfo.setDepth(rackDto.getDepth());
+        rackInfo.setSectorId(rackDto.getSectorId());
+        rackInfo.setSector(rackDto.getSector());
+        rackInfo.setFloorCount(rackDto.getFloors().size());
+        rackInfo.setCellCount(rackDto.getFloors().getFirst().getCells().size());
+        rackInfo.setSumOfCells(rackDto.getFloors().getFirst().getCells().size() * rackDto.getFloors().size());
+        return rackInfo;
     }
 
     @NotNull
     private RackDTO getRackDTO(RackDTO dto, List<FloorEntity> floors) {
         dto.setFloors(floors.stream().map(floorMapper::toDto).toList());
+
         dto.getFloors().forEach(floor -> {
             var cells = cellsRepository.findByFloorIdAndStatusIsNot(floor.getId(), Status.DELETED);
             floor.setCells(cells.stream().map(cellsMapper::toDto).collect(Collectors.toList()));

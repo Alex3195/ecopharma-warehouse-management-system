@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
+import uz.duol.ecopharmwarehouse.module.rack.dto.RackInfo;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackRequest;
 import uz.duol.ecopharmwarehouse.module.rack.service.RackService;
 
@@ -104,8 +105,8 @@ public class RackController {
     )
     @PreAuthorize("hasAuthority('RACK_GET') or hasRole('SUPER_ADMIN')")
     @GetMapping("/list")
-    public Page<RackDTO> getAll(@RequestParam(value = "search", required = false) String search,
-                                @PageableDefault Pageable pageable) {
+    public Page<RackInfo> getAll(@RequestParam(value = "search", required = false) String search,
+                                 @PageableDefault Pageable pageable) {
         return service.findAll(search, pageable);
     }
 }
