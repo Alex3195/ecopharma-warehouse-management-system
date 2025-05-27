@@ -107,6 +107,7 @@ public class RackServiceUnitTest extends BaseUnitTest {
         when(floorRepository.saveAndFlush(any(FloorEntity.class))).thenReturn(new FloorEntity());
         when(cellsRepository.saveAll(anyList())).thenReturn(List.of(new CellEntity()));
         when(mapper.toDto(any(RackEntity.class))).thenReturn(dto);
+        when(locationService.create(any())).thenReturn(null);
 
         RackDTO result = service.create(request);
 
