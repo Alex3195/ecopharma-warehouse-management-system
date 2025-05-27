@@ -17,6 +17,7 @@ import uz.duol.ecopharmwarehouse.enums.RackTypeEnum;
 import uz.duol.ecopharmwarehouse.module.floor.dto.FloorDTO;
 import uz.duol.ecopharmwarehouse.module.location.service.LocationService;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
+import uz.duol.ecopharmwarehouse.module.rack.dto.RackInfo;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackRequest;
 import uz.duol.ecopharmwarehouse.module.rack.exception.RackNotFoundException;
 import uz.duol.ecopharmwarehouse.module.rack.mapper.RackMapper;
@@ -163,7 +164,7 @@ public class RackServiceUnitTest extends BaseUnitTest {
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(any(RackEntity.class))).thenReturn(dto);
 
-        Page<RackDTO> actual = service.findAll("search", Pageable.unpaged());
+        Page<RackInfo> actual = service.findAll("search", Pageable.unpaged());
 
         assertNotNull(actual);
         assertEquals(1, actual.getTotalElements());

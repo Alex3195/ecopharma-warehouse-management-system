@@ -11,6 +11,7 @@ import uz.duol.ecopharmwarehouse.enums.RackTypeEnum;
 import uz.duol.ecopharmwarehouse.module.cells.dto.CellDTO;
 import uz.duol.ecopharmwarehouse.module.floor.dto.FloorDTO;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
+import uz.duol.ecopharmwarehouse.module.rack.dto.RackInfo;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackRequest;
 import uz.duol.ecopharmwarehouse.module.rack.exception.RackNotFoundException;
 
@@ -144,7 +145,7 @@ public class RackServiceIntegrationTest extends BaseServiceIntegrationTest {
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {
-        Page<RackDTO> page = service.findAll("", PageRequest.of(0, 10));
+        Page<RackInfo> page = service.findAll("", PageRequest.of(0, 10));
         assertNotNull(page);
         assertEquals(10, page.getNumberOfElements());
         assertEquals(20, page.getTotalElements());
