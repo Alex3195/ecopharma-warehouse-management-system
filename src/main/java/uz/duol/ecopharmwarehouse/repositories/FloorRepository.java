@@ -5,8 +5,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import uz.duol.ecopharmwarehouse.entity.FloorEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface FloorRepository extends JpaRepository<FloorEntity,Long>, JpaSpecificationExecutor<FloorEntity> {
+public interface FloorRepository extends JpaRepository<FloorEntity, Long>, JpaSpecificationExecutor<FloorEntity> {
     Optional<FloorEntity> findByIdAndStatusIsNot(Long id, Status status);
+
+    List<FloorEntity> findByRackIdAndStatusIsNot(Long rackId, Status status);
 }
