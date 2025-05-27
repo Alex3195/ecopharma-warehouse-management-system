@@ -156,13 +156,20 @@ public class RackService {
         rackInfo.setSectorId(rackDto.getSectorId());
         rackInfo.setSector(rackDto.getSector());
         rackInfo.setFloorCount(rackDto.getFloors().size());
-        rackInfo.setCellCount(rackDto.getFloors().getFirst().getCells().size());
-        rackInfo.setSumOfCells(rackDto.getFloors().getFirst().getCells().size() * rackDto.getFloors().size());
+        if (rackDto.getFloors() != null && !rackDto.getFloors().isEmpty()) {
+            rackInfo.setCellCount(rackDto.getFloors().getFirst().getCells().size());
+            rackInfo.setSumOfCells(rackDto.getFloors().getFirst().getCells().size() * rackDto.getFloors().size());
+        }
+
         return rackInfo;
     }
 
     @NotNull
     private RackDTO getRackDTO(RackDTO dto, List<FloorEntity> floors) {
+        if (floors == null || floors.isEmpty()) {
+            dto.setFloors(new ArrayList<>());
+            return dto;
+        }
         dto.setFloors(floors.stream().map(floorMapper::toDto).toList());
 
         dto.getFloors().forEach(floor -> {

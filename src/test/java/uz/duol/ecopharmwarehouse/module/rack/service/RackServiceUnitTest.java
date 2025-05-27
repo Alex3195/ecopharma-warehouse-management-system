@@ -24,6 +24,8 @@ import uz.duol.ecopharmwarehouse.module.rack.mapper.RackMapper;
 import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
 import uz.duol.ecopharmwarehouse.module.sector.service.SectorService;
 import uz.duol.ecopharmwarehouse.module.warehouse.dto.WarehouseDTO;
+import uz.duol.ecopharmwarehouse.repositories.CellsRepository;
+import uz.duol.ecopharmwarehouse.repositories.FloorRepository;
 import uz.duol.ecopharmwarehouse.repositories.RackRepository;
 
 import java.util.ArrayList;
@@ -41,6 +43,10 @@ public class RackServiceUnitTest extends BaseUnitTest {
     private SectorService sectorService;
     @Mock
     private LocationService locationService;
+    @Mock
+    private FloorRepository floorRepository;
+    @Mock
+    private CellsRepository cellsRepository;
     @Mock
     private RackRepository repository;
     @Mock
@@ -97,7 +103,9 @@ public class RackServiceUnitTest extends BaseUnitTest {
         entity.setFloors(floors);
 
         when(sectorService.findById(anyLong())).thenReturn(sector);
-        when(repository.save(any(RackEntity.class))).thenReturn(entity);
+        when(repository.saveAndFlush(any(RackEntity.class))).thenReturn(entity);
+        when(floorRepository.saveAndFlush(any(FloorEntity.class))).thenReturn(new FloorEntity());
+        when(cellsRepository.saveAll(anyList())).thenReturn(List.of(new CellEntity()));
         when(mapper.toDto(any(RackEntity.class))).thenReturn(dto);
 
         RackDTO result = service.create(request);
@@ -105,7 +113,7 @@ public class RackServiceUnitTest extends BaseUnitTest {
         assertNotNull(result);
         assertEquals(dto.toString(), result.toString());
 
-        verify(repository, times(1)).save(any(RackEntity.class));
+        verify(repository, times(1)).saveAndFlush(any(RackEntity.class));
         verify(mapper, times(1)).toDto(any(RackEntity.class));
     }
 
