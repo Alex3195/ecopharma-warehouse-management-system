@@ -57,4 +57,12 @@ public class OutboundShipmentEntity extends BaseEntity {
     @Column(name = "shipment_status")
     @Enumerated(EnumType.STRING)
     private ShipmentStatusEnum shipmentStatus;
+
+    @Column(name = "inbound_receipt_id")
+    private Long inboundReceiptId;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "inbound_receipt_id", insertable = false, updatable = false)
+    @ToString.Exclude
+    private InboundReceiptEntity inboundReceipt;
 }

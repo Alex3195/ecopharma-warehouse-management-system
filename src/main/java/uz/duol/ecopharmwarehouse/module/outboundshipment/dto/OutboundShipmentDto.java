@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.module.outboundshipment.dto;
 import lombok.Data;
 import uz.duol.ecopharmwarehouse.enums.ShipmentStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ShipmentTypeEnum;
+import uz.duol.ecopharmwarehouse.module.inbound.receipt.dto.InboundReceiptDto;
 import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
 import uz.duol.ecopharmwarehouse.module.users.dto.UserDTO;
 
@@ -28,4 +29,7 @@ public class OutboundShipmentDto {
     private LocalDateTime scheduledFor;
 
     private ShipmentStatusEnum shipmentStatus;
+
+    private Long inboundReceiptId;
+    private InboundReceiptDto inboundReceipt;
 }

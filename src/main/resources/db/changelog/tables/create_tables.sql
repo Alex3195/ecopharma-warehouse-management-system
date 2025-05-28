@@ -260,18 +260,19 @@ CREATE TABLE location
 
 CREATE TABLE outbound_shipment
 (
-    id              BIGINT                      NOT NULL,
-    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at      TIMESTAMP WITHOUT TIME ZONE,
-    status          VARCHAR(255)                NOT NULL,
-    created_by      VARCHAR(255),
-    updated_by      VARCHAR(255),
-    product_id      BIGINT,
-    shipment_type   VARCHAR(255),
-    quantity        INTEGER,
-    customer_id     VARCHAR(255),
-    scheduled_for   TIMESTAMP WITHOUT TIME ZONE,
-    shipment_status VARCHAR(255),
+    id                 BIGINT                      NOT NULL,
+    created_at         TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at         TIMESTAMP WITHOUT TIME ZONE,
+    status             VARCHAR(255)                NOT NULL,
+    created_by         VARCHAR(255),
+    updated_by         VARCHAR(255),
+    product_id         BIGINT,
+    shipment_type      VARCHAR(255),
+    quantity           INTEGER,
+    customer_id        VARCHAR(255),
+    scheduled_for      TIMESTAMP WITHOUT TIME ZONE,
+    shipment_status    VARCHAR(255),
+    inbound_receipt_id BIGINT,
     CONSTRAINT pk_outbound_shipment PRIMARY KEY (id)
 );
 
@@ -585,6 +586,9 @@ ALTER TABLE inventory_snapshot
 
 ALTER TABLE outbound_shipment
     ADD CONSTRAINT FK_OUTBOUND_SHIPMENT_ON_CUSTOMER FOREIGN KEY (customer_id) REFERENCES users (id);
+
+ALTER TABLE outbound_shipment
+    ADD CONSTRAINT FK_OUTBOUND_SHIPMENT_ON_INBOUND_RECEIPT FOREIGN KEY (inbound_receipt_id) REFERENCES inbound_receipt (id);
 
 ALTER TABLE outbound_shipment
     ADD CONSTRAINT FK_OUTBOUND_SHIPMENT_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
