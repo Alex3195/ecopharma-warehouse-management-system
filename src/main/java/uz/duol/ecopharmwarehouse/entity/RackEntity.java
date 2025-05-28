@@ -31,6 +31,8 @@ public class RackEntity extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
+    @Column(name = "description")
+    private String description;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

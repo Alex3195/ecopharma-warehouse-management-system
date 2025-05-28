@@ -324,18 +324,19 @@ CREATE TABLE product_return
 
 CREATE TABLE racks
 (
-    id         BIGINT                      NOT NULL,
-    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    status     VARCHAR(255)                NOT NULL,
-    created_by VARCHAR(255),
-    updated_by VARCHAR(255),
-    name       VARCHAR(255)                NOT NULL,
-    type       VARCHAR(255)                NOT NULL,
-    height     DOUBLE PRECISION            NOT NULL,
-    width      DOUBLE PRECISION            NOT NULL,
-    depth      DOUBLE PRECISION            NOT NULL,
-    sector_id  BIGINT,
+    id          BIGINT                      NOT NULL,
+    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at  TIMESTAMP WITHOUT TIME ZONE,
+    status      VARCHAR(255)                NOT NULL,
+    created_by  VARCHAR(255),
+    updated_by  VARCHAR(255),
+    name        VARCHAR(255)                NOT NULL,
+    description VARCHAR(255),
+    type        VARCHAR(255)                NOT NULL,
+    height      DOUBLE PRECISION            NOT NULL,
+    width       DOUBLE PRECISION            NOT NULL,
+    depth       DOUBLE PRECISION            NOT NULL,
+    sector_id   BIGINT,
     CONSTRAINT pk_racks PRIMARY KEY (id)
 );
 

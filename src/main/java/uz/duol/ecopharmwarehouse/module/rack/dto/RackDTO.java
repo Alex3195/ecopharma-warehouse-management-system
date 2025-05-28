@@ -14,6 +14,7 @@ public class RackDTO {
     private Long id;
     @NotBlank
     private String name;
+    private String description;
     private RackTypeEnum type;
     private Double height;
     private Double width;
