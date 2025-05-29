@@ -41,5 +41,7 @@ public class TableNamesConstant {
         public static final String STORAGE_AGGREGATIONS_WITH_ALTERNATIVE_UNIT = "store_aggregations_with_alternative_unit";
         public static final String ROLE_DEFAULT_PERMISSIONS = "role_default_permissions";
         public static final String ROLE = "role";
+        public static final String PRINTER_SETTINGS = "printer_settings";
+        public static final String DEPARTMENT = "department";
     }
 }

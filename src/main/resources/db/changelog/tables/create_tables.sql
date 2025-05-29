@@ -8,6 +8,8 @@ CREATE SEQUENCE IF NOT EXISTS characteristics_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS cross_docking_seq START WITH 1 INCREMENT BY 1;
 
+CREATE SEQUENCE IF NOT EXISTS department_seq START WITH 1 INCREMENT BY 1;
+
 CREATE SEQUENCE IF NOT EXISTS floor_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS inbound_receipt_seq START WITH 1 INCREMENT BY 1;
@@ -19,6 +21,8 @@ CREATE SEQUENCE IF NOT EXISTS inventory_snapshot_seq START WITH 1 INCREMENT BY 1
 CREATE SEQUENCE IF NOT EXISTS jobs_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS location_seq START WITH 1 INCREMENT BY 1;
+
+CREATE SEQUENCE IF NOT EXISTS printer_settings_seq START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE IF NOT EXISTS product_location_seq START WITH 1 INCREMENT BY 1;
 
@@ -142,6 +146,19 @@ CREATE TABLE default_permission
     name        VARCHAR(255) NOT NULL,
     description VARCHAR(255),
     CONSTRAINT pk_default_permission PRIMARY KEY (name)
+);
+
+CREATE TABLE department
+(
+    id          BIGINT                      NOT NULL,
+    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at  TIMESTAMP WITHOUT TIME ZONE,
+    status      VARCHAR(255)                NOT NULL,
+    created_by  VARCHAR(255),
+    updated_by  VARCHAR(255),
+    name        VARCHAR(255)                NOT NULL,
+    description VARCHAR(255),
+    CONSTRAINT pk_department PRIMARY KEY (id)
 );
 
 CREATE TABLE floor
@@ -274,6 +291,25 @@ CREATE TABLE outbound_shipment
     shipment_status    VARCHAR(255),
     inbound_receipt_id BIGINT,
     CONSTRAINT pk_outbound_shipment PRIMARY KEY (id)
+);
+
+CREATE TABLE printer_settings
+(
+    id              BIGINT                      NOT NULL,
+    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at      TIMESTAMP WITHOUT TIME ZONE,
+    status          VARCHAR(255)                NOT NULL,
+    created_by      VARCHAR(255),
+    updated_by      VARCHAR(255),
+    printer_name    VARCHAR(255)                NOT NULL,
+    printer_address VARCHAR(255)                NOT NULL,
+    printer_port    VARCHAR(255)                NOT NULL,
+    paper_size      VARCHAR(255),
+    paper_type      VARCHAR(255),
+    print_mode      VARCHAR(255),
+    department_id   BIGINT                      NOT NULL,
+    is_default      BOOLEAN                     NOT NULL,
+    CONSTRAINT pk_printer_settings PRIMARY KEY (id)
 );
 
 CREATE TABLE product
@@ -543,6 +579,9 @@ CREATE TABLE warehouse
     address_id  BIGINT,
     CONSTRAINT pk_warehouse PRIMARY KEY (id)
 );
+
+ALTER TABLE department
+    ADD CONSTRAINT UC_DEPARTMENT_NAME UNIQUE (name);
 
 ALTER TABLE users
     ADD CONSTRAINT UC_USERS_USERNAME UNIQUE (username);
