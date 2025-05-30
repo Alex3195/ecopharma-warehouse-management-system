@@ -29,8 +29,13 @@ public class EventListener {
     public void handleUserCreated(UserCreatedEvent event) {
         log.info("Received user created event: {}", event);
         UserDTO user = getUserDto(event);
-        userService.create(user);
+        try {
+            userService.create(user);
+        } catch (Exception e) {
+            log.error("Error occurred while saving user:{} ", e.getMessage());
+        }
     }
+
     private UserDTO getUserDto(UserCreatedEvent event) {
         UserDTO userDto = new UserDTO();
         userDto.setId(event.getId());
@@ -49,7 +54,11 @@ public class EventListener {
     public void handleUserUpdated(UserUpdatedEvent event) {
         log.info("Received user created event: {}", event);
         UserUpdateDto user = getUserUpdateDto(event);
-        userService.update(event.getId(), user);
+        try {
+            userService.update(event.getId(), user);
+        } catch (Exception e) {
+            log.error("Error occurred while updating user:{} ", e.getMessage());
+        }
     }
 
 
@@ -69,16 +78,23 @@ public class EventListener {
     @RabbitListener(queues = RabbitMQConfig.USER_DELETED_QUEUE)
     public void handleUserDeleted(UserDeleteEvent event) {
         log.info("Received user deleted event: {}", event);
-        userService.delete(event.getUserId(), event.getPerformedBy());
+        try {
+            userService.delete(event.getUserId(), event.getPerformedBy());
+        } catch (Exception e) {
+            log.error("Error occurred while deleting user:{} ", e.getMessage());
+        }
     }
-
 
 
     @RabbitListener(queues = RabbitMQConfig.PRODUCT_CREATED_QUEUE)
     public void handleProductCreated(ProductCreateEvent event) {
         log.info("Received user created event: {}", event);
         ProductDTO product = getProductDto(event);
-        productService.create(product);
+        try {
+            productService.create(product);
+        } catch (Exception e) {
+            log.error("Error occurred while saving product :{} ", e.getMessage());
+        }
     }
 
 
@@ -96,7 +112,11 @@ public class EventListener {
     public void handleUnitCreated(UnitCreateEvent event) {
         log.info("Received user created event: {}", event);
         UnitsDTO unit = getUnitDto(event);
-        unitsService.create(unit);
+        try {
+            unitsService.create(unit);
+        } catch (Exception e) {
+            log.error("Error occurred while saving unit :{} ", e.getMessage());
+        }
     }
 
     private UnitsDTO getUnitDto(UnitCreateEvent event) {
@@ -114,7 +134,11 @@ public class EventListener {
     public void handleUnitConversionCreated(UnitConversionCreateEvent event) {
         log.info("Received user created event: {}", event);
         UnitConversionDto dto = getUnitConversion(event);
-        unitConversionService.create(dto);
+        try {
+            unitConversionService.create(dto);
+        } catch (Exception e) {
+            log.error("Error occurred while saving unit :{} ", e.getMessage());
+        }
     }
 
     private UnitConversionDto getUnitConversion(UnitConversionCreateEvent event) {
