@@ -18,5 +18,6 @@ public interface SectorMapper {
     @Mapping(target = "warehouse", ignore = true)
     SectorEntity toEntity(SectorDTO dto);
 
+    @Mapping(target = "numberOfRacks", ignore = true)
     SectorDTO toDto(SectorEntity entity);
 }
