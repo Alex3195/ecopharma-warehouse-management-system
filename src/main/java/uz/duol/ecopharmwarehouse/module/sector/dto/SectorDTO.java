@@ -1,5 +1,6 @@
 package uz.duol.ecopharmwarehouse.module.sector.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -17,6 +18,9 @@ public class SectorDTO {
     private String description;
     @NotNull
     private Long warehouseId;
+    @Schema(name = "warehouse", description = "This field for information.")
     private WarehouseDTO warehouse;
     private List<SectorCharacteristicDTO> characteristics = new ArrayList<>();
+    @Schema(name = "numberOfRacks", description = "This field for information.")
+    private Integer numberOfRacks;
 }

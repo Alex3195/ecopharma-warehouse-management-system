@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface RackRepository extends JpaRepository<RackEntity, Long>, JpaSpecificationExecutor<RackEntity> {
     Optional<RackEntity> findByIdAndStatusIsNot(Long id, Status status);
+
+    Integer countBySectorId(Long sectorId);
 }

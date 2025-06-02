@@ -11,12 +11,14 @@ import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
 import uz.duol.ecopharmwarehouse.module.sector.exception.SectorNotFoundException;
 import uz.duol.ecopharmwarehouse.module.sector.mapper.SectorMapper;
 import uz.duol.ecopharmwarehouse.module.sector.specification.SectorSpecification;
+import uz.duol.ecopharmwarehouse.repositories.RackRepository;
 import uz.duol.ecopharmwarehouse.repositories.SectorRepository;
 
 @Service
 @RequiredArgsConstructor
 public class SectorService {
     private final SectorRepository repository;
+    private final RackRepository rackRepository;
     private final SectorMapper mapper;
 
     @Transactional
@@ -29,7 +31,7 @@ public class SectorService {
     public SectorDTO findById(Long id) {
         var entity = repository.findById(id)
                 .orElseThrow(() -> new SectorNotFoundException("Sector not found"));
-        return mapper.toDto(entity);
+        return mapToDtoAndSetNumberOfRackInSector(entity);
     }
 
     @Transactional
@@ -37,7 +39,8 @@ public class SectorService {
         findById(id);
         var entity = mapper.toEntity(dto);
         entity.setId(id);
-        return mapper.toDto(repository.save(entity));
+        repository.save(entity);
+        return mapper.toDto(entity);
     }
 
     @Transactional
@@ -52,6 +55,13 @@ public class SectorService {
         if (search != null && !search.isEmpty()) {
             spec = spec.and(SectorSpecification.hasText(search));
         }
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+        return repository.findAll(spec, pageable).map(this::mapToDtoAndSetNumberOfRackInSector);
+    }
+
+    private SectorDTO mapToDtoAndSetNumberOfRackInSector(SectorEntity e) {
+        var dto = mapper.toDto(e);
+        var numberOfRacks = rackRepository.countBySectorId(e.getId());
+        dto.setNumberOfRacks(numberOfRacks);
+        return dto;
     }
 }
