@@ -18,6 +18,8 @@ import uz.duol.ecopharmwarehouse.module.rack.dto.RackRequest;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackUpdateRequest;
 import uz.duol.ecopharmwarehouse.module.rack.service.RackService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/wms/rack")
 @RequiredArgsConstructor
@@ -109,5 +111,18 @@ public class RackController {
     public Page<RackInfo> getAll(@RequestParam(value = "search", required = false) String search,
                                  @PageableDefault Pageable pageable) {
         return service.findAll(search, pageable);
+    }
+
+    @Operation(summary = "Get by sector id",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - bad credentials"),
+                    @ApiResponse(responseCode = "403", description = "Access denied - bad role or permissions"),
+            })
+    @PreAuthorize("hasAnyAuthority('RACK_GET') or hasRole('SUPER_ADMIN')")
+    @GetMapping("/by-sector/{id}")
+    public List<RackDTO> findBySectorId(@PathVariable Long id) {
+        return service.findBySectorId(id);
     }
 }

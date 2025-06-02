@@ -124,6 +124,12 @@ public class RackService {
         return rackMapper.toDto(rack);
     }
 
+    @Transactional(readOnly = true)
+    public List<RackDTO> findBySectorId(Long sectorId) {
+        var racks = repository.findBySectorId(sectorId);
+        return racks.stream().map(rackMapper::toDto).toList();
+    }
+
     @Transactional
     public void delete(Long id) {
         RackDTO dto = findById(id);
