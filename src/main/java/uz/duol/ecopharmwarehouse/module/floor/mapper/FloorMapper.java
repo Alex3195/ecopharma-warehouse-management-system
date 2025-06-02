@@ -10,6 +10,7 @@ import uz.duol.ecopharmwarehouse.module.floor.dto.FloorDTO;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR, uses = {CellsMapper.class})
 public interface FloorMapper {
     @Mapping(target = "rack.floors", ignore = true)
+    @Mapping(target = "rack.sector.numberOfRacks", ignore = true)
     FloorDTO toDto(FloorEntity entity);
 
     @Mapping(target = "updatedBy", ignore = true)

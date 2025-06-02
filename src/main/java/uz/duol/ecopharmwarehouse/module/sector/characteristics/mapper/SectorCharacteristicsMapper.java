@@ -17,6 +17,7 @@ public interface SectorCharacteristicsMapper {
     @Mapping(target = "sector", ignore = true)
     SectorCharacteristicEntity toEntity(SectorCharacteristicDTO dto);
 
+    @Mapping(target = "sector.numberOfRacks", ignore = true)
     SectorCharacteristicDTO toDto(SectorCharacteristicEntity entity);
 
 }
