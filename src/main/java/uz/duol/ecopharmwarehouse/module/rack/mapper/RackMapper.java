@@ -1,12 +1,11 @@
 package uz.duol.ecopharmwarehouse.module.rack.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import uz.duol.ecopharmwarehouse.entity.FloorEntity;
 import uz.duol.ecopharmwarehouse.entity.RackEntity;
 import uz.duol.ecopharmwarehouse.module.floor.mapper.FloorMapper;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
+import uz.duol.ecopharmwarehouse.module.rack.dto.RackUpdateRequest;
 import uz.duol.ecopharmwarehouse.module.sector.mapper.SectorMapper;
 
 import java.util.List;
@@ -31,4 +30,7 @@ public interface RackMapper {
                 .map(FloorEntity::getId)
                 .toList();
     }
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+    void updateEntity(@MappingTarget RackEntity rack, RackUpdateRequest rackDTO);
 }

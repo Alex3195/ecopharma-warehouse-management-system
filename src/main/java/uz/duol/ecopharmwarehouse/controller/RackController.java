@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackInfo;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackRequest;
+import uz.duol.ecopharmwarehouse.module.rack.dto.RackUpdateRequest;
 import uz.duol.ecopharmwarehouse.module.rack.service.RackService;
 
 @RestController
@@ -72,8 +73,8 @@ public class RackController {
     )
     @PreAuthorize("hasAuthority('RACK_UPDATE') or hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
-    public RackDTO update(@PathVariable Long id, @Valid @RequestBody RackDTO rackDTO) {
-        return service.update(id, rackDTO);
+    public RackDTO update(@PathVariable Long id, @Valid @RequestBody RackUpdateRequest request) {
+        return service.update(id, request);
     }
 
     @Operation(

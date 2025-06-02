@@ -18,6 +18,7 @@ import uz.duol.ecopharmwarehouse.module.location.service.LocationService;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackInfo;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackRequest;
+import uz.duol.ecopharmwarehouse.module.rack.dto.RackUpdateRequest;
 import uz.duol.ecopharmwarehouse.module.rack.exception.RackNotFoundException;
 import uz.duol.ecopharmwarehouse.module.rack.mapper.RackMapper;
 import uz.duol.ecopharmwarehouse.module.rack.specification.RackSpecification;
@@ -109,25 +110,54 @@ public class RackService {
 
     @Transactional(readOnly = true)
     public RackDTO findById(Long id) {
-        var e = repository.findById(id)
-                .orElseThrow(() -> new RackNotFoundException("Rack not found"));
+        var e = repository.findById(id).orElseThrow(() -> new RackNotFoundException("Rack not found"));
         var dto = rackMapper.toDto(e);
         var floors = floorRepository.findByRackIdAndStatusIsNot(id, Status.DELETED);
         return getRackDTO(dto, floors);
     }
 
     @Transactional
-    public RackDTO update(Long id, RackDTO rackDTO) {
-        findById(id);
-        var e = rackMapper.toEntity(rackDTO);
-        e.setId(id);
-        return rackMapper.toDto(repository.save(e));
+    public RackDTO update(Long id, RackUpdateRequest request) {
+        var rack = repository.findById(id).orElseThrow(() -> new RackNotFoundException("Rack not found"));
+        rackMapper.updateEntity(rack, request);
+        repository.save(rack);
+        return rackMapper.toDto(rack);
     }
 
     @Transactional
     public void delete(Long id) {
         RackDTO dto = findById(id);
-        repository.deleteById(dto.getId());
+        if (cellsIsEmpty(id)) {
+            throw new RuntimeException("Rack has products and you cannot delete it.");
+        } else {
+            deleteAllFloorsAndItsCellsByRackId(id);
+            repository.deleteById(dto.getId());
+        }
+    }
+
+    private boolean cellsIsEmpty(Long rackId) {
+        List<FloorEntity> floors = floorRepository.findByRackIdAndStatusIsNot(rackId, Status.DELETED);
+        for (FloorEntity floor : floors) {
+            List<CellEntity> cells = cellsRepository.findByFloorIdAndStatusIsNot(floor.getId(), Status.DELETED);
+            long emptyCellsCount = cells.stream().filter(cell -> !cell.getIsEmpty()).count();
+            boolean emptyCells = emptyCellsCount == 0;
+            if (emptyCells) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Transactional
+    protected void deleteAllFloorsAndItsCellsByRackId(Long rackId) {
+        List<FloorEntity> floors = floorRepository.findByRackIdAndStatusIsNot(rackId, Status.DELETED);
+        floors.forEach(floor -> {
+            List<CellEntity> cells = cellsRepository.findByFloorIdAndStatusIsNot(floor.getId(), Status.DELETED);
+            cells.forEach(cell -> cell.setStatus(Status.DELETED));
+            cellsRepository.saveAllAndFlush(cells);
+            floor.setStatus(Status.DELETED);
+        });
+        floorRepository.saveAllAndFlush(floors);
     }
 
     @Transactional(readOnly = true)
