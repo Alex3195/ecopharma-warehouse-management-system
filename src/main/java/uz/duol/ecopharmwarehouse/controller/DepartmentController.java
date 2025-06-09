@@ -32,7 +32,7 @@ public class DepartmentController {
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role or permission")
             })
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('DEPARTMENT_READ') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('WMS_DEPARTMENT_READ') or hasRole('SUPER_ADMIN')")
     public Page<DepartmentDto> findAll(@RequestParam(value = "search", required = false) String search,
                                        @PageableDefault Pageable pageable) {
         return service.findAll(search, pageable);
@@ -48,7 +48,7 @@ public class DepartmentController {
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role or permission"),
                     @ApiResponse(responseCode = "404", description = "Not found - department with given ID does not exist")
             })
-    @PreAuthorize("hasAuthority('DEPARTMENT_READ') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('WMS_DEPARTMENT_READ') or hasRole('SUPER_ADMIN')")
     public DepartmentDto findById(@PathVariable Long id) {
         return service.findById(id);
     }
@@ -63,7 +63,7 @@ public class DepartmentController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized - bad credential"),
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role or permission")
             })
-    @PreAuthorize("hasAuthority('DEPARTMENT_CREATE') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('WMS_DEPARTMENT_CREATE') or hasRole('SUPER_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public DepartmentDto create(@RequestBody @Valid DepartmentDto departmentDto) {
         return service.create(departmentDto);
@@ -80,7 +80,7 @@ public class DepartmentController {
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role or permission"),
                     @ApiResponse(responseCode = "404", description = "Not found - department with given ID does not exist")
             })
-    @PreAuthorize("hasAuthority('DEPARTMENT_UPDATE') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('WMS_DEPARTMENT_UPDATE') or hasRole('SUPER_ADMIN')")
     public DepartmentDto update(@PathVariable Long id, @RequestBody @Valid DepartmentDto departmentDto) {
         return service.update(id, departmentDto);
     }
@@ -95,7 +95,7 @@ public class DepartmentController {
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role or permission"),
                     @ApiResponse(responseCode = "404", description = "Not found - department with given ID does not exist")
             })
-    @PreAuthorize("hasAuthority('DEPARTMENT_DELETE') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('WMS_DEPARTMENT_DELETE') or hasRole('SUPER_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         service.delete(id);

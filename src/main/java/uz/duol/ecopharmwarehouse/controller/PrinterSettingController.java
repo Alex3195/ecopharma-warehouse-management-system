@@ -30,7 +30,7 @@ public class PrinterSettingController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized - You must be authenticated to access this resource"),
                     @ApiResponse(responseCode = "403", description = "Forbidden - You do not have permission to access this resource"),
             })
-    @PreAuthorize("hasAuthority('PRINTER_SETTING_READ') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('WMS_PRINTER_SETTING_READ') or hasRole('SUPER_ADMIN')")
     @GetMapping("/list")
     public Page<PrinterSettingsDto> getPrinterSettings(@PageableDefault Pageable pageable,
                                                        @RequestParam(value = "search", required = false) String search,
@@ -48,7 +48,7 @@ public class PrinterSettingController {
                     @ApiResponse(responseCode = "403", description = "Forbidden - You do not have permission to access this resource"),
                     @ApiResponse(responseCode = "404", description = "Not Found - The requested resource could not be found")
             })
-    @PreAuthorize("hasAuthority('PRINTER_SETTING_READ') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('WMS_PRINTER_SETTING_READ') or hasRole('SUPER_ADMIN')")
     public PrinterSettingsDto getPrinterSettingById(@PathVariable("id") Long id) {
         return service.findById(id);
     }
@@ -63,7 +63,7 @@ public class PrinterSettingController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized - You must be authenticated to access this resource"),
                     @ApiResponse(responseCode = "403", description = "Forbidden - You do not have permission to access this resource")
             })
-    @PreAuthorize("hasAuthority('PRINTER_SETTING_CREATE') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('WMS_PRINTER_SETTING_CREATE') or hasRole('SUPER_ADMIN')")
     public PrinterSettingsDto createPrinterSetting(@RequestBody @Valid PrinterSettingsDto printerSettingsDto) {
         return service.create(printerSettingsDto);
     }
@@ -79,7 +79,7 @@ public class PrinterSettingController {
                     @ApiResponse(responseCode = "403", description = "Forbidden - You do not have permission to access this resource"),
                     @ApiResponse(responseCode = "404", description = "Not Found - The requested resource could not be found")
             })
-    @PreAuthorize("hasAuthority('PRINTER_SETTING_UPDATE') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('WMS_PRINTER_SETTING_UPDATE') or hasRole('SUPER_ADMIN')")
     public PrinterSettingsDto updatePrinterSetting(@PathVariable("id") Long id,
                                                    @RequestBody @Valid PrinterSettingsDto printerSettingsDto) {
         return service.update(id, printerSettingsDto);
@@ -95,7 +95,7 @@ public class PrinterSettingController {
                     @ApiResponse(responseCode = "403", description = "Forbidden - You do not have permission to access this resource"),
                     @ApiResponse(responseCode = "404", description = "Not Found - The requested resource could not be found")
             })
-    @PreAuthorize("hasAuthority('PRINTER_SETTING_DELETE') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('WMS_PRINTER_SETTING_DELETE') or hasRole('SUPER_ADMIN')")
     public void deletePrinterSetting(@PathVariable("id") Long id) {
         service.delete(id);
     }
@@ -109,7 +109,7 @@ public class PrinterSettingController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized - You must be authenticated to access this resource"),
                     @ApiResponse(responseCode = "403", description = "Forbidden - You do not have permission to access this resource")
             })
-    @PreAuthorize("hasAuthority('PRINTER_SETTING_READ') or hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('WMS_PRINTER_SETTING_READ') or hasRole('SUPER_ADMIN')")
     public PrinterSettingsDto getDefaultPrinterSettings(@RequestParam("departmentId") Long departmentId) {
         return service.getDefaultPrinterSettings(departmentId);
     }
