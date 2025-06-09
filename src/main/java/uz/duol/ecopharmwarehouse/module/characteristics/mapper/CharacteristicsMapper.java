@@ -5,8 +5,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import uz.duol.ecopharmwarehouse.entity.CharacteristicEntity;
 import uz.duol.ecopharmwarehouse.module.characteristics.dto.CharacteristicsDTO;
+import uz.duol.ecopharmwarehouse.module.characteristics.values.mapper.CharacteristicValueMapper;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR, uses = {CharacteristicValueMapper.class})
 public interface CharacteristicsMapper {
     CharacteristicsDTO toDto(CharacteristicEntity entity);
 

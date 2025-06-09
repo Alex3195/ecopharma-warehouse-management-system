@@ -126,6 +126,19 @@ CREATE TABLE characteristic
     CONSTRAINT pk_characteristic PRIMARY KEY (id)
 );
 
+CREATE TABLE characteristic_values
+(
+    id                BIGINT                      NOT NULL,
+    created_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at        TIMESTAMP WITHOUT TIME ZONE,
+    status            VARCHAR(255)                NOT NULL,
+    created_by        VARCHAR(255),
+    updated_by        VARCHAR(255),
+    characteristic_id BIGINT,
+    value             VARCHAR(255),
+    CONSTRAINT pk_characteristic_values PRIMARY KEY (id)
+);
+
 CREATE TABLE cross_docking
 (
     id                   BIGINT                      NOT NULL,
@@ -593,6 +606,9 @@ ALTER TABLE audit_trail
 
 ALTER TABLE cell
     ADD CONSTRAINT FK_CELL_ON_FLOOR FOREIGN KEY (floor_id) REFERENCES floor (id);
+
+ALTER TABLE characteristic_values
+    ADD CONSTRAINT FK_CHARACTERISTIC_VALUES_ON_CHARACTERISTIC FOREIGN KEY (characteristic_id) REFERENCES characteristic (id);
 
 ALTER TABLE cross_docking
     ADD CONSTRAINT FK_CROSS_DOCKING_ON_INBOUND_RECEIPT FOREIGN KEY (inbound_receipt_id) REFERENCES inbound_receipt (id);

@@ -1,5 +1,6 @@
 package uz.duol.ecopharmwarehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,8 @@ import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.enums.CharacteristicType;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
+
+import java.util.List;
 
 @Entity
 @Table(name = TableNamesConstant.Tables.CHARACTERISTIC)
@@ -34,4 +37,10 @@ public class CharacteristicEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private CharacteristicType type;
+
+    @OneToMany(mappedBy = "characteristic", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @Where(clause = "status != 'DELETED'")
+    @ToString.Exclude
+    private List<CharacterValuesEntity> values;
 }

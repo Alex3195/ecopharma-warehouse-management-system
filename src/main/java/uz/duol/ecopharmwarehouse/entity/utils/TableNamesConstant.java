@@ -43,5 +43,6 @@ public class TableNamesConstant {
         public static final String ROLE = "role";
         public static final String PRINTER_SETTINGS = "printer_settings";
         public static final String DEPARTMENT = "department";
+        public static final String CHARACTERISTIC_VALUES = "characteristic_values";
     }
 }
