@@ -5,8 +5,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import uz.duol.ecopharmwarehouse.entity.DepartmentEntity;
 import uz.duol.ecopharmwarehouse.module.department.dto.DepartmentDto;
+import uz.duol.ecopharmwarehouse.module.warehouse.mapper.WarehouseMapper;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR, uses = {WarehouseMapper.class})
 public interface DepartmentMapper {
 
     DepartmentDto toDto(DepartmentEntity entity);

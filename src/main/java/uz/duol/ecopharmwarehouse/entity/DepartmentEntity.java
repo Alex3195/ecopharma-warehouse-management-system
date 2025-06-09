@@ -23,4 +23,10 @@ public class DepartmentEntity extends BaseEntity {
     private String name;
     @Column(name = "description")
     private String description;
+    @Column(name = "warehouse_id")
+    private Long warehouseId;
+
+    @ManyToOne
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private WarehouseEntity warehouse;
 }

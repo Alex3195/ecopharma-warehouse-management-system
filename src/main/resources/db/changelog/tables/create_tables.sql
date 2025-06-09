@@ -163,14 +163,15 @@ CREATE TABLE default_permission
 
 CREATE TABLE department
 (
-    id          BIGINT                      NOT NULL,
-    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at  TIMESTAMP WITHOUT TIME ZONE,
-    status      VARCHAR(255)                NOT NULL,
-    created_by  VARCHAR(255),
-    updated_by  VARCHAR(255),
-    name        VARCHAR(255)                NOT NULL,
-    description VARCHAR(255),
+    id           BIGINT                      NOT NULL,
+    created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at   TIMESTAMP WITHOUT TIME ZONE,
+    status       VARCHAR(255)                NOT NULL,
+    created_by   VARCHAR(255),
+    updated_by   VARCHAR(255),
+    name         VARCHAR(255)                NOT NULL,
+    description  VARCHAR(255),
+    warehouse_id BIGINT,
     CONSTRAINT pk_department PRIMARY KEY (id)
 );
 
