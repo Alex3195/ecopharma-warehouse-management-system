@@ -24,6 +24,9 @@ public class CharacteristicsService {
     @Transactional
     public CharacteristicsDTO create(CharacteristicsDTO dto) {
         var e = mapper.toEntity(dto);
+        if(e.getValues()!=null){
+            e.getValues().forEach(value -> value.setCharacteristic(e));
+        }
         return mapper.toDto(repository.save(e));
     }
 
@@ -38,6 +41,9 @@ public class CharacteristicsService {
     public CharacteristicsDTO update(Long id, CharacteristicsDTO dto) {
         findById(id);
         var e = mapper.toEntity(dto);
+        if(e.getValues()!=null){
+            e.getValues().forEach(value -> value.setCharacteristic(e));
+        }
         e.setId(id);
         return mapper.toDto(repository.save(e));
     }
@@ -50,7 +56,7 @@ public class CharacteristicsService {
 
     @Transactional(readOnly = true)
     public Page<CharacteristicsDTO> findAll(String search, Pageable pageable) {
-        Specification<CharacteristicEntity> spec = Specification.where(null);
+        Specification<CharacteristicEntity> spec = CharacteristicSpecification.isActive();
         if (search != null && !search.isEmpty()) {
             spec = spec.and(CharacteristicSpecification.hasText(search));
         }
