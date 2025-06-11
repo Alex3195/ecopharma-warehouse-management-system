@@ -24,7 +24,7 @@ public class CharacteristicsService {
     @Transactional
     public CharacteristicsDTO create(CharacteristicsDTO dto) {
         var e = mapper.toEntity(dto);
-        if(e.getValues()!=null){
+        if (e.getValues() != null) {
             e.getValues().forEach(value -> value.setCharacteristic(e));
         }
         return mapper.toDto(repository.save(e));
@@ -40,12 +40,9 @@ public class CharacteristicsService {
     @Transactional
     public CharacteristicsDTO update(Long id, CharacteristicsDTO dto) {
         findById(id);
-        var e = mapper.toEntity(dto);
-        if(e.getValues()!=null){
-            e.getValues().forEach(value -> value.setCharacteristic(e));
-        }
-        e.setId(id);
-        return mapper.toDto(repository.save(e));
+        var existing = mapper.toEntity(dto);
+        repository.save(existing);
+        return mapper.toDto(existing);
     }
 
     @Transactional
