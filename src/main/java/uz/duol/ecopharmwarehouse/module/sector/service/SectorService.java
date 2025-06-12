@@ -46,6 +46,9 @@ public class SectorService {
     @Transactional
     public void delete(Long id) {
         SectorDTO dto = findById(id);
+        if (rackRepository.existsBySectorId(id)) {
+            throw new RuntimeException("You cannot delete this sector because it has racks");
+        }
         repository.deleteById(dto.getId());
     }
 

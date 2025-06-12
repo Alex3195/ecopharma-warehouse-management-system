@@ -14,4 +14,6 @@ public interface RackRepository extends JpaRepository<RackEntity, Long>, JpaSpec
     Integer countBySectorId(Long sectorId);
 
     List<RackEntity> findBySectorId(Long sectorId);
+
+    boolean existsBySectorId(Long sectorId);
 }

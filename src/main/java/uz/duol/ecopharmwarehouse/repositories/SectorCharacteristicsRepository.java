@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface SectorCharacteristicsRepository extends JpaRepository<SectorCharacteristicEntity, Long>, JpaSpecificationExecutor<SectorCharacteristicEntity> {
     Optional<SectorCharacteristicEntity> findByIdAndStatusIsNot(Long id, Status status);
+
+    boolean existsByCharacteristicId(Long characteristicId);
 }

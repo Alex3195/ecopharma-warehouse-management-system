@@ -9,13 +9,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.entity.CharacterValuesEntity;
 import uz.duol.ecopharmwarehouse.entity.CharacteristicEntity;
+import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.characteristics.dto.CharacteristicsDTO;
 import uz.duol.ecopharmwarehouse.module.characteristics.exception.CharacteristicsNotFoundException;
 import uz.duol.ecopharmwarehouse.module.characteristics.mapper.CharacteristicsMapper;
 import uz.duol.ecopharmwarehouse.module.characteristics.specification.CharacteristicSpecification;
+import uz.duol.ecopharmwarehouse.module.characteristics.values.dto.CharacteristicValueDto;
+import uz.duol.ecopharmwarehouse.repositories.CharacteristicValuesRepository;
 import uz.duol.ecopharmwarehouse.repositories.CharacteristicsRepository;
+import uz.duol.ecopharmwarehouse.repositories.SectorCharacteristicsRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +31,8 @@ public class CharacteristicsService {
     private final CharacteristicsRepository repository;
     @Qualifier("characteristicsMapper")
     private final CharacteristicsMapper mapper;
+    private final CharacteristicValuesRepository characteristicValuesRepository;
+    private final SectorCharacteristicsRepository sectorCharacteristicsRepository;
 
     @Transactional
     public CharacteristicsDTO create(CharacteristicsDTO dto) {
@@ -42,54 +52,59 @@ public class CharacteristicsService {
 
     @Transactional
     public CharacteristicsDTO update(Long id, CharacteristicsDTO dto) {
-        // Fetch the managed entity from DB
         CharacteristicEntity existing = repository.findById(id)
                 .orElseThrow(() -> new CharacteristicsNotFoundException("Characteristics not found"));
 
-        // Update simple fields
         existing.setName(dto.getName());
         existing.setDescription(dto.getDescription());
         existing.setType(dto.getType());
 
-        // Sync values manually
-        List<CharacterValuesEntity> newValues = dto.getValues().stream().map(valueDto -> {
-            CharacterValuesEntity valEntity = new CharacterValuesEntity();
-            valEntity.setId(valueDto.getId()); // if null, treated as new
-            valEntity.setValue(valueDto.getValue());
-            valEntity.setCharacteristic(existing); // maintain relationship
-            return valEntity;
-        }).toList();
+        Map<Long, CharacterValuesEntity> existingValuesMap = existing.getValues().stream()
+                .collect(Collectors.toMap(CharacterValuesEntity::getId, Function.identity()));
 
-        // Remove orphaned values
-        existing.getValues().removeIf(oldVal ->
-                newValues.stream().noneMatch(newVal ->
-                        newVal.getId() != null && newVal.getId().equals(oldVal.getId())
-                )
-        );
+        List<CharacterValuesEntity> updatedValues = new ArrayList<>();
 
-        // Add or update values
-        for (CharacterValuesEntity newVal : newValues) {
-            if (newVal.getId() == null || existing.getValues().stream().noneMatch(ev -> ev.getId().equals(newVal.getId()))) {
-                existing.getValues().add(newVal);
+        for (CharacteristicValueDto dtoValue : dto.getValues()) {
+            if (dtoValue.getId() != null && existingValuesMap.containsKey(dtoValue.getId())) {
+                CharacterValuesEntity existingValue = existingValuesMap.get(dtoValue.getId());
+                existingValue.setValue(dtoValue.getValue());
+                updatedValues.add(existingValue);
             } else {
-                // Optional: update existing value (if needed)
-                CharacterValuesEntity existingVal = existing.getValues().stream()
-                        .filter(ev -> ev.getId().equals(newVal.getId()))
-                        .findFirst().orElseThrow();
-                existingVal.setValue(newVal.getValue());
+                CharacterValuesEntity newValue = new CharacterValuesEntity();
+                newValue.setValue(dtoValue.getValue());
+                newValue.setCharacteristic(existing);
+                updatedValues.add(newValue);
             }
         }
 
-        // Persist changes
-        return mapper.toDto(repository.save(existing));
-    }
+        List<CharacterValuesEntity> valuesToRemove = existing.getValues().stream()
+                .filter(v -> !updatedValues.contains(v))
+                .toList();
 
+        existing.getValues().clear();
+
+        existing.getValues().addAll(updatedValues);
+
+        if (!valuesToRemove.isEmpty()) {
+            characteristicValuesRepository.deleteAll(valuesToRemove);
+            characteristicValuesRepository.flush();
+        }
+        repository.save(existing);
+        return mapper.toDto(existing);
+    }
 
 
     @Transactional
     public void delete(Long id) {
-        CharacteristicsDTO dto = findById(id);
-        repository.deleteById(dto.getId());
+        var e = repository.findById(id).orElseThrow(() -> new CharacteristicsNotFoundException("Characteristics not found"));
+        if(sectorCharacteristicsRepository.existsByCharacteristicId(id)){
+            throw new RuntimeException("You cannot delete this characteristic because it bind with some of the sectors");
+        }
+        e.setStatus(Status.DELETED);
+        repository.save(e);
+        if (e.getValues() != null) {
+            characteristicValuesRepository.deleteAll(e.getValues());
+        }
     }
 
     @Transactional(readOnly = true)

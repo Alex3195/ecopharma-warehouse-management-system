@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface WarehouseRepository extends JpaRepository<WarehouseEntity, Long>, JpaSpecificationExecutor<WarehouseEntity> {
     Optional<WarehouseEntity> findByIdAndStatusIsNot(Long id, Status status);
+
+    boolean existsByAddressId(Long addressId);
 }

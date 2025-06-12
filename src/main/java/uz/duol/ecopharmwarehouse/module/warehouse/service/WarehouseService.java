@@ -11,6 +11,7 @@ import uz.duol.ecopharmwarehouse.module.warehouse.dto.WarehouseDTO;
 import uz.duol.ecopharmwarehouse.module.warehouse.exception.WarehouseNotFoundException;
 import uz.duol.ecopharmwarehouse.module.warehouse.mapper.WarehouseMapper;
 import uz.duol.ecopharmwarehouse.module.warehouse.specification.WarehouseSpecification;
+import uz.duol.ecopharmwarehouse.repositories.SectorRepository;
 import uz.duol.ecopharmwarehouse.repositories.WarehouseRepository;
 
 @Service
@@ -18,6 +19,7 @@ import uz.duol.ecopharmwarehouse.repositories.WarehouseRepository;
 public class WarehouseService {
     private final WarehouseRepository repository;
     private final WarehouseMapper mapper;
+    private final SectorRepository sectorRepository;
 
     @Transactional
     public WarehouseDTO create(WarehouseDTO dto) {
@@ -43,6 +45,9 @@ public class WarehouseService {
     @Transactional
     public void delete(Long id) {
         WarehouseDTO dto = findById(id);
+        if (sectorRepository.existsByWarehouseId(id)) {
+            throw new RuntimeException("You cannot delete this warehous because it has sectors");
+        }
         repository.deleteById(dto.getId());
     }
 

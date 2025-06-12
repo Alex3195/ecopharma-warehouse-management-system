@@ -12,6 +12,7 @@ import uz.duol.ecopharmwarehouse.module.address.exception.AddressNotFoundExcepti
 import uz.duol.ecopharmwarehouse.module.address.mapper.AddressMapper;
 import uz.duol.ecopharmwarehouse.module.address.specification.AddressSpecification;
 import uz.duol.ecopharmwarehouse.repositories.AddressRepository;
+import uz.duol.ecopharmwarehouse.repositories.WarehouseRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class AddressService {
     private final AddressRepository repository;
     @Qualifier("addressMapper")
     private final AddressMapper mapper;
+    private final WarehouseRepository warehouseRepository;
 
     public AddressDTO create(AddressDTO dto) {
         var entity = mapper.toEntity(dto);
@@ -40,6 +42,9 @@ public class AddressService {
 
     public void delete(Long id) {
         AddressDTO dto = findById(id);
+        if (warehouseRepository.existsByAddressId(id)) {
+            throw new RuntimeException("You cannot delete this address because it bind to one of the warehouses");
+        }
         repository.deleteById(dto.getId());
     }
 

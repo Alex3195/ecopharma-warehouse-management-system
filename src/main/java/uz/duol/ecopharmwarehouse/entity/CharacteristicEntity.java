@@ -38,7 +38,7 @@ public class CharacteristicEntity extends BaseEntity {
     @Column(name = "type", nullable = false)
     private CharacteristicType type;
 
-    @OneToMany(mappedBy = "characteristic", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "characteristic", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JsonManagedReference
     @Where(clause = "status != 'DELETED'")
     @ToString.Exclude
