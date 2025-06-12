@@ -4,6 +4,8 @@ import lombok.Data;
 import uz.duol.ecopharmwarehouse.module.characteristics.dto.CharacteristicsDTO;
 import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
 
+import java.util.List;
+
 @Data
 public class SectorCharacteristicDTO {
     private Long id;
@@ -16,5 +18,5 @@ public class SectorCharacteristicDTO {
 
     private CharacteristicsDTO characteristic;
 
-    private String value;
+    private List<String> value;
 }

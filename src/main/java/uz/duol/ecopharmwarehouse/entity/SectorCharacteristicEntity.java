@@ -9,6 +9,8 @@ import org.hibernate.annotations.Where;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
+import java.util.List;
+
 @Entity
 @Table(name = TableNamesConstant.Tables.SECTOR_CHARACTERISTIC)
 @Setter
@@ -39,6 +41,6 @@ public class SectorCharacteristicEntity extends BaseEntity {
     private CharacteristicEntity characteristic;
 
     @Column(nullable = false)
-    private String value;
+    private List<String> value;
 
 }

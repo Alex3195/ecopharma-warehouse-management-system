@@ -439,7 +439,7 @@ CREATE TABLE sector_characteristic
     updated_by        VARCHAR(255),
     sector_id         BIGINT,
     characteristic_id BIGINT,
-    value             VARCHAR(255)                NOT NULL,
+    value             TEXT[]                      NOT NULL,
     CONSTRAINT pk_sector_characteristic PRIMARY KEY (id)
 );
 
@@ -616,6 +616,9 @@ ALTER TABLE cross_docking
 
 ALTER TABLE cross_docking
     ADD CONSTRAINT FK_CROSS_DOCKING_ON_OUTBOUND_SHIPMENT FOREIGN KEY (outbound_shipment_id) REFERENCES outbound_shipment (id);
+
+ALTER TABLE department
+    ADD CONSTRAINT FK_DEPARTMENT_ON_WAREHOUSE FOREIGN KEY (warehouse_id) REFERENCES warehouse (id);
 
 ALTER TABLE floor
     ADD CONSTRAINT FK_FLOOR_ON_RACK FOREIGN KEY (rack_id) REFERENCES racks (id);
