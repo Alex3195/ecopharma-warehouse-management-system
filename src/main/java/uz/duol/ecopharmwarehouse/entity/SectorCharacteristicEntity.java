@@ -1,6 +1,7 @@
 package uz.duol.ecopharmwarehouse.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +39,7 @@ public class SectorCharacteristicEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "characteristic_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonManagedReference
     private CharacteristicEntity characteristic;
 
     @Column(nullable = false)

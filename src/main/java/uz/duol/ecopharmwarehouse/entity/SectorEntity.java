@@ -39,7 +39,7 @@ public class SectorEntity extends BaseEntity {
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id", insertable = false, updatable = false)
     private WarehouseEntity warehouse;
 
-    @OneToMany(mappedBy = "sector", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sector", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<SectorCharacteristicEntity> characteristics = new ArrayList<>();
 
