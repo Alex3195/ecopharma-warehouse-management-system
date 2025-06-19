@@ -17,7 +17,7 @@ import uz.duol.ecopharmwarehouse.module.printer.service.PrinterSettingsService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/wms/printer-settings")
-@PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER', 'SUPER_ADMIN')")
 @Tag(name = "Printer Settings", description = "Printer settings management")
 public class PrinterSettingController {
     private final PrinterSettingsService service;

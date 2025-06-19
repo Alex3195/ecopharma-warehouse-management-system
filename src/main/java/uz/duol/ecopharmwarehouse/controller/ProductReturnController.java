@@ -17,7 +17,7 @@ import uz.duol.ecopharmwarehouse.module.product.returns.service.ProductReturnSer
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/product-return")
-@PreAuthorize("hasAnyRole('ADMIN','USER','SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 @Tag(name = "Product Return", description = "Product Return API")
 public class ProductReturnController {
     private final ProductReturnService service;

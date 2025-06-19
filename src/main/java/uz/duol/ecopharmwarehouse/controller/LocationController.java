@@ -16,7 +16,7 @@ import uz.duol.ecopharmwarehouse.module.location.service.LocationService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/wms/location")
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 public class LocationController {
     private final LocationService locationService;
 

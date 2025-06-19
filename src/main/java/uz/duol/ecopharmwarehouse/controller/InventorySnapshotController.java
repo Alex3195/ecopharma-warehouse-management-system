@@ -16,7 +16,7 @@ import uz.duol.ecopharmwarehouse.module.inventory.snapshot.servcie.InventorySnap
 @RestController
 @RequestMapping("/api/v1/wms/inventory-snapshot")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 public class InventorySnapshotController {
     private final InventorySnapshotService inventorySnapshotService;
 

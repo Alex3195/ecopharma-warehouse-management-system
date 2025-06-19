@@ -17,7 +17,7 @@ import uz.duol.ecopharmwarehouse.module.outboundshipment.service.OutboundShipmen
 @RestController
 @RequestMapping("/api/v1/wms/outbound-shipment")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 @Tag(name = "Outbound Shipment endpoint")
 public class OutboundShipmentController {
     private final OutboundShipmentService service;

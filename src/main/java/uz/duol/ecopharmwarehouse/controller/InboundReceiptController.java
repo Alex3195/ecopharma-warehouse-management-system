@@ -14,7 +14,7 @@ import uz.duol.ecopharmwarehouse.module.inbound.receipt.service.InboundReceiptSe
 @RestController
 @RequestMapping("/api/v1/wms/inbound-receipt")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 public class InboundReceiptController {
     private final InboundReceiptService service;
 

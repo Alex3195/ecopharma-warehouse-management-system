@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping("/api/v1/wms/rack")
 @RequiredArgsConstructor
 @Tag(name = "Rack endpoint")
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 public class RackController {
     private final RackService service;
 

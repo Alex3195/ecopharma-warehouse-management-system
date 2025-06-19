@@ -19,7 +19,7 @@ import uz.duol.ecopharmwarehouse.module.sector.service.SectorService;
 @RequestMapping("/api/v1/wms/sector")
 @RequiredArgsConstructor
 @Tag(name = "Sector endpoint")
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 public class SectorController {
     private final SectorService service;
 

@@ -18,7 +18,7 @@ import uz.duol.ecopharmwarehouse.module.department.service.DepartmentService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/wms/departments")
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 @Tag(name = "Department", description = "Department API")
 public class DepartmentController {
     private final DepartmentService service;

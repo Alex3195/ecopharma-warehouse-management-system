@@ -14,7 +14,7 @@ import uz.duol.ecopharmwarehouse.module.inventory.audit.service.InventoryAuditSe
 @RestController
 @RequestMapping("/api/v1/inventory-audit")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('SUPER_ADMIN') or hasAnyRole('ADMIN','USER')")
+@PreAuthorize("hasRole('SUPER_ADMIN') or hasAnyRole('ADMIN','MANAGER','USER')")
 @Tag(name = "Inventory Audit", description = "Inventory Audit API")
 public class InventoryAuditController {
     private final InventoryAuditService inventoryAuditService;

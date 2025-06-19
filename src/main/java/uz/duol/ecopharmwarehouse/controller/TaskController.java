@@ -19,7 +19,7 @@ import uz.duol.ecopharmwarehouse.module.task.service.TaskService;
 @RequestMapping("/api/v1/wms/task")
 @RequiredArgsConstructor
 @Tag(name = "Task endpoint")
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 public class TaskController {
 
     private final TaskService taskService;

@@ -16,7 +16,7 @@ import uz.duol.ecopharmwarehouse.module.inventory.service.InventoryService;
 
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN','USER','SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER','SUPER_ADMIN')")
 @RequestMapping("/api/v1/wms/inventory")
 @Tag(name = "Inventory", description = "Inventory API")
 public class InventoryController {

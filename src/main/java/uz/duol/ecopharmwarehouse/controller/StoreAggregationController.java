@@ -15,7 +15,7 @@ import uz.duol.ecopharmwarehouse.module.store.service.StoreAggregationService;
 @RestController
 @RequestMapping("/api/v1/wms/store-aggregation")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 public class StoreAggregationController {
     private final StoreAggregationService storeAggregationService;
 

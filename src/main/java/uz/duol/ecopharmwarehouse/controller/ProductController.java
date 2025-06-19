@@ -21,7 +21,7 @@ import uz.duol.ecopharmwarehouse.module.product.service.ProductService;
 @RequestMapping("/api/v1/wms/product")
 @RequiredArgsConstructor
 @Tag(name = "Product and its metadata endpoint0")
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 public class ProductController {
 
     private final ProductService service;

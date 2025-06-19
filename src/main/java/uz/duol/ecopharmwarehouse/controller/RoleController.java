@@ -17,7 +17,7 @@ import uz.duol.ecopharmwarehouse.module.role.service.RoleService;
 @RestController
 @RequestMapping("/api/v1/wms/role")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER') or hasRole('SUPER_ADMIN')")
 public class RoleController {
     private final RoleService roleService;
 

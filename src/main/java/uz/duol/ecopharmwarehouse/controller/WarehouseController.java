@@ -19,7 +19,7 @@ import uz.duol.ecopharmwarehouse.module.warehouse.service.WarehouseService;
 @RequestMapping("/api/v1/wms/warehouse")
 @RequiredArgsConstructor
 @Tag(name = "Warehouse entity")
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 public class WarehouseController {
 
     private final WarehouseService service;

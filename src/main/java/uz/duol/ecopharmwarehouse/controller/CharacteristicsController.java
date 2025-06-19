@@ -19,7 +19,7 @@ import uz.duol.ecopharmwarehouse.module.characteristics.service.CharacteristicsS
 @RequestMapping("/api/v1/wms/characteristics")
 @RequiredArgsConstructor
 @Tag(name = "Characteristics endpoints")
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 public class CharacteristicsController {
     private final CharacteristicsService service;
 

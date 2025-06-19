@@ -17,7 +17,7 @@ import uz.duol.ecopharmwarehouse.module.sector.characteristics.service.SectorCha
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/wms/sector-characteristics")
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 public class SectorCharacteristicsController {
     private final SectorCharacteristicsService sectorCharacteristicsService;
 

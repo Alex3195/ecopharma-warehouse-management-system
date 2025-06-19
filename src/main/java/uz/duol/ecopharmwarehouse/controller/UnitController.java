@@ -19,7 +19,7 @@ import uz.duol.ecopharmwarehouse.module.unit.service.UnitsService;
 @RequestMapping("/api/v1/wms/unit")
 @RequiredArgsConstructor
 @Tag(name = "Units endpoint")
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 public class UnitController {
     private final UnitsService service;
 

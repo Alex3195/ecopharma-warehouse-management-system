@@ -17,7 +17,7 @@ import uz.duol.ecopharmwarehouse.module.transport.label.service.TransportLabelSe
 @RestController
 @RequestMapping("/api/v1/wms/transport-label")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN','USER','SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER','SUPER_ADMIN')")
 @Tag(name = "Transport Label", description = "Transport Label API")
 public class TransportLabelController {
     private final TransportLabelService transportLabelService;

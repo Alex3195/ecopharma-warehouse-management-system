@@ -17,7 +17,7 @@ import uz.duol.ecopharmwarehouse.module.users.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/wms/user")
-@PreAuthorize("hasAnyRole('ADMIN','USER') or hasRole('SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
 @RequiredArgsConstructor
 @Tag(name = "User", description = "User API")
 public class UserController {
