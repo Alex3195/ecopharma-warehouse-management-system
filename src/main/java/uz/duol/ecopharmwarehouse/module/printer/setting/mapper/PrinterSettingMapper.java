@@ -1,8 +1,8 @@
-package uz.duol.ecopharmwarehouse.module.printer.mapper;
+package uz.duol.ecopharmwarehouse.module.printer.setting.mapper;
 
 import org.mapstruct.*;
 import uz.duol.ecopharmwarehouse.entity.PrinterSettingsEntity;
-import uz.duol.ecopharmwarehouse.module.printer.dto.PrinterSettingsDto;
+import uz.duol.ecopharmwarehouse.module.printer.setting.dto.PrinterSettingsDto;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface PrinterSettingMapper {

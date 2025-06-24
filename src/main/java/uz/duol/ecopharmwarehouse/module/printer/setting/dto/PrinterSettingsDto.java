@@ -1,4 +1,4 @@
-package uz.duol.ecopharmwarehouse.module.printer.dto;
+package uz.duol.ecopharmwarehouse.module.printer.setting.dto;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package uz.duol.ecopharmwarehouse.module.printer.service;
+package uz.duol.ecopharmwarehouse.module.printer.setting.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.duol.ecopharmwarehouse.entity.PrinterSettingsEntity;
-import uz.duol.ecopharmwarehouse.module.printer.dto.PrinterSettingsDto;
-import uz.duol.ecopharmwarehouse.module.printer.mapper.PrinterSettingMapper;
-import uz.duol.ecopharmwarehouse.module.printer.specification.PrinterSettingSpecification;
+import uz.duol.ecopharmwarehouse.module.printer.setting.dto.PrinterSettingsDto;
+import uz.duol.ecopharmwarehouse.module.printer.setting.mapper.PrinterSettingMapper;
+import uz.duol.ecopharmwarehouse.module.printer.setting.specification.PrinterSettingSpecification;
 import uz.duol.ecopharmwarehouse.repositories.PrinterSettingsRepository;
 
 @Service

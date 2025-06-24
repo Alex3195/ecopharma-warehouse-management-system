@@ -1,4 +1,4 @@
-package uz.duol.ecopharmwarehouse.module.printer.specification;
+package uz.duol.ecopharmwarehouse.module.printer.setting.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.entity.PrinterSettingsEntity;
