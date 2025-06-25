@@ -24,7 +24,7 @@ RUN apk add --no-cache postgresql-client gzip
 # App directory
 WORKDIR /opt/app
 
-ENV SPRING_PROFILE=dev \
+ENV SPRING_PROFILES_ACTIVE=dev \
     SERVER_PORT=9091 \
     JAVA_OPTS="-Xmx512m" \
     EXTRA_ARGS=""
@@ -35,4 +35,4 @@ COPY --from=build /app/build/libs/*.jar app-wms.jar
 EXPOSE 9091 9092
 
 # Use exec form to ensure signal handling works (e.g., for shutdown)
-ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar app-wms.jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$DEBUG_PORT --spring.profiles.active=$SPRING_PROFILE $EXTRA_ARGS"]
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar app-wms.jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$DEBUG_PORT --spring.profiles.active=$SPRING_PROFILES_ACTIVE $EXTRA_ARGS"]

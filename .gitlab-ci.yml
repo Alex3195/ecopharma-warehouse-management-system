@@ -2,19 +2,23 @@ image: gradle:8.6.0-jdk21-alpine
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-  SPRING_PROFILES_ACTIVE: dev # Use prod for main branch
+  SPRING_PROFILES_ACTIVE_DEV: dev # Use prod for main branch
+  SPRING_PROFILES_ACTIVE_STAGE: stage # Use prod for main branch
+  SPRING_PROFILES_ACTIVE_PROD: prod # Use prod for main branch
   SERVER_PORT: 9091
   DEBUG_PORT: 9092
-  SPRING_DB_URL: jdbc:postgresql://192.168.7.12:5432/postgres
+  SPRING_DB_URL: jdbc:postgresql://192.168.7.12:5432/wms
   SPRING_DB_USERNAME: postgres
   SPRING_DB_PASSWORD: postgres
-  LIQUIBASE_DEFAULT_SCHEMA: public
   DOCKER_IMAGE_NAME: $CI_REGISTRY/$DOCKER_USERNAME/eco-pharma-warehouse
-  DOCKER_TAG: latest
+  DOCKER_TAG_DEV: latest-dev
+  DOCKER_TAG_STAGE: latest-stage
+  DOCKER_TAG_PROD: latest
   DOCKER_TLS_CERTDIR: ""  # Required for Docker-in-Docker
 
 stages:
   - gradle-build
+  - gradle-test
   - publish
   - deploy
 
@@ -27,66 +31,163 @@ cache:
   when: always
 
 # Stage 1: Build the JAR file
-build:
+.build_template: &build_template
   stage: gradle-build
   script:
     - gradle clean bootJar
   artifacts:
     paths:
       - build/libs/*.jar
-      - docker-compose-wms.yml
     when: always
     expire_in: 1 week
+
+build-dev:
+  <<: *build_template
+  artifacts:
+    paths:
+      - build/libs/*.jar
+      - docker-compose-wms-dev.yml
   only:
-    - main
     - dev
 
+build-stage:
+  <<: *build_template
+  artifacts:
+    paths:
+      - build/libs/*.jar
+      - docker-compose-wms-stage.yml
+  only:
+    - stage
+
+build-prod:
+  <<: *build_template
+  artifacts:
+    paths:
+      - build/libs/*.jar
+      - docker-compose-wms-prod.yml
+  only:
+    - main
+
+gradle-test:
+  stage: gradle-test
+  services:
+    - name: postgres:16-alpine
+      alias: postgres-db
+      variables:
+        POSTGRES_DB: $DB_NAME
+        POSTGRES_USER: $SPRING_DB_USERNAME
+        POSTGRES_PASSWORD: $SPRING_DB_PASSWORD
+    - name: redis:latest
+      alias: redis
+  before_script:
+    - apk update && apk add --no-cache netcat-openbsd redis
+    - redis-cli -h redis ping || (echo "Redis не запущен!" && exit 1)
+    - echo "Checking environment variables..."
+    - echo "SPRING_REDIS_HOST=$SPRING_REDIS_HOST"
+    - echo "SPRING_REDIS_PORT=$SPRING_REDIS_PORT"
+    - echo "Testing Redis connection..."
+    - until nc -z redis 6379; do echo "Waiting for Redis..."; sleep 5; done
+    - echo "Redis is up!"
+  script:
+    - gradle test
+  only:
+    - main
 # Stage 2: Publish Docker image
-publish:
+.publish_template: &publish_template
   stage: publish
   image: docker:latest
-  services:
-    - docker:20.10.7-dind  # Docker-in-Docker service
   before_script:
     - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
   script:
-    - docker info  # Check Docker info to ensure connection works
-    - docker buildx build --build-arg SPRING_PROFILE=$SPRING_PROFILES_ACTIVE --build-arg SERVER_PORT=$SERVER_PORT --build-arg DEBUG_PORT=$DEBUG_PORT --build-arg JAVA_OPTS="-Xmx512m" --build-arg EXTRA_ARGS="" -t $DOCKER_IMAGE_NAME:$DOCKER_TAG -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA .
+    - unset DOCKER_HOST
+    - |
+      docker buildx build \
+       --build-arg SPRING_PROFILE=$SPRING_PROFILE \
+       --build-arg SERVER_PORT=$SERVER_PORT \
+       --build-arg DEBUG_PORT=$DEBUG_PORT \
+       --build-arg JAVA_OPTS="-Xms128m -Xmx512m" \
+       --build-arg EXTRA_ARGS="" \
+       -t $DOCKER_IMAGE_NAME:$DOCKER_TAG \
+       -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA .
     - docker push $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA
-    - docker push $DOCKER_IMAGE_NAME:latest
+    - docker push $DOCKER_IMAGE_NAME:$DOCKER_TAG
+
+publish-dev:
+    <<: *publish_template
+    variables:
+        SPRING_PROFILE: $SPRING_PROFILES_ACTIVE_DEV
+        DOCKER_TAG: $DOCKER_TAG_DEV
+    only:
+        - dev
+
+publish-stage:
+    <<: *publish_template
+    variables:
+        SPRING_PROFILE: $SPRING_PROFILES_ACTIVE_STAGE
+        DOCKER_TAG: $DOCKER_TAG_STAGE
+    only:
+        - stage
+
+publish-prod:
+  <<: *publish_template
+  variables:
+    SPRING_PROFILE: $SPRING_PROFILES_ACTIVE_PROD
+    DOCKER_TAG: $DOCKER_TAG_PROD
   only:
     - main
-    - dev
 
-deploy:
+.deploy_template: &deploy_template
   stage: deploy
   image: alpine:latest
   before_script:
     - apk add --no-cache openssh
     - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    - ssh-keyscan $SERVER_IP >> ~/.ssh/known_hosts
+    - ssh-keyscan -p "$SERVER_PORT" "$SERVER_IP" >> ~/.ssh/known_hosts
   script:
-    # Create directory on server
-    - ssh $SERVER_USER@$SERVER_IP "mkdir -p gitlab-runner-api/eco-pharma-api && chmod 755 gitlab-runner-api/eco-pharma-api"
+    - export SSH="ssh -p $SERVER_PORT $USER@$SERVER_IP"
+    - $SSH "mkdir -p gitlab-runner-api/eco-pharma-api && chmod 755 gitlab-runner-api/eco-pharma-api"
+    - scp -P $SERVER_PORT $COMPOSE_FILE $USER@$SERVER_IP:gitlab-runner-api/eco-pharma-api
+    - $SSH "cd gitlab-runner-api/eco-pharma-api && docker compose -f $COMPOSE_FILE_NAME down || true"
+    - $SSH "cd gitlab-runner-api/eco-pharma-api && docker compose -f $COMPOSE_FILE_NAME pull"
+    - $SSH "cd gitlab-runner-api/eco-pharma-api && docker compose -f $COMPOSE_FILE_NAME up -d"
+    - $SSH "docker image prune -f --filter 'until=24h' || true"
+    - $SSH "docker container prune -f || true"
+    - $SSH "docker system prune -f --volumes --filter 'label!=keep=true' || true"
 
-    # Copy a docker compose file
-    - scp docker-compose-wms.yml $SERVER_USER@$SERVER_IP:gitlab-runner-api/eco-pharma-api
+deploy-dev:
+  <<: *deploy_template
+  variables:
+    USER: $SERVER_USER_DEV
+    PRIVATE_KEY: $SSH_PRIVATE_KEY
+    SERVER_PORT: $SERVER_SSH_PORT_DEV
+    SERVER_USER: $SERVER_USER_DEV
+    COMPOSE_FILE: docker-compose-wms-dev.yml
+    COMPOSE_FILE_NAME: docker-compose-wms-dev.yml
+  only:
+    - dev
 
-    # Stop existing containers
-    - ssh $SERVER_USER@$SERVER_IP "cd gitlab-runner-api/eco-pharma-api && docker compose -f docker-compose-wms.yml down || true"
+deploy-stage:
+  <<: *deploy_template
+  variables:
+    USER: $SERVER_USER_STAGE
+    PRIVATE_KEY: $SSH_PRIVATE_KEY_STAGE
+    SERVER_PORT: $SERVER_SSH_PORT_STAGE
+    SERVER_USER: $SERVER_USER_STAGE
+    COMPOSE_FILE: docker-compose-wms-stage.yml
+    COMPOSE_FILE_NAME: docker-compose-wms-stage.yml
+  only:
+    - stage
 
-    # Pull new image
-    - ssh $SERVER_USER@$SERVER_IP "cd gitlab-runner-api/eco-pharma-api && docker compose -f docker-compose-wms.yml pull"
-
-    # Start new containers
-    - ssh $SERVER_USER@$SERVER_IP "cd gitlab-runner-api/eco-pharma-api && docker compose -f docker-compose-wms.yml up -d"
-
-    # Clean up unused images and containers
-    - ssh $SERVER_USER@$SERVER_IP "docker image prune -f --filter \"until=24h\" || true"
-    - ssh $SERVER_USER@$SERVER_IP "docker container prune -f || true"
-    - ssh $SERVER_USER@$SERVER_IP "docker system prune -f --volumes --filter \"label!=keep=true\" || true"
+deploy-prod:
+  <<: *deploy_template
+  variables:
+    USER: $SERVER_USER_PROD
+    PRIVATE_KEY: $SSH_PRIVATE_KEY_PROD
+    SERVER_PORT: $SERVER_SSH_PORT_PROD
+    SERVER_USER: $SERVER_USER_PROD
+    COMPOSE_FILE: docker-compose-wms-prod.yml
+    COMPOSE_FILE_NAME: docker-compose-wms-prod.yml
   only:
     - main
-    - dev
