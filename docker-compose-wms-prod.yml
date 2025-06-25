@@ -7,9 +7,6 @@ services:
     container_name: eco-pharma-wms-service
     restart: always
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://192.168.7.12:5430/postgres
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_PROFILES_ACTIVE=prod
     ports:
       - "9091:9091"
