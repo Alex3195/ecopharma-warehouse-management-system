@@ -98,10 +98,14 @@ gradle-test:
 .publish_template: &publish_template
   stage: publish
   image: docker:latest
+  services:
+    - name: docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""  # Required to disable TLS inside DinD
   before_script:
     - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
   script:
-    - unset DOCKER_HOST
     - |
       docker buildx build \
        --build-arg SPRING_PROFILE=$SPRING_PROFILE \
@@ -110,9 +114,9 @@ gradle-test:
        --build-arg JAVA_OPTS="-Xms128m -Xmx512m" \
        --build-arg EXTRA_ARGS="" \
        -t $DOCKER_IMAGE_NAME:$DOCKER_TAG \
-       -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA .
-    - docker push $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA
-    - docker push $DOCKER_IMAGE_NAME:$DOCKER_TAG
+       -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA . \
+       --push
+
 
 publish-dev:
     <<: *publish_template
