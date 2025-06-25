@@ -153,17 +153,26 @@ publish-prod:
     - mkdir -p ~/.ssh
     - echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
+
+    # Debugging values before SSH
+    - echo "Connecting with USER=$USER, SERVER_IP=$SERVER_IP, SERVER_PORT=$SERVER_PORT"
+    - '[ -z "$USER" ] && echo "ERROR: USER is empty!" && exit 1'
+    - '[ -z "$SERVER_IP" ] && echo "ERROR: SERVER_IP is empty!" && exit 1'
+    - '[ -z "$SERVER_PORT" ] && echo "ERROR: SERVER_PORT is empty!" && exit 1'
+
+    # Add remote host to known_hosts
     - ssh-keyscan -p "$SERVER_PORT" "$SERVER_IP" >> ~/.ssh/known_hosts
   script:
     - export SSH="ssh -p $SERVER_PORT $USER@$SERVER_IP"
     - $SSH "mkdir -p gitlab-runner-api/eco-pharma-api && chmod 755 gitlab-runner-api/eco-pharma-api"
-    - scp -P $SERVER_PORT $COMPOSE_FILE $USER@$SERVER_IP:gitlab-runner-api/eco-pharma-api
+    - scp -P "$SERVER_PORT" "$COMPOSE_FILE" "$USER@$SERVER_IP:gitlab-runner-api/eco-pharma-api"
     - $SSH "cd gitlab-runner-api/eco-pharma-api && docker compose -f $COMPOSE_FILE_NAME down || true"
     - $SSH "cd gitlab-runner-api/eco-pharma-api && docker compose -f $COMPOSE_FILE_NAME pull"
     - $SSH "cd gitlab-runner-api/eco-pharma-api && docker compose -f $COMPOSE_FILE_NAME up -d"
     - $SSH "docker image prune -f --filter 'until=24h' || true"
     - $SSH "docker container prune -f || true"
     - $SSH "docker system prune -f --volumes --filter 'label!=keep=true' || true"
+
 
 deploy-dev:
   <<: *deploy_template
