@@ -137,8 +137,8 @@ VALUES
 ('WMS_DEPARTMENT_UPDATE', 'Update department permission'),
 ('WMS_DEPARTMENT_DELETE', 'Delete department permission');
 
-truncate table user_permission cascade;
-insert into user_permission (id, created_at, updated_at, status, created_by, updated_by, user_id, name)
+truncate table user_permissions cascade;
+insert into user_permissions (id, created_at, updated_at, status, created_by, updated_by, user_id, permission)
 select row_number() over (),
        now(),
        now(),
@@ -150,5 +150,5 @@ select row_number() over (),
 from default_permission;
 
 -- increment user_permission_sequence
-SELECT setval('user_permission_seq', (SELECT COALESCE(MAX(id), 1) FROM "user_permission"));
+SELECT setval('user_permission_seq', (SELECT COALESCE(MAX(id), 1) FROM "user_permissions"));
 
