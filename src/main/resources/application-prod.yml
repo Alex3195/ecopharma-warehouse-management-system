@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://192.168.7.12:5430/postgres
+    url: jdbc:postgresql://192.168.7.133:5432/wms
     username: postgres
     password: postgres
   jpa:
@@ -14,24 +14,25 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://keycloak.duol.uz/realms/eco-pharma
-          jwk-set-uri: https://keycloak.duol.uz/realms/eco-pharma/protocol/openid-connect/certs
+          issuer-uri: https://keycloak.rivermed.uz/realms/pharm
+          jwk-set-uri: https://keycloak.rivermed.uz/realms/pharm/protocol/openid-connect/certs
   rabbitmq:
-    host: 192.168.7.12
-    port: 5672
+    host: api-jms.rivermed.uz
+    port: 5671
     username: admin
-    password: Dev@2552!
+    password: admin!123
+    ssl:
+      enabled: true
+      trust-store: classpath:truststore.p12
+      trust-store-password: Dev@2552!
+      trust-store-type: PKCS12
 
 keycloak:
-  realm: eco-pharma
-  auth-server-url: https://keycloack.duol.uz
-  client-id: eco-pharma
-  client-secret: gDS25j4Vi0kEILXD19XcnkcFXBUD3fkk
-
-api:
-  url: http://192.168.7.12:10001
-  connection-timeout: 5000
-  read-timeout: 10000
+  realm: pharm
+  auth-server-url: https://keycloack.rivermed.uz
+  client-id: pharm
+  client-secret: IODMDQALC7jHyZBlFg1yNJL5Vvt0tPcT
+  public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArM5UmLHmGRjInO/PGw9nho4LC0tQJus/KiFuTu4U8w9hFMAiQ4S3Lbw8cOcR0ubZ84rZgs7OdWBI0HUxGFk3pxTFp7DFAnQvfUMH13j0LkbND5bfOcHSONatlArcfOAcL300rVJFrFMwIqLi94qSLBkfRheKJPNeiqcPBOLy/ET07TLjAvAcTBEQDOtHBZmmZkslHOLhiNLrTgsuBVzLjz5yR1ZFQXHxR2LiRG/scZVJTsIO3BAc12EY3fPCUQDCki85XcfhRxly+L15cQtTBDMs/R1JBV+T6YKES2rnMznrm9VfUl1/lXWNZ23P+2AsxGX1xL5Hk/AqfjSuxIAfvwIDAQAB
 
 eureka:
   instance:
@@ -40,7 +41,7 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://192.168.7.12:8088/eureka/
+      defaultZone: https://discovery.rivermed.uz/eureka/
     healthcheck:
       enabled: true
     fetch-registry: true
@@ -59,9 +60,9 @@ springdoc:
     operations-sorter: method
 
 minio:
-  endpoint: https://storage.winpro.uz
-  access-key: xSfeETHCpUfHzcXwUz51
-  secret-key: EWRIyhmglLJfYOQnebCimwj30ivUq2kVUfbk51HM
+  endpoint: https://storage.rivermed.uz
+  access-key: 4eTbVd5A0wCbisN8bP0b
+  secret-key: 7Wh2bLKVRR8alNvAEmZi7RHx7eggWGtsEuaZnBJ1
   bucket: backups
 
 postgres:
