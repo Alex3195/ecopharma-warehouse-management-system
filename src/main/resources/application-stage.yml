@@ -23,9 +23,8 @@ spring:
     password: admin!123
     ssl:
       enabled: true
-      trust-store: classpath:truststore.p12
-      trust-store-password: Dev@2552!
-      trust-store-type: PKCS12
+      algorithm: TLSv1.2
+      validate-server-certificate: false
 
 keycloak:
   realm: pharm
