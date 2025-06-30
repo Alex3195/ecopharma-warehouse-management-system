@@ -29,7 +29,7 @@ spring:
 
 keycloak:
   realm: pharm
-  auth-server-url: https://keycloack.rivermed.uz
+  auth-server-url: https://keycloak.rivermed.uz
   client-id: pharm
   client-secret: IODMDQALC7jHyZBlFg1yNJL5Vvt0tPcT
   public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArM5UmLHmGRjInO/PGw9nho4LC0tQJus/KiFuTu4U8w9hFMAiQ4S3Lbw8cOcR0ubZ84rZgs7OdWBI0HUxGFk3pxTFp7DFAnQvfUMH13j0LkbND5bfOcHSONatlArcfOAcL300rVJFrFMwIqLi94qSLBkfRheKJPNeiqcPBOLy/ET07TLjAvAcTBEQDOtHBZmmZkslHOLhiNLrTgsuBVzLjz5yR1ZFQXHxR2LiRG/scZVJTsIO3BAc12EY3fPCUQDCki85XcfhRxly+L15cQtTBDMs/R1JBV+T6YKES2rnMznrm9VfUl1/lXWNZ23P+2AsxGX1xL5Hk/AqfjSuxIAfvwIDAQAB
