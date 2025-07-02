@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://192.168.7.133:5432/wms
+    url: jdbc:postgresql://192.168.100.192:5432/wms
     username: postgres
     password: postgres
   jpa:
@@ -17,14 +17,12 @@ spring:
           issuer-uri: https://keycloak.rivermed.uz/realms/pharm
           jwk-set-uri: https://keycloak.rivermed.uz/realms/pharm/protocol/openid-connect/certs
   rabbitmq:
-    host: 192.168.100.914
-    port: 5671
-    username: admin
-    password: admin!123
+    addresses: amqps://admin:admin@api-jms.rivermed.uz:5671
     ssl:
       enabled: true
-      algorithm: TLSv1.2
-      validate-server-certificate: false
+      trust-store: classpath:truststore.p12
+      trust-store-password: Dev@2552!
+      trust-store-type: PKCS12
 
 keycloak:
   realm: pharm
