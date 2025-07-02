@@ -17,7 +17,7 @@ spring:
           issuer-uri: https://keycloak.rivermed.uz/realms/pharm
           jwk-set-uri: https://keycloak.rivermed.uz/realms/pharm/protocol/openid-connect/certs
   rabbitmq:
-    host: 192.168.100.914
+    host: 192.168.100.194
     port: 5671
     username: admin
     password: admin!123
