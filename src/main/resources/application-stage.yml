@@ -17,12 +17,14 @@ spring:
           issuer-uri: https://keycloak.rivermed.uz/realms/pharm
           jwk-set-uri: https://keycloak.rivermed.uz/realms/pharm/protocol/openid-connect/certs
   rabbitmq:
-    addresses: amqps://admin:admin@api-jms.rivermed.uz:5671
+    host: 192.168.100.914
+    port: 5671
+    username: admin
+    password: admin!123
     ssl:
       enabled: true
-      trust-store: classpath:truststore.p12
-      trust-store-password: Dev@2552!
-      trust-store-type: PKCS12
+      algorithm: TLSv1.2
+      validate-server-certificate: false
 
 keycloak:
   realm: pharm
