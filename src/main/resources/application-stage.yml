@@ -14,8 +14,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://keycloak.rivermed.uz/realms/pharm
-          jwk-set-uri: https://keycloak.rivermed.uz/realms/pharm/protocol/openid-connect/certs
+          issuer-uri: https://keycloak.rivermed.uz/realms/eco-pharma
+          jwk-set-uri: https://keycloak.rivermed.uz/realms/eco-pharma/protocol/openid-connect/certs
   rabbitmq:
     host: 192.168.100.194
     port: 5671
@@ -27,11 +27,11 @@ spring:
       validate-server-certificate: false
 
 keycloak:
-  realm: pharm
+  realm: eco-pharma
   auth-server-url: https://keycloak.rivermed.uz
-  client-id: pharm
-  client-secret: IODMDQALC7jHyZBlFg1yNJL5Vvt0tPcT
-  public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArM5UmLHmGRjInO/PGw9nho4LC0tQJus/KiFuTu4U8w9hFMAiQ4S3Lbw8cOcR0ubZ84rZgs7OdWBI0HUxGFk3pxTFp7DFAnQvfUMH13j0LkbND5bfOcHSONatlArcfOAcL300rVJFrFMwIqLi94qSLBkfRheKJPNeiqcPBOLy/ET07TLjAvAcTBEQDOtHBZmmZkslHOLhiNLrTgsuBVzLjz5yR1ZFQXHxR2LiRG/scZVJTsIO3BAc12EY3fPCUQDCki85XcfhRxly+L15cQtTBDMs/R1JBV+T6YKES2rnMznrm9VfUl1/lXWNZ23P+2AsxGX1xL5Hk/AqfjSuxIAfvwIDAQAB
+  client-id: eco-pharma
+  client-secret: QG25UNd5aOrrmttgOAkRQwWZZUag62ko
+  public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjCHpICM88DjY+mK8CIYohjJpM2+wekoUv87da1B0bYSz2pnvlmIATm70X9SGj3kH+3t5S3vtXtxH9FCX2Ek32zQ2AWmp7ydO0focpj9fdlG++vHV3yNudkK0eOG/YaqE1CZ33UpCeyxV6vZDK439koWhj1JDNqKLWD/UWj2g+fvMYa9/0i5Jm2dLuxNanjBNW8r9OyU26GEDMsh5PEI3I3GqnTlAmTGBPpWfN7H4eKyHd/lom9PHd0RxtbuKtWjy/lP9RLt1RQUlJai4bywasxyKcVuusbfeB82XclRBr2U/ooMZFTRGfxYq7gsonMIvyeb8RotFsFENgIntKgGT/wIDAQAB
 
 
 eureka:
