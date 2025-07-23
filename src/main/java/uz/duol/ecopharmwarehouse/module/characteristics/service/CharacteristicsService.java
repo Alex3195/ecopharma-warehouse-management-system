@@ -2,11 +2,13 @@ package uz.duol.ecopharmwarehouse.module.characteristics.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.CharacterValuesEntity;
 import uz.duol.ecopharmwarehouse.entity.CharacteristicEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
@@ -97,7 +99,7 @@ public class CharacteristicsService {
     @Transactional
     public void delete(Long id) {
         var e = repository.findById(id).orElseThrow(() -> new CharacteristicsNotFoundException("Characteristics not found"));
-        if(sectorCharacteristicsRepository.existsByCharacteristicId(id)){
+        if (sectorCharacteristicsRepository.existsByCharacteristicId(id)) {
             throw new RuntimeException("You cannot delete this characteristic because it bind with some of the sectors");
         }
         e.setStatus(Status.DELETED);
@@ -108,11 +110,10 @@ public class CharacteristicsService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CharacteristicsDTO> findAll(String search, Pageable pageable) {
-        Specification<CharacteristicEntity> spec = CharacteristicSpecification.isActive();
-        if (search != null && !search.isEmpty()) {
-            spec = spec.and(CharacteristicSpecification.hasText(search));
-        }
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<CharacteristicsDTO> findAll(DataTableRequest request) {
+        Specification<CharacteristicEntity> spec = CharacteristicSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 }

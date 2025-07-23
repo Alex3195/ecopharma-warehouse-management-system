@@ -2,18 +2,20 @@ package uz.duol.ecopharmwarehouse.module.inventory.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.InventoryEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
+import uz.duol.ecopharmwarehouse.module.inventory.dto.InventoryDto;
 import uz.duol.ecopharmwarehouse.module.inventory.mapper.InventoryMapper;
+import uz.duol.ecopharmwarehouse.module.inventory.specification.InventorySpecification;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 import uz.duol.ecopharmwarehouse.module.location.service.LocationService;
-import uz.duol.ecopharmwarehouse.module.inventory.dto.InventoryDto;
-import uz.duol.ecopharmwarehouse.module.inventory.specification.InventorySpecification;
 import uz.duol.ecopharmwarehouse.repositories.InventoryRepository;
 
 @Service
@@ -52,13 +54,11 @@ public class InventoryService {
         return mapper.toDto(entity);
     }
 
-    public Page<InventoryDto> getProductLocationByItsBarcode(String search, Pageable pageable) {
-        Specification<InventoryEntity> spec = Specification.where(null);
-        if (search != null && !search.isBlank()) {
-            spec = spec.and(InventorySpecification.hasText(search));
-        }
-        Page<InventoryEntity> entities = repository.findAll(spec, pageable);
-        return entities.map(mapper::toDto);
+    public DataTableResponse<InventoryDto> getProductLocationByItsBarcode(DataTableRequest request) {
+        Specification<InventoryEntity> spec = InventorySpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 
     public void delete(Long id) {

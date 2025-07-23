@@ -2,14 +2,17 @@ package uz.duol.ecopharmwarehouse.module.crossdocking.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.CrossDockingEntity;
 import uz.duol.ecopharmwarehouse.module.crossdocking.dto.CrossDockingDto;
 import uz.duol.ecopharmwarehouse.module.crossdocking.mapper.CrossDockingMapper;
+import uz.duol.ecopharmwarehouse.module.crossdocking.specification.CrossDockingSpecification;
 import uz.duol.ecopharmwarehouse.repositories.CrossDockingRepository;
 
 @Service
@@ -51,9 +54,11 @@ public class CrossDockingService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CrossDockingDto> findAll(Pageable pageable) {
-        Specification<CrossDockingEntity> spec = Specification.where(null);
-        return crossDockingRepository.findAll(spec, pageable)
+    public DataTableResponse<CrossDockingDto> findAll(DataTableRequest request) {
+        Specification<CrossDockingEntity> spec = CrossDockingSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = crossDockingRepository.findAll(spec, pageable)
                 .map(crossDockingMapper::toDto);
+        return new DataTableResponse<>(page);
     }
 }

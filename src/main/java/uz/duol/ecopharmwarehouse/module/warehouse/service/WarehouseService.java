@@ -1,11 +1,13 @@
 package uz.duol.ecopharmwarehouse.module.warehouse.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.WarehouseEntity;
 import uz.duol.ecopharmwarehouse.module.warehouse.dto.WarehouseDTO;
 import uz.duol.ecopharmwarehouse.module.warehouse.exception.WarehouseNotFoundException;
@@ -52,11 +54,10 @@ public class WarehouseService {
     }
 
     @Transactional(readOnly = true)
-    public Page<WarehouseDTO> findAll(String search, Pageable pageable) {
-        Specification<WarehouseEntity> spec = Specification.where(WarehouseSpecification.isActive());
-        if (search != null && !search.isEmpty()) {
-            spec = spec.and(WarehouseSpecification.hasText(search));
-        }
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<WarehouseDTO> findAll(DataTableRequest request) {
+        Specification<WarehouseEntity> spec = WarehouseSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 }

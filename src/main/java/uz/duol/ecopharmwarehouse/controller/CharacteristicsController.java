@@ -6,12 +6,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.characteristics.dto.CharacteristicsDTO;
 import uz.duol.ecopharmwarehouse.module.characteristics.service.CharacteristicsService;
 
@@ -65,11 +64,10 @@ public class CharacteristicsController {
                     @ApiResponse(responseCode = "403", description = "Access denied - Insufficient permissions"),
             }
     )
-    @GetMapping("/list")
+    @PostMapping("/list")
     @PreAuthorize("hasAuthority('CHARACTERISTICS_GET') or hasRole('SUPER_ADMIN')")
-    public Page<CharacteristicsDTO> findAll(@RequestParam(required = false) String search,
-                                            @PageableDefault Pageable pageable) {
-        return service.findAll(search, pageable);
+    public DataTableResponse<CharacteristicsDTO> findAll(@RequestBody DataTableRequest request) {
+        return service.findAll(request);
     }
 
     @Operation(
@@ -88,6 +86,7 @@ public class CharacteristicsController {
     public CharacteristicsDTO update(@PathVariable Long id, @Valid @RequestBody CharacteristicsDTO dto) {
         return service.update(id, dto);
     }
+
     @Operation(
             summary = "Delete characteristics by id",
             security = @SecurityRequirement(name = "bearerAuth"),

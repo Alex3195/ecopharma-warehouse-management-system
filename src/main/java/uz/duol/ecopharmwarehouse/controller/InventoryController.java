@@ -5,12 +5,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.inventory.dto.InventoryDto;
 import uz.duol.ecopharmwarehouse.module.inventory.service.InventoryService;
 
@@ -78,9 +77,8 @@ public class InventoryController {
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             })
     @PreAuthorize("hasAuthority('INVENTORY_READ') or hasRole('SUPER_ADMIN')")
-    @GetMapping("/list")
-    public Page<InventoryDto> getProductLocationByItsBarcode(@RequestParam(value = "search", required = false) String search,
-                                                             @PageableDefault Pageable pageable) {
-        return service.getProductLocationByItsBarcode(search, pageable);
+    @PostMapping("/list")
+    public DataTableResponse<InventoryDto> getProductLocationByItsBarcode(@RequestBody DataTableRequest request) {
+        return service.getProductLocationByItsBarcode(request);
     }
 }

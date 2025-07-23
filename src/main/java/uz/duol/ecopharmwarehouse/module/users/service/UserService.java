@@ -2,11 +2,13 @@ package uz.duol.ecopharmwarehouse.module.users.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.UserEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.users.dto.UserDTO;
@@ -60,11 +62,10 @@ public class UserService {
     }
 
     @Transactional
-    public Page<UserDTO> findAll(String search, Pageable pageable) {
-        Specification<UserEntity> spec = Specification.where(UserSpecification.isActive());
-        if (search != null && !search.isEmpty()) {
-            spec = spec.and(UserSpecification.hasText(search));
-        }
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<UserDTO> findAll(DataTableRequest request) {
+        Specification<UserEntity> spec = UserSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 }

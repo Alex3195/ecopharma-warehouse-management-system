@@ -1,11 +1,13 @@
 package uz.duol.ecopharmwarehouse.module.product.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.ProductEntity;
 import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
 import uz.duol.ecopharmwarehouse.module.product.exception.ProductNotFundException;
@@ -30,8 +32,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
-        var productEntity = repository.findById(id)
-                .orElseThrow(() -> new ProductNotFundException("Product not found"));
+        var productEntity = repository.findById(id).orElseThrow(() -> new ProductNotFundException("Product not found"));
         return mapper.toDto(productEntity);
     }
 
@@ -51,11 +52,10 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll(String search, Pageable pageable) {
-        Specification<ProductEntity> spec = Specification.where(null);
-        if (search != null && !search.isEmpty()) {
-            spec = spec.and(ProductSpecification.hasName(search));
-        }
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<ProductDTO> findAll(DataTableRequest request) {
+        Specification<ProductEntity> spec = ProductSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 }

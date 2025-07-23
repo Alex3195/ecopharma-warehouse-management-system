@@ -2,11 +2,13 @@ package uz.duol.ecopharmwarehouse.module.outboundshipment.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.OutboundShipmentEntity;
 import uz.duol.ecopharmwarehouse.module.outboundshipment.dto.OutboundShipmentDto;
 import uz.duol.ecopharmwarehouse.module.outboundshipment.mapper.OutboundShipmentMapper;
@@ -48,11 +50,10 @@ public class OutboundShipmentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<OutboundShipmentDto> findAll(String search, Pageable pageable) {
-        Specification<OutboundShipmentEntity> spec = Specification.where(null);
-        if (search != null && !search.isBlank()) {
-            spec = spec.and(OutboundShipmentSpecification.hasText(search));
-        }
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<OutboundShipmentDto> findAll(DataTableRequest request) {
+        Specification<OutboundShipmentEntity> spec = OutboundShipmentSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 }

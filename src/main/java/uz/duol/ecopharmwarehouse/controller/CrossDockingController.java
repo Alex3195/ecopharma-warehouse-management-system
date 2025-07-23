@@ -4,12 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.crossdocking.dto.CrossDockingDto;
 import uz.duol.ecopharmwarehouse.module.crossdocking.service.CrossDockingService;
 
@@ -78,9 +77,9 @@ public class CrossDockingController {
             }
     )
     @PreAuthorize("hasAuthority('CROSS_DOCKING_GET') or hasRole('SUPER_ADMIN')")
-    @GetMapping("/list")
-    public Page<CrossDockingDto> getAll(@PageableDefault Pageable pageable) {
-        return crossDockingService.findAll(pageable);
+    @PostMapping("/list")
+    public DataTableResponse<CrossDockingDto> getAll(@RequestBody DataTableRequest request) {
+        return crossDockingService.findAll(request);
     }
 
     @Operation(summary = "Delete cross docking",

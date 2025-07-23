@@ -5,12 +5,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.users.dto.UserDTO;
 import uz.duol.ecopharmwarehouse.module.users.dto.UserUpdateDto;
 import uz.duol.ecopharmwarehouse.module.users.service.UserService;
@@ -32,9 +31,9 @@ public class UserController {
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             })
     @PreAuthorize("hasAuthority('USER_READ') or hasRole('SUPER_ADMIN')")
-    @GetMapping("/list")
-    public Page<UserDTO> getAllUserPermission(@RequestParam(value = "search", required = false) String search, @PageableDefault Pageable pageable) {
-        return userService.findAll(search, pageable);
+    @PostMapping("/list")
+    public DataTableResponse<UserDTO> getAllUserPermission(@RequestBody DataTableRequest request) {
+        return userService.findAll(request);
     }
 
     @Operation(summary = "Get User by ID",

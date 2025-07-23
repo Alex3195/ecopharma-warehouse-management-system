@@ -2,10 +2,12 @@ package uz.duol.ecopharmwarehouse.module.address.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.AddressEntity;
 import uz.duol.ecopharmwarehouse.module.address.dto.AddressDTO;
 import uz.duol.ecopharmwarehouse.module.address.exception.AddressNotFoundException;
@@ -48,11 +50,10 @@ public class AddressService {
         repository.deleteById(dto.getId());
     }
 
-    public Page<AddressDTO> findAll(String search, Pageable pageable) {
-        Specification<AddressEntity> spec = Specification.where(null);
-        if (search != null && !search.isEmpty()) {
-            spec = spec.and(AddressSpecification.hasText(search));
-        }
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<AddressDTO> findAll(DataTableRequest request) {
+        Specification<AddressEntity> spec = AddressSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 }

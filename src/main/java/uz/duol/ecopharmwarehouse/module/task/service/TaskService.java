@@ -1,11 +1,13 @@
 package uz.duol.ecopharmwarehouse.module.task.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.TaskEntity;
 import uz.duol.ecopharmwarehouse.module.task.dto.TaskDTO;
 import uz.duol.ecopharmwarehouse.module.task.exception.TaskNotFoundException;
@@ -55,19 +57,15 @@ public class TaskService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TaskDTO> findAll(String search, String assignedTo, Pageable pageable) {
-        Specification<TaskEntity> spec = Specification.where(TaskSpecification.isActive());
-        if (search != null) {
-            spec = spec.and(TaskSpecification.hasText(search));
-        }
-        if (assignedTo != null) {
-            spec = spec.and(TaskSpecification.hasAssignedTo(assignedTo));
-        }
-        return repository.findAll(spec, pageable).map(item -> {
+    public DataTableResponse<TaskDTO> findAll(DataTableRequest request) {
+        Specification<TaskEntity> spec = TaskSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(item -> {
             var dto = mapper.toDto(item);
             dto.setAssignedToUser(userMapper.toDto(item.getAssignedToUser()));
             return dto;
         });
+        return new DataTableResponse<>(page);
     }
 
 }

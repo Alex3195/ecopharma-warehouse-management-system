@@ -6,12 +6,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
 import uz.duol.ecopharmwarehouse.module.sector.service.SectorService;
 
@@ -104,10 +103,9 @@ public class SectorController {
             }
     )
     @PreAuthorize("hasAuthority('SECTOR_GET') or hasRole('SUPER_ADMIN')")
-    @GetMapping("/list")
-    public Page<SectorDTO> getAll(@RequestParam(value = "search", required = false) String search,
-                                  @PageableDefault Pageable pageable) {
-        return service.findAll(search, pageable);
+    @PostMapping("/list")
+    public DataTableResponse<SectorDTO> getAll(@RequestBody DataTableRequest request) {
+        return service.findAll(request);
     }
 
 }

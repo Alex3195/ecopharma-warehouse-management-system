@@ -1,11 +1,13 @@
 package uz.duol.ecopharmwarehouse.module.sector.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.SectorEntity;
 import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
 import uz.duol.ecopharmwarehouse.module.sector.exception.SectorNotFoundException;
@@ -53,12 +55,11 @@ public class SectorService {
     }
 
     @Transactional(readOnly = true)
-    public Page<SectorDTO> findAll(String search, Pageable pageable) {
-        Specification<SectorEntity> spec = Specification.where(SectorSpecification.isActive());
-        if (search != null && !search.isEmpty()) {
-            spec = spec.and(SectorSpecification.hasText(search));
-        }
-        return repository.findAll(spec, pageable).map(this::mapToDtoAndSetNumberOfRackInSector);
+    public DataTableResponse<SectorDTO> findAll(DataTableRequest request) {
+        Specification<SectorEntity> spec = SectorSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(this::mapToDtoAndSetNumberOfRackInSector);
+        return new DataTableResponse<>(page);
     }
 
     private SectorDTO mapToDtoAndSetNumberOfRackInSector(SectorEntity e) {

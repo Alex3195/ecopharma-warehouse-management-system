@@ -2,10 +2,12 @@ package uz.duol.ecopharmwarehouse.module.product.returns.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.ProductReturnEntity;
 import uz.duol.ecopharmwarehouse.module.product.returns.dto.ProductReturnDto;
 import uz.duol.ecopharmwarehouse.module.product.returns.mapper.ProductReturnMapper;
@@ -43,11 +45,10 @@ public class ProductReturnService {
         repository.deleteById(dto.getId());
     }
 
-    public Page<ProductReturnDto> findAll(String search, Pageable pageable) {
-        Specification<ProductReturnEntity> isActive = ProductReturnSpecification.isActive();
-        if (search != null && !search.isEmpty()) {
-            isActive = isActive.and(ProductReturnSpecification.hasText(search));
-        }
-        return repository.findAll(isActive, pageable).map(mapper::toDto);
+    public DataTableResponse<ProductReturnDto> findAll(DataTableRequest request) {
+        Specification<ProductReturnEntity> isActive = ProductReturnSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(isActive, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 }

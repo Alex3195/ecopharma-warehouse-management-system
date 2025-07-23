@@ -4,12 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 import uz.duol.ecopharmwarehouse.module.location.service.LocationService;
 
@@ -28,11 +27,10 @@ public class LocationController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             })
-    @GetMapping("/list")
+    @PostMapping("/list")
     @PreAuthorize("hasAuthority('LOCATION_GET') or hasRole('SUPER_ADMIN')")
-    public Page<LocationDTO> findAll(@RequestParam(value = "search", required = false) String search,
-                                     @PageableDefault Pageable pageable) {
-        return locationService.findAll(search, pageable);
+    public DataTableResponse<LocationDTO> findAll(@RequestBody DataTableRequest request) {
+        return locationService.findAll(request);
     }
 
     @Operation(summary = "Get Location by ID",

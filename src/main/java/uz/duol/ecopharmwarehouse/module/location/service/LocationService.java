@@ -1,10 +1,12 @@
 package uz.duol.ecopharmwarehouse.module.location.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.LocationEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
@@ -60,12 +62,11 @@ public class LocationService {
         return numeric.substring(0, length);
     }
 
-    public Page<LocationDTO> findAll(String name, Pageable pageable) {
-        Specification<LocationEntity> spec = Specification.where(null);
-        if (name != null && !name.isEmpty()) {
-            spec = spec.and(LocationSpecification.hasText(name));
-        }
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<LocationDTO> findAll(DataTableRequest request) {
+        Specification<LocationEntity> spec = LocationSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new  DataTableResponse<>(page);
     }
 
     public LocationDTO findByBarcode(String locationBarcode) {

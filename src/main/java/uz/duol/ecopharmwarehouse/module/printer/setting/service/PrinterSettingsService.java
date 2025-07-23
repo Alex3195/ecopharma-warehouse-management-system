@@ -2,10 +2,12 @@ package uz.duol.ecopharmwarehouse.module.printer.setting.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.PrinterSettingsEntity;
 import uz.duol.ecopharmwarehouse.module.printer.setting.dto.PrinterSettingsDto;
 import uz.duol.ecopharmwarehouse.module.printer.setting.mapper.PrinterSettingMapper;
@@ -50,10 +52,10 @@ public class PrinterSettingsService {
         return mapper.toDto(entity);
     }
 
-    public Page<PrinterSettingsDto> findAll(String search, Long departmentId, Pageable pageable) {
-        Specification<PrinterSettingsEntity> spec = PrinterSettingSpecification.isActive()
-                .and(PrinterSettingSpecification.hasText(search))
-                .and(PrinterSettingSpecification.departmentIdEquals(departmentId));
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<PrinterSettingsDto> findAll(DataTableRequest request) {
+        Specification<PrinterSettingsEntity> spec = PrinterSettingSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 }

@@ -2,12 +2,11 @@ package uz.duol.ecopharmwarehouse.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.dto.InboundReceiptDto;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.service.InboundReceiptService;
 
@@ -18,10 +17,10 @@ import uz.duol.ecopharmwarehouse.module.inbound.receipt.service.InboundReceiptSe
 public class InboundReceiptController {
     private final InboundReceiptService service;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @PreAuthorize("hasAuthority('INBOUND_RECEIPT_GET') or hasRole('SUPER_ADMIN')")
-    public Page<InboundReceiptDto> getAll(@RequestParam(value = "search", required = false) String search, @PageableDefault Pageable pageable) {
-        return service.findAll(search, pageable);
+    public DataTableResponse<InboundReceiptDto> getAll(@RequestBody DataTableRequest request) {
+        return service.findAll(request);
     }
 
     @GetMapping("/{id}")

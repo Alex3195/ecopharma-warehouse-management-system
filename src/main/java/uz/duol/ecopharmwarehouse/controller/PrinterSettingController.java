@@ -6,11 +6,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.printer.setting.dto.PrinterSettingsDto;
 import uz.duol.ecopharmwarehouse.module.printer.setting.service.PrinterSettingsService;
 
@@ -31,11 +30,9 @@ public class PrinterSettingController {
                     @ApiResponse(responseCode = "403", description = "Forbidden - You do not have permission to access this resource"),
             })
     @PreAuthorize("hasAuthority('WMS_PRINTER_SETTING_READ') or hasRole('SUPER_ADMIN')")
-    @GetMapping("/list")
-    public Page<PrinterSettingsDto> getPrinterSettings(@PageableDefault Pageable pageable,
-                                                       @RequestParam(value = "search", required = false) String search,
-                                                       @RequestParam(value = "departmentId", required = false) Long departmentId) {
-        return service.findAll(search, departmentId, pageable);
+    @PostMapping("/list")
+    public DataTableResponse<PrinterSettingsDto> getPrinterSettings(@RequestBody DataTableRequest request) {
+        return service.findAll(request);
     }
 
     @GetMapping("/{id}")

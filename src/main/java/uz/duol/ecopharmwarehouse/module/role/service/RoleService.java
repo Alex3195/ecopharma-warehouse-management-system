@@ -2,9 +2,10 @@ package uz.duol.ecopharmwarehouse.module.role.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.module.role.dto.RoleDto;
 import uz.duol.ecopharmwarehouse.module.role.mapper.RoleMapper;
 import uz.duol.ecopharmwarehouse.module.role.specification.RoleSpecification;
@@ -28,10 +29,12 @@ public class RoleService {
         return roleMapper.toDto(role);
     }
 
-    public Page<RoleDto> findAll(String search, Pageable pageable) {
-        var spec = RoleSpecification.hasText(search);
-        return roleRepository.findAll(spec, pageable)
+    public DataTableResponse<RoleDto> findAll(DataTableRequest request) {
+        var spec = RoleSpecification.advancedFilter(request.getFilters());
+        var pageable = PageUtil.getPageable(request);
+        var page = roleRepository.findAll(spec, pageable)
                 .map(roleMapper::toDto);
+        return new DataTableResponse<>(page);
     }
 
     public RoleDto update(String name, RoleDto roleDto) {
