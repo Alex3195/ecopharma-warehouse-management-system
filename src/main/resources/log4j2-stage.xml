@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" name="EcoPharmWMSStage">
+    <Properties>
+        <Property name="LOG_PATH">logs</Property>
+        <Property name="LOG_FILE_NAME">wms</Property>
+        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+        <Property name="LOG_LEVEL_PATTERN">%5p</Property>
+        <Property name="PID">${sys:PID:-}</Property>
+        <Property name="LOGSTASH_HOST">${sys:logstash.host:-localhost}</Property>
+        <Property name="LOGSTASH_PORT">${sys:logstash.port:-5000}</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN} ${PID} --- [%15.15t] %-40.40c{1.} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}" />
+        </Console>
+
+        <!-- RollingFile Appender -->
+        <RollingFile name="RollingFile"
+                     fileName="${LOG_PATH}/${LOG_FILE_NAME}.log"
+                     filePattern="${LOG_PATH}/${LOG_FILE_NAME}-%d{yyyy-MM-dd}.log">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN} ${PID} --- [%15.15t] %-40.40c{1.} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <!-- Logstash Socket Appender -->
+        <Socket name="Logstash"
+                host="${LOGSTASH_HOST}"
+                port="${LOGSTASH_PORT}"
+                protocol="tcp"
+                ignoreExceptions="true">
+            <JsonLayout compact="true" eventEol="true" properties="true" />
+        </Socket>
+    </Appenders>
+
+    <Loggers>
+        <!-- Root Logger -->
+        <Root level="ERROR">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="Logstash" />
+        </Root>
+
+        <!-- Framework and Application Loggers -->
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" />
+            <AppenderRef ref="Logstash" />
+        </Logger>
+
+        <Logger name="org.apache.catalina" level="INFO" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" />
+            <AppenderRef ref="Logstash" />
+        </Logger>
+
+        <Logger name="org.hibernate" level="INFO" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" />
+            <AppenderRef ref="Logstash" />
+        </Logger>
+
+        <Logger name="com.zaxxer.hikari" level="INFO" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" />
+            <AppenderRef ref="Logstash" />
+        </Logger>
+
+        <!-- Your Application Package -->
+        <Logger name="uz.duol.ecopharmwarehouse" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" />
+            <AppenderRef ref="Logstash" />
+        </Logger>
+    </Loggers>
+</Configuration>

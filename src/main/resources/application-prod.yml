@@ -68,3 +68,12 @@ postgres:
 
 backup:
   useShell: false
+
+logging:
+  config: classpath:log4j2-prod.xml
+  threshold:
+    console: error
+
+logstash:
+  host: 192.168.100.141
+  port: 5000

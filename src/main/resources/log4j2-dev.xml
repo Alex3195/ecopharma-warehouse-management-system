@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" name="EcoPharmWMSDev">
+    <Properties>
+        <Property name="log-path">logs</Property>
+        <Property name="logfile-name">wms</Property>
+        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+        <Property name="LOG_LEVEL_PATTERN">%5p</Property>
+        <Property name="PID">${sys:PID:-}</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{${PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD}" />
+        </Console>
+
+        <!-- Rolling File Appender -->
+        <RollingFile name="RollingFile"
+                     fileName="${log-path}/${logfile-name}.log"
+                     filePattern="${log-path}/${logfile-name}-%d{yyyy-MM-dd}.log">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN} ${PID} --- [%15.15t] %-40.40c{1.} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- Root Logger -->
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+        </Root>
+
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+
+        <Logger name="org.apache.catalina" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+
+        <Logger name="org.hibernate" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+
+        <Logger name="com.zaxxer.hikari" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+
+        <Logger name="uz.duol.ecopharmwarehouse" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+    </Loggers>
+</Configuration>
