@@ -68,7 +68,11 @@ public class DatabaseBackupScheduler {
             String port = extractPort(dbUrl);
             String dbName = extractDatabaseName(dbUrl);
 
-            ProcessBuilder pb = useShell ? new ProcessBuilder("sh", "-c", String.format("PGPASSWORD=%s pg_dump -h %s -p %s -U %s -d %s | gzip", dbPassword, host, port, dbUser, dbName)) : new ProcessBuilder("pg_dump", "-h", host, "-p", port, "-U", dbUser, "-d", dbName, "--no-password");
+            ProcessBuilder pb = useShell ?
+                    new ProcessBuilder("sh", "-c",
+                            String.format("PGPASSWORD=%s pg_dump -h %s -p %s -U %s -d %s | gzip",
+                                    dbPassword, host, port, dbUser, dbName))
+                    : new ProcessBuilder("pg_dump", "-h", host, "-p", port, "-U", dbUser, "-d", dbName, "--no-password");
 
             pb.environment().put("PGPASSWORD", dbPassword);
             Process process = pb.start();
