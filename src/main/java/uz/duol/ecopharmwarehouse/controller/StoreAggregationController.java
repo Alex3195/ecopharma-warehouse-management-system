@@ -4,11 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.store.dto.StoreSyncRequest;
 import uz.duol.ecopharmwarehouse.module.store.service.StoreAggregationService;
 
@@ -54,9 +54,9 @@ public class StoreAggregationController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized - bad credential"),
                     @ApiResponse(responseCode = "403", description = "Access denied - bad role/permission"),
             })
-    @GetMapping("/list")
-    public Page<StoreSyncRequest> storeSyncList(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
-        return storeAggregationService.findAll(search, pageable);
+    @PostMapping("/list")
+    public DataTableResponse<StoreSyncRequest> storeSyncList(@RequestBody DataTableRequest request) {
+        return storeAggregationService.findAll(request);
     }
 
     @Operation(summary = "Delete Store Sync",

@@ -3,11 +3,13 @@ package uz.duol.ecopharmwarehouse.module.conversion.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.UnitConversionEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.conversion.dto.UnitConversionDto;
@@ -71,10 +73,11 @@ public class UnitConversionService {
     }
 
     @Transactional
-    public Page<UnitConversionDto> getByMainUnitId(Long id, Pageable pageable) {
-        Specification<UnitConversionEntity> spec = ConversionSpecification.isActive()
+    public DataTableResponse<UnitConversionDto> getByMainUnitId(Long id, DataTableRequest request) {
+        Specification<UnitConversionEntity> spec = ConversionSpecification.advancedFilter(request.getFilters())
                 .and(ConversionSpecification.hasBaseUnitId(id));
-        return repository.findAll(spec, pageable).map(item -> {
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(item -> {
             var dto = mapper.toDto(item);
             if (item.getBaseUnit() != null) {
                 dto.setBaseUnitSymbol(item.getBaseUnit().getSymbol());
@@ -84,6 +87,7 @@ public class UnitConversionService {
             }
             return dto;
         });
+        return new DataTableResponse<>(page);
     }
 
     @Transactional

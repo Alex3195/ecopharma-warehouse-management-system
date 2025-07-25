@@ -2,11 +2,13 @@ package uz.duol.ecopharmwarehouse.module.department.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.DepartmentEntity;
 import uz.duol.ecopharmwarehouse.module.department.dto.DepartmentDto;
 import uz.duol.ecopharmwarehouse.module.department.mapper.DepartmentMapper;
@@ -18,6 +20,7 @@ import uz.duol.ecopharmwarehouse.repositories.DepartmentRepository;
 public class DepartmentService {
     private final DepartmentRepository repository;
     private final DepartmentMapper mapper;
+
     @Transactional
     public DepartmentDto create(DepartmentDto dto) {
         if (repository.existsByName(dto.getName())) {
@@ -27,6 +30,7 @@ public class DepartmentService {
         repository.save(entity);
         return mapper.toDto(entity);
     }
+
     @Transactional
     public DepartmentDto update(Long id, DepartmentDto dto) {
         var existingDepartment = repository.findById(id)
@@ -41,6 +45,7 @@ public class DepartmentService {
         repository.save(existingDepartment);
         return mapper.toDto(existingDepartment);
     }
+
     @Transactional
     public void delete(Long id) {
         if (!repository.existsById(id)) {
@@ -48,16 +53,19 @@ public class DepartmentService {
         }
         repository.deleteById(id);
     }
+
     @Transactional(readOnly = true)
     public DepartmentDto findById(Long id) {
         var entity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Department not found"));
         return mapper.toDto(entity);
     }
+
     @Transactional(readOnly = true)
-    public Page<DepartmentDto> findAll(String search, Pageable pageable) {
-        Specification<DepartmentEntity> spec = DepartmentSpecification.isActive()
-                .and(DepartmentSpecification.hasText(search));
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<DepartmentDto> findAll(DataTableRequest request) {
+        Specification<DepartmentEntity> spec = DepartmentSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 }

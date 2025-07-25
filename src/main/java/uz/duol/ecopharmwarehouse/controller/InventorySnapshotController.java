@@ -4,12 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.inventory.snapshot.dto.InventorySnapshotDto;
 import uz.duol.ecopharmwarehouse.module.inventory.snapshot.servcie.InventorySnapshotService;
 
@@ -28,11 +27,10 @@ public class InventorySnapshotController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
             })
-    @GetMapping("/list")
+    @PostMapping("/list")
     @PreAuthorize("hasAuthority('INVENTORY_SNAPSHOT_GET') or hasRole('SUPER_ADMIN')")
-    public Page<InventorySnapshotDto> findAll(@RequestParam(value = "search", required = false) String search,
-                                              @PageableDefault Pageable pageable) {
-        return inventorySnapshotService.findAll(search, pageable);
+    public DataTableResponse<InventorySnapshotDto> findAll(@RequestBody DataTableRequest request) {
+        return inventorySnapshotService.findAll(request);
     }
 
     @Operation(summary = "Get Inventory Snapshot by ID",

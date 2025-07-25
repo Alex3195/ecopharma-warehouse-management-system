@@ -2,11 +2,13 @@ package uz.duol.ecopharmwarehouse.module.inventory.snapshot.servcie;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.InventoryEntity;
 import uz.duol.ecopharmwarehouse.entity.InventorySnapshotEntity;
 import uz.duol.ecopharmwarehouse.module.inventory.snapshot.dto.InventorySnapshotDto;
@@ -14,7 +16,6 @@ import uz.duol.ecopharmwarehouse.module.inventory.snapshot.mapper.InventorySnaps
 import uz.duol.ecopharmwarehouse.module.inventory.snapshot.specification.InventorySnapshotSpecification;
 import uz.duol.ecopharmwarehouse.repositories.InventoryRepository;
 import uz.duol.ecopharmwarehouse.repositories.InventorySnapshotRepository;
-import uz.duol.ecopharmwarehouse.utils.DateTimeUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -51,19 +52,11 @@ public class InventorySnapshotService {
     }
 
     @Transactional(readOnly = true)
-    public Page<InventorySnapshotDto> findAll(String search, Pageable pageable) {
-        Specification<InventorySnapshotEntity> spec = Specification.where(null);
-
-        if (search != null && !search.isBlank()) {
-            if (DateTimeUtils.isDate(search) || DateTimeUtils.isDateTime(search)) {
-                LocalDateTime date = DateTimeUtils.parseDateTime(search);
-                spec = spec.and(InventorySnapshotSpecification.hasSnapshotTime(date));
-            } else {
-                spec = spec.and(InventorySnapshotSpecification.productNameContains(search));
-            }
-        }
-
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<InventorySnapshotDto> findAll(DataTableRequest request) {
+        Specification<InventorySnapshotEntity> spec = InventorySnapshotSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 
     @Transactional(readOnly = true)

@@ -70,3 +70,12 @@ postgres:
 
 backup:
   useShell: false
+
+logging:
+  config: classpath:log4j2-dev.xml
+  threshold:
+    console: error
+
+logstash:
+  host:
+  port: 0

@@ -1,10 +1,12 @@
 package uz.duol.ecopharmwarehouse.module.sector.characteristics.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.SectorCharacteristicEntity;
 import uz.duol.ecopharmwarehouse.module.sector.characteristics.dto.SectorCharacteristicDTO;
 import uz.duol.ecopharmwarehouse.module.sector.characteristics.exception.SectorCharacteristicsNotFoundException;
@@ -41,9 +43,10 @@ public class SectorCharacteristicsService {
         repository.deleteById(dto.getId());
     }
 
-    public Page<SectorCharacteristicDTO> findAll(String search, Long sectorId, Pageable pageable) {
-        Specification<SectorCharacteristicEntity> spec = Specification.where(SectorCharacteristicsSpecification.hasText(search));
-        spec = spec.and(SectorCharacteristicsSpecification.hasSectorId(sectorId));
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<SectorCharacteristicDTO> findAll(DataTableRequest request) {
+        Specification<SectorCharacteristicEntity> spec = SectorCharacteristicsSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 }

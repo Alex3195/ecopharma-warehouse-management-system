@@ -5,12 +5,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.sector.characteristics.dto.SectorCharacteristicDTO;
 import uz.duol.ecopharmwarehouse.module.sector.characteristics.service.SectorCharacteristicsService;
 
@@ -31,12 +30,10 @@ public class SectorCharacteristicsController {
                     @ApiResponse(responseCode = "403", description = "Access denied - Bad role or permission"),
             }
     )
-    @GetMapping("/list")
+    @PostMapping("/list")
     @PreAuthorize("hasAuthority('SECTOR_CHARACTERISTICS_GET') or hasRole('SUPER_ADMIN')")
-    public Page<SectorCharacteristicDTO> getAll(@RequestParam(value = "search", required = false) String search,
-                                                @RequestParam(value = "sectorId", required = false) Long sectorId,
-                                                @PageableDefault Pageable pageable) {
-        return sectorCharacteristicsService.findAll(search, sectorId,pageable);
+    public DataTableResponse<SectorCharacteristicDTO> getAll(@RequestBody DataTableRequest request) {
+        return sectorCharacteristicsService.findAll(request);
     }
 
     @Operation(summary = "Create sector characteristic",

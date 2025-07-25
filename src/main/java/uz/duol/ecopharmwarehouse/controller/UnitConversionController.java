@@ -6,11 +6,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.conversion.dto.UnitConversionDto;
 import uz.duol.ecopharmwarehouse.module.conversion.service.UnitConversionService;
 
@@ -101,9 +101,9 @@ public class UnitConversionController {
             }
     )
     @PreAuthorize("hasAuthority('CONVERSION_GET_BY_MAIN_UNIT_ID') or hasRole('SUPER_ADMIN')")
-    @GetMapping("/get-by-main-unit/{id}")
-    public Page<UnitConversionDto> getUnitConversionByMainUnit(@PathVariable Long id, Pageable pageable) {
-        return service.getByMainUnitId(id,pageable);
+    @PostMapping("/get-by-main-unit/{id}")
+    public DataTableResponse<UnitConversionDto> getUnitConversionByMainUnit(@PathVariable Long id, @RequestBody DataTableRequest request) {
+        return service.getByMainUnitId(id, request);
     }
 
     @Operation(security = @SecurityRequirement(name = "bearerAuth"),

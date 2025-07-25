@@ -4,7 +4,7 @@ services:
   # Spring Boot Application
   wms-service:
     image: duoluz/eco-pharma-warehouse:latest # Use the latest tag if TAG is not provided
-    container_name: eco-pharma-wms-service
+    container_name: wms-service
     restart: always
     environment:
       - SPRING_PROFILES_ACTIVE=prod

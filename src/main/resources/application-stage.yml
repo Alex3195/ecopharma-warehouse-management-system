@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://192.168.7.133:5432/wms
+    url: jdbc:postgresql://192.168.100.192:5432/wms
     username: postgres
     password: postgres
   jpa:
@@ -14,24 +14,25 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://keycloak.duol.uz/realms/eco-pharma
-          jwk-set-uri: https://keycloak.duol.uz/realms/eco-pharma/protocol/openid-connect/certs
+          issuer-uri: https://keycloak.rivermed.uz/realms/eco-pharma
+          jwk-set-uri: https://keycloak.rivermed.uz/realms/eco-pharma/protocol/openid-connect/certs
   rabbitmq:
-    host: 192.168.7.137
-    port: 5672
+    host: 192.168.100.194
+    port: 5671
     username: admin
     password: admin!123
+    ssl:
+      enabled: true
+      algorithm: TLSv1.2
+      validate-server-certificate: false
 
 keycloak:
   realm: eco-pharma
-  auth-server-url: https://keycloack.duol.uz
+  auth-server-url: https://keycloak.rivermed.uz
   client-id: eco-pharma
-  client-secret: gDS25j4Vi0kEILXD19XcnkcFXBUD3fkk
+  client-secret: QG25UNd5aOrrmttgOAkRQwWZZUag62ko
+  public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjCHpICM88DjY+mK8CIYohjJpM2+wekoUv87da1B0bYSz2pnvlmIATm70X9SGj3kH+3t5S3vtXtxH9FCX2Ek32zQ2AWmp7ydO0focpj9fdlG++vHV3yNudkK0eOG/YaqE1CZ33UpCeyxV6vZDK439koWhj1JDNqKLWD/UWj2g+fvMYa9/0i5Jm2dLuxNanjBNW8r9OyU26GEDMsh5PEI3I3GqnTlAmTGBPpWfN7H4eKyHd/lom9PHd0RxtbuKtWjy/lP9RLt1RQUlJai4bywasxyKcVuusbfeB82XclRBr2U/ooMZFTRGfxYq7gsonMIvyeb8RotFsFENgIntKgGT/wIDAQAB
 
-api:
-  url: http://192.168.7.135:10001
-  connection-timeout: 5000
-  read-timeout: 10000
 
 eureka:
   instance:
@@ -40,7 +41,7 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://192.168.7.135:8088/eureka/
+      defaultZone: https://discovery.rivermed.uz/eureka/
     healthcheck:
       enabled: true
     fetch-registry: true
@@ -59,9 +60,9 @@ springdoc:
     operations-sorter: method
 
 minio:
-  endpoint: https://storage.winpro.uz
-  access-key: xSfeETHCpUfHzcXwUz51
-  secret-key: EWRIyhmglLJfYOQnebCimwj30ivUq2kVUfbk51HM
+  endpoint: https://storage.rivermed.uz
+  access-key: 4eTbVd5A0wCbisN8bP0b
+  secret-key: 7Wh2bLKVRR8alNvAEmZi7RHx7eggWGtsEuaZnBJ1
   bucket: backups
 
 postgres:
@@ -70,3 +71,12 @@ postgres:
 
 backup:
   useShell: false
+
+logging:
+  config: classpath:log4j2-stage.xml
+  threshold:
+    console: error
+
+logstash:
+  host: 192.168.100.141
+  port: 5000

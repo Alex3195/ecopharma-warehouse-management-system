@@ -1,76 +1,57 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<Configuration status="WARN" name="Project name">
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" name="EcoPharmWMS">
     <Properties>
-        <Property name="log-path">logs</Property>
-        <Property name="logfile-name">wms</Property>
+        <Property name="LOG_PATH">logs</Property>
+        <Property name="LOG_FILE_NAME">wms</Property>
         <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
         <Property name="LOG_LEVEL_PATTERN">%5p</Property>
+
+        <!-- Logstash props can be overridden via system/env properties or Spring Boot config -->
+        <Property name="LOGSTASH_HOST">${sys:logstash.host:-}</Property>
+        <Property name="LOGSTASH_PORT">${sys:logstash.port:-0}</Property>
     </Properties>
 
     <Appenders>
-        <!-- Console Appender -->
+        <!-- Console -->
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout
-                    pattern="%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}"/>
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN} --- [%15.15t] %-40.40c{1.} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}" />
         </Console>
 
-        <!-- RollingFile Appender -->
-        <RollingFile name="RollingFile" filePattern="${log-path}/${logfile-name}-%d{yyyy-MM-dd}.log">
+        <!-- Rolling File -->
+        <RollingFile name="RollingFile"
+                     fileName="${LOG_PATH}/${LOG_FILE_NAME}.log"
+                     filePattern="${LOG_PATH}/${LOG_FILE_NAME}-%d{yyyy-MM-dd}.log">
             <PatternLayout
-                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN} ${sys:PID} --- [%15.15t] %c : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}"/>
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN} --- [%15.15t] %-40.40c{1.} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}" />
             <Policies>
-                <TimeBasedTriggeringPolicy/>
+                <TimeBasedTriggeringPolicy />
             </Policies>
-            <DirectWriteRolloverStrategy/>
         </RollingFile>
-        <!--TODO uncomment if you want to use Logstash-->
 
-        <!--        &lt;!&ndash; Socket Appender for Logstash &ndash;&gt;-->
-        <!--        <Socket name="Logstash" host="192.168.7.12" port="5000" protocol="tcp">-->
-        <!--            <JsonLayout compact="true" eventEol="true" properties="true" />-->
-        <!--        </Socket>-->
+        <!-- Logstash Socket Appender (safe fallback if host/port are not set) -->
+        <Socket name="Logstash"
+                host="${LOGSTASH_HOST}"
+                port="${LOGSTASH_PORT}"
+                protocol="tcp"
+                ignoreExceptions="true">
+            <JsonLayout compact="true" eventEol="true" properties="true" />
+        </Socket>
     </Appenders>
 
     <Loggers>
         <!-- Root Logger -->
-        <Root level="ERROR">
-            <AppenderRef ref="Console"/>
-            <!--            <AppenderRef ref="Logstash"/>-->
+        <Root level="INFO">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" />
+            <AppenderRef ref="Logstash" />
         </Root>
 
-        <!-- Logger for org.springframework.boot package -->
-        <Logger name="org.springframework" level="INFO" additivity="false">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile" level="DEBUG"/>
-            <!--            <AppenderRef ref="Logstash"/>-->
-        </Logger>
-
-        <!-- Logger for org.apache.catalina package -->
-        <Logger name="org.apache.catalina" level="INFO" additivity="false">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile" level="DEBUG"/>
-            <!--            <AppenderRef ref="Logstash"/>-->
-        </Logger>
-
-        <!-- Logger for org.hibernate package -->
-        <Logger name="org.hibernate" level="INFO" additivity="false">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile" level="DEBUG"/>
-            <!--            <AppenderRef ref="Logstash"/>-->
-        </Logger>
-
-        <!-- Logger for com.zaxxer.hikari package -->
-        <Logger name="com.zaxxer.hikari" level="INFO" additivity="false">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile" level="DEBUG"/>
-            <!--            <AppenderRef ref="Logstash"/>-->
-        </Logger>
-
-        <!-- Logger for uz.duol.ecopharmwarehouse package -->
+        <!-- App-specific packages -->
         <Logger name="uz.duol.ecopharmwarehouse" level="DEBUG" additivity="false">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile"/>
-            <!--            <AppenderRef ref="Logstash"/>-->
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" />
+            <AppenderRef ref="Logstash" />
         </Logger>
     </Loggers>
 </Configuration>

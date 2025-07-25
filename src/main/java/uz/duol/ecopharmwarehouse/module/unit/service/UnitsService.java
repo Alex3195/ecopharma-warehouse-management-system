@@ -1,10 +1,12 @@
 package uz.duol.ecopharmwarehouse.module.unit.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.UnitsEntity;
 import uz.duol.ecopharmwarehouse.module.unit.dto.UnitsDTO;
 import uz.duol.ecopharmwarehouse.module.unit.exception.UnitNotFoundException;
@@ -44,11 +46,10 @@ public class UnitsService {
         repository.deleteById(dto.getId());
     }
 
-    public Page<UnitsDTO> findAll(String search, Pageable pageable) {
-        Specification<UnitsEntity> spec = Specification.where(UnitSpecification.isActive());
-        if (search != null && !search.isEmpty()) {
-            spec = spec.and(UnitSpecification.hasText(search));
-        }
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<UnitsDTO> findAll(DataTableRequest request) {
+        Specification<UnitsEntity> spec = UnitSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 }

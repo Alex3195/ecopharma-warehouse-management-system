@@ -2,11 +2,13 @@ package uz.duol.ecopharmwarehouse.module.rack.service;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.CellEntity;
 import uz.duol.ecopharmwarehouse.entity.FloorEntity;
 import uz.duol.ecopharmwarehouse.entity.RackEntity;
@@ -167,18 +169,17 @@ public class RackService {
     }
 
     @Transactional(readOnly = true)
-    public Page<RackInfo> findAll(String search, Pageable pageable) {
-        Specification<RackEntity> spec = Specification.where(null);
-        if (search != null && !search.isEmpty()) {
-            spec = spec.and(RackSpecification.hasText(search));
-        }
-        return repository.findAll(spec, pageable).map(item -> {
+    public DataTableResponse<RackInfo> findAll(DataTableRequest request) {
+        Specification<RackEntity> spec = RackSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(item -> {
             var dto = rackMapper.toDto(item);
             var floors = floorRepository.findByRackIdAndStatusIsNot(item.getId(), Status.DELETED);
             var rackDto = getRackDTO(dto, floors);
 
             return getRackInfo(rackDto);
         });
+        return new DataTableResponse<>(page);
     }
 
     private RackInfo getRackInfo(RackDTO rackDto) {

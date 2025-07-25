@@ -40,36 +40,19 @@ cache:
   stage: gradle-build
   script:
     - gradle clean bootJar
-  artifacts:
-    paths:
-      - build/libs/*.jar
-    when: always
-    expire_in: 1 week
 
 build-dev:
   <<: *build_template
-  artifacts:
-    paths:
-      - build/libs/*.jar
-      - docker-compose-wms-dev.yml
   only:
     - dev
 
 build-stage:
   <<: *build_template
-  artifacts:
-    paths:
-      - build/libs/*.jar
-      - docker-compose-wms-stage.yml
   only:
     - stage
 
 build-prod:
   <<: *build_template
-  artifacts:
-    paths:
-      - build/libs/*.jar
-      - docker-compose-wms-prod.yml
   only:
     - main
 
@@ -178,6 +161,7 @@ deploy-dev:
   <<: *deploy_template
   variables:
     USER: $SERVER_USER_DEV
+    SERVER_IP: $SERVER_IP_DEV
     PRIVATE_KEY: $SSH_PRIVATE_KEY
     SERVER_PORT: $SERVER_SSH_PORT_DEV
     SERVER_USER: $SERVER_USER_DEV
@@ -190,6 +174,7 @@ deploy-stage:
   <<: *deploy_template
   variables:
     USER: $SERVER_USER_STAGE
+    SERVER_IP: $SERVER_IP_STAGE
     PRIVATE_KEY: $SSH_PRIVATE_KEY_STAGE
     SERVER_PORT: $SERVER_SSH_PORT_STAGE
     SERVER_USER: $SERVER_USER_STAGE
@@ -202,6 +187,7 @@ deploy-prod:
   <<: *deploy_template
   variables:
     USER: $SERVER_USER_PROD
+    SERVER_IP: $SERVER_IP_PROD
     PRIVATE_KEY: $SSH_PRIVATE_KEY_PROD
     SERVER_PORT: $SERVER_SSH_PORT_PROD
     SERVER_USER: $SERVER_USER_PROD

@@ -2,10 +2,12 @@ package uz.duol.ecopharmwarehouse.module.store.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.module.store.dto.StoreSyncRequest;
 import uz.duol.ecopharmwarehouse.module.store.mapper.StoreAggregationWithAlternativeUnitMapper;
 import uz.duol.ecopharmwarehouse.module.store.specification.StoreAggregationWithAlternativeUnitSpecification;
@@ -36,8 +38,7 @@ public class StoreAggregationService {
 
     @Transactional(readOnly = true)
     public StoreSyncRequest findById(Long id) {
-        var e = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Store not found"));
+        var e = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Store not found"));
         return mapper.toDto(e);
     }
 
@@ -57,12 +58,11 @@ public class StoreAggregationService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StoreSyncRequest> findAll(String search, Pageable pageable) {
-        var spec = StoreAggregationWithAlternativeUnitSpecification.isActive();
-        if (search != null && !search.isEmpty()) {
-            spec = spec.and(StoreAggregationWithAlternativeUnitSpecification.hasText(search));
-        }
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<StoreSyncRequest> findAll(DataTableRequest request) {
+        var spec = StoreAggregationWithAlternativeUnitSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page = repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 
     private String generateBarCode() {

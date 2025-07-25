@@ -6,12 +6,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.warehouse.dto.WarehouseDTO;
 import uz.duol.ecopharmwarehouse.module.warehouse.service.WarehouseService;
 
@@ -102,9 +101,8 @@ public class WarehouseController {
             }
     )
     @PreAuthorize("hasAuthority('WAREHOUSE_GET') or hasRole('SUPER_ADMIN')")
-    @GetMapping("/list")
-    public Page<WarehouseDTO> findAll(@RequestParam(value = "search",required = false) String search,
-                                      @PageableDefault Pageable pageable) {
-        return service.findAll(search, pageable);
+    @PostMapping("/list")
+    public DataTableResponse<WarehouseDTO> findAll(@RequestBody DataTableRequest request) {
+        return service.findAll(request);
     }
 }

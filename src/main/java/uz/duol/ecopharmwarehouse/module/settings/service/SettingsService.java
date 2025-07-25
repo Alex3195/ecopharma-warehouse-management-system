@@ -1,10 +1,12 @@
 package uz.duol.ecopharmwarehouse.module.settings.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
+import uz.duol.ecopharmwarehouse.common.PageUtil;
 import uz.duol.ecopharmwarehouse.entity.SettingsEntity;
 import uz.duol.ecopharmwarehouse.module.settings.dto.SettingsDTO;
 import uz.duol.ecopharmwarehouse.module.settings.exception.SettingNotFoundException;
@@ -41,11 +43,10 @@ public class SettingsService {
         repository.deleteById(dto.getId());
     }
 
-    public Page<SettingsDTO> findAll(String search, Pageable pageable) {
-        Specification<SettingsEntity> spec = Specification.where(SettingsSpecification.isActive());
-        if (search != null && !search.isEmpty()) {
-            spec = spec.and(SettingsSpecification.hasText(search));
-        }
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+    public DataTableResponse<SettingsDTO> findAll(DataTableRequest request) {
+        Specification<SettingsEntity> spec = SettingsSpecification.advancedFilter(request.getFilters());
+        Pageable pageable = PageUtil.getPageable(request);
+        var page =repository.findAll(spec, pageable).map(mapper::toDto);
+        return new DataTableResponse<>(page);
     }
 }
