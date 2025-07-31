@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.entity.CharacteristicEntity;
 import uz.duol.ecopharmwarehouse.enums.CharacteristicType;
 import uz.duol.ecopharmwarehouse.module.characteristics.dto.CharacteristicsDTO;
@@ -41,13 +43,13 @@ public class CharacteristicsServiceUnitTest extends BaseUnitTest {
         dto.setId(8001L);
         dto.setDescription("description");
         dto.setName("name");
-        dto.setType(CharacteristicType.STRING);
+        dto.setType(CharacteristicType.TEXT);
 
         entity = new CharacteristicEntity();
         entity.setId(8001L);
         entity.setDescription("description");
         entity.setName("name");
-        entity.setType(CharacteristicType.STRING);
+        entity.setType(CharacteristicType.TEXT);
     }
 
     @Test
@@ -105,11 +107,10 @@ public class CharacteristicsServiceUnitTest extends BaseUnitTest {
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(any(CharacteristicEntity.class))).thenReturn(dto);
 
-        Page<CharacteristicsDTO> actual = service.findAll("search", PageRequest.of(0, 10));
+        DataTableResponse<CharacteristicsDTO> actual = service.findAll(new DataTableRequest());
         assertNotNull(actual);
 
         assertEquals(1, actual.getTotalElements());
-        assertEquals(1, actual.getNumberOfElements());
         assertEquals(1, actual.getTotalPages());
     }
 

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.module.inventory.dto.InventoryDto;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 
@@ -238,7 +239,7 @@ public class InventoryServiceIntegrationTest extends BaseServiceIntegrationTest 
     },executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testGetProductLocationByItsBarcode() {
-        Page<InventoryDto> actual = service.getProductLocationByItsBarcode(null, PageRequest.of(0, 10));
+        var actual = service.getProductLocationByItsBarcode(new DataTableRequest());
         assertNotNull(actual);
         assertEquals(10, actual.getTotalElements());
         assertEquals(1, actual.getTotalPages());

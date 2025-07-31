@@ -10,6 +10,7 @@ import uz.duol.ecopharmwarehouse.entity.SectorEntity;
 import uz.duol.ecopharmwarehouse.module.sector.characteristics.dto.SectorCharacteristicDTO;
 import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +31,7 @@ public class SectorMapperUnitTest extends BaseUnitTest {
         SectorCharacteristicDTO characteristic = new SectorCharacteristicDTO();
         characteristic.setId(1L);
         characteristic.setCharacteristicId(2L);
-        characteristic.setValue("Value");
+        characteristic.setValue(new ArrayList<>());
         dto.setCharacteristics(List.of(characteristic));
 
         entity = new SectorEntity();
@@ -41,7 +42,7 @@ public class SectorMapperUnitTest extends BaseUnitTest {
         SectorCharacteristicEntity characteristicE = new SectorCharacteristicEntity();
         characteristicE.setId(1L);
         characteristicE.setCharacteristicId(2L);
-        characteristicE.setValue("Value");
+        characteristicE.setValue(new ArrayList<>());
         entity.setCharacteristics(List.of(characteristicE));
     }
 

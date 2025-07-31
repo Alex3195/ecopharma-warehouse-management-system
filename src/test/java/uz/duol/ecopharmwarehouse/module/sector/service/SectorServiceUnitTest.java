@@ -10,17 +10,23 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.entity.SectorCharacteristicEntity;
 import uz.duol.ecopharmwarehouse.entity.SectorEntity;
 import uz.duol.ecopharmwarehouse.module.sector.characteristics.dto.SectorCharacteristicDTO;
 import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
 import uz.duol.ecopharmwarehouse.module.sector.exception.SectorNotFoundException;
 import uz.duol.ecopharmwarehouse.module.sector.mapper.SectorMapper;
+import uz.duol.ecopharmwarehouse.repositories.RackRepository;
 import uz.duol.ecopharmwarehouse.repositories.SectorRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,6 +44,9 @@ public class SectorServiceUnitTest extends BaseUnitTest {
     private SectorEntity entity;
     private SectorDTO dto;
 
+    @Mock
+    private RackRepository rackRepository;
+
     @BeforeEach
     void setUp() {
         dto = new SectorDTO();
@@ -48,7 +57,7 @@ public class SectorServiceUnitTest extends BaseUnitTest {
         SectorCharacteristicDTO characteristic = new SectorCharacteristicDTO();
         characteristic.setId(1L);
         characteristic.setCharacteristicId(2L);
-        characteristic.setValue("Value");
+        characteristic.setValue(new ArrayList<>());
         dto.setCharacteristics(List.of(characteristic));
 
         entity = new SectorEntity();
@@ -59,8 +68,10 @@ public class SectorServiceUnitTest extends BaseUnitTest {
         SectorCharacteristicEntity characteristicE = new SectorCharacteristicEntity();
         characteristicE.setId(1L);
         characteristicE.setCharacteristicId(2L);
-        characteristicE.setValue("Value");
+        characteristicE.setValue(new ArrayList<>());
         entity.setCharacteristics(List.of(characteristicE));
+
+        when(rackRepository.countBySectorId(anyLong())).thenReturn(5);
     }
 
     @Test
@@ -138,9 +149,17 @@ public class SectorServiceUnitTest extends BaseUnitTest {
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(entity)).thenReturn(dto);
 
-        Page<SectorDTO> found = sectorService.findAll("search", PageRequest.of(0, 10));
+        DataTableRequest request = new DataTableRequest();
+        request.setFilters(Map.of("search", ""));
+        request.setPage(0);
+        request.setSize(10);
 
-        assertEquals(List.of(dto.toString()), found.stream().map(SectorDTO::toString).toList());
+        DataTableResponse<SectorDTO> found = sectorService.findAll(request);
+
+        assertNotNull(found);
+        assertEquals(1, found.getTotalElements());
+        assertEquals(1, found.getData().size());
+        assertEquals(dto.toString(), found.getData().get(0).toString());
     }
 
 }

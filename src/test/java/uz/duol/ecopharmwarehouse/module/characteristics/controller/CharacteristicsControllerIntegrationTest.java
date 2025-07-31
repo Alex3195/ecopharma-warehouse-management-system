@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import uz.duol.ecopharmwarehouse.common.BaseControllerIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.enums.CharacteristicType;
 import uz.duol.ecopharmwarehouse.module.characteristics.dto.CharacteristicsDTO;
 
@@ -25,7 +26,7 @@ public class CharacteristicsControllerIntegrationTest extends BaseControllerInte
         dto.setId(1L);
         dto.setDescription("description");
         dto.setName("name");
-        dto.setType(CharacteristicType.STRING);
+        dto.setType(CharacteristicType.TEXT);
     }
 
     @Test
@@ -107,9 +108,13 @@ public class CharacteristicsControllerIntegrationTest extends BaseControllerInte
     @Test
     @WithMockUser(authorities = "CHARACTERISTICS_GET")
     void testFindAll() throws Exception {
-        mockMvc.perform(get("/api/v1/wms/characteristics/list")
-                        .param("page", "0")
-                        .param("size", "10"))
+        var request = new DataTableRequest();
+        request.setPage(0);
+        request.setSize(10);
+
+        mockMvc.perform(post("/api/v1/wms/characteristics/list")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
     }
 

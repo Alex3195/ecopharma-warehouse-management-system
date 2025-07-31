@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.module.store.dto.StoreSyncRequest;
 
 import java.util.HashMap;
@@ -71,7 +72,7 @@ public class StoreAggregationServiceIntegrationTest extends BaseServiceIntegrati
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {
-        Page<StoreSyncRequest> actual = storeAggregationService.findAll(null, PageRequest.of(0, 10));
+        var actual = storeAggregationService.findAll(new DataTableRequest());
 
         assertNotNull(actual);
     }
@@ -92,5 +93,18 @@ public class StoreAggregationServiceIntegrationTest extends BaseServiceIntegrati
         assertEquals("Store not found", e.getMessage());
     }
 
+    @Sql(scripts = {
+            "classpath:sql/store/truncate.sql",
+            "classpath:sql/store/insert.sql"
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = {
+            "classpath:sql/store/truncate.sql"
+    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Test
+    void testUpdate() {
+        StoreSyncRequest actual = storeAggregationService.update(589001L, request);
+        request.setId(actual.getId());
+        assertEquals(request.toString(), actual.toString());
+    }
 
 }

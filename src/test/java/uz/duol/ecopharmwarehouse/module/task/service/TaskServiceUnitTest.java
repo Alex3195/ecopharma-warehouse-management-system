@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.entity.LocationEntity;
 import uz.duol.ecopharmwarehouse.entity.TaskEntity;
 import uz.duol.ecopharmwarehouse.enums.TaskStatusEnum;
@@ -130,7 +131,7 @@ public class TaskServiceUnitTest extends BaseUnitTest {
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(any(TaskEntity.class))).thenReturn(dto);
 
-        Page<TaskDTO> actual = service.findAll(null, null, pageable);
+        var actual = service.findAll(new DataTableRequest());
         assertNotNull(actual);
         assertEquals(1, actual.getTotalPages());
     }

@@ -14,6 +14,7 @@ import uz.duol.ecopharmwarehouse.module.characteristics.dto.CharacteristicsDTO;
 import uz.duol.ecopharmwarehouse.module.sector.characteristics.dto.SectorCharacteristicDTO;
 import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,9 +38,9 @@ public class SectorControllerIntegrationTest extends BaseControllerIntegrationTe
         CharacteristicsDTO characteristicsDTO = new CharacteristicsDTO();
         characteristicsDTO.setId(1L);
         characteristic.setCharacteristic(characteristicsDTO);
-        characteristicsDTO.setType(CharacteristicType.STRING);
+        characteristicsDTO.setType(CharacteristicType.TEXT);
 
-        characteristic.setValue("Value");
+        characteristic.setValue(new ArrayList<>());
         dto.setCharacteristics(List.of(characteristic));
     }
 

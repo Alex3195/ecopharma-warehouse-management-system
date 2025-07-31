@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.entity.InboundReceiptEntity;
 import uz.duol.ecopharmwarehouse.enums.ReceiptStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ReceiptTypeEnum;
@@ -51,7 +52,7 @@ public class InboundReceiptServiceUnitTest extends BaseUnitTest {
         dto.setSupplierId("4a6b7165-2e61-4b35-9afb-5f576ee13049");
         dto.setAlternateStoreId(70014L);
         dto.setUnitId(70016L);
-        dto.setReceiptType(ReceiptTypeEnum.PRODUCTION_LINE_RETURN);
+        dto.setReceiptType(ReceiptTypeEnum.CUSTOMER_RETURN);
         dto.setReceiptStatus(ReceiptStatusEnum.CREATED);
 
 
@@ -62,7 +63,7 @@ public class InboundReceiptServiceUnitTest extends BaseUnitTest {
         entity.setSupplierId("4a6b7165-2e61-4b35-9afb-5f576ee13049");
         entity.setAlternateStoreId(70014L);
         entity.setUnitId(70016L);
-        entity.setReceiptType(ReceiptTypeEnum.PRODUCTION_LINE_RETURN);
+        entity.setReceiptType(ReceiptTypeEnum.CUSTOMER_RETURN);
         entity.setReceiptStatus(ReceiptStatusEnum.CREATED);
     }
 
@@ -125,10 +126,10 @@ public class InboundReceiptServiceUnitTest extends BaseUnitTest {
         when(repository.findAll(any(Specification.class), eq(pageable))).thenReturn(page);
         when(mapper.toDto(entity)).thenReturn(dto);
 
-        var actual = service.findAll(null, pageable);
+        var actual = service.findAll(new DataTableRequest());
         assertNotNull(actual);
         assertEquals(1, actual.getTotalElements());
-        assertEquals(dto.toString(), actual.getContent().getFirst().toString());
+        assertEquals(dto.toString(), actual.getData().getFirst().toString());
 
         verify(repository, times(1)).findAll(any(Specification.class), eq(pageable));
     }

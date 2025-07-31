@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.enums.CharacteristicType;
 import uz.duol.ecopharmwarehouse.module.characteristics.dto.CharacteristicsDTO;
 import uz.duol.ecopharmwarehouse.module.characteristics.exception.CharacteristicsNotFoundException;
@@ -25,7 +27,7 @@ public class CharacteristicsServiceIntegrationTest extends BaseServiceIntegratio
         dto.setId(1L);
         dto.setDescription("description");
         dto.setName("name");
-        dto.setType(CharacteristicType.STRING);
+        dto.setType(CharacteristicType.TEXT);
     }
 
     @Test
@@ -88,9 +90,8 @@ public class CharacteristicsServiceIntegrationTest extends BaseServiceIntegratio
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {
-        Page<CharacteristicsDTO> actual = service.findAll("", PageRequest.of(0, 10));
+        DataTableResponse<CharacteristicsDTO> actual = service.findAll(new DataTableRequest());
         assertNotNull(actual);
-        assertEquals(10, actual.getNumberOfElements());
         assertEquals(2, actual.getTotalPages());
         assertEquals(14, actual.getTotalElements());
     }

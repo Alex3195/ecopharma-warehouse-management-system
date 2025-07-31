@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.module.transport.label.dto.TransportLabelDto;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -138,9 +139,8 @@ public class TransportLabelIntegrationTest extends BaseServiceIntegrationTest {
     void testFindAll() {
         Pageable pageable = PageRequest.of(0, 10);
 
-        var page = service.findAll(null, pageable);
+        var page = service.findAll(new DataTableRequest());
         assertNotNull(page);
-        assertFalse(page.isEmpty());
         assertEquals(10, page.getTotalElements());
         assertEquals(1, page.getTotalPages());
     }

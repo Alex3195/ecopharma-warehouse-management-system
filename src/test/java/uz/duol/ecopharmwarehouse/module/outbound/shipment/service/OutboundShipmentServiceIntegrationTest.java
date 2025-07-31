@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.enums.ShipmentStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ShipmentTypeEnum;
 import uz.duol.ecopharmwarehouse.module.outboundshipment.dto.OutboundShipmentDto;
@@ -136,7 +137,7 @@ public class OutboundShipmentServiceIntegrationTest extends BaseServiceIntegrati
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {
-        var actual = service.findAll("", PageRequest.of(0,10));
+        var actual = service.findAll(new DataTableRequest());
 
         assertNotNull(actual);
         assertEquals(10, actual.getTotalElements());

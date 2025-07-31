@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.module.unit.dto.UnitsDTO;
 import uz.duol.ecopharmwarehouse.module.unit.exception.UnitNotFoundException;
 
@@ -101,11 +102,10 @@ public class UnitServiceIntegrationTest extends BaseServiceIntegrationTest {
     },executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {
-        Page<UnitsDTO> actual = service.findAll("", PageRequest.of(0, 10));
+        var actual = service.findAll(new DataTableRequest());
 
         assertNotNull(actual);
         assertEquals(2, actual.getTotalPages());
         assertEquals(20, actual.getTotalElements());
-        assertEquals(10, actual.getNumberOfElements());
     }
 }

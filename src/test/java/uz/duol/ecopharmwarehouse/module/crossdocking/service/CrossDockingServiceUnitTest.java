@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.entity.CrossDockingEntity;
 import uz.duol.ecopharmwarehouse.enums.CrossDockTypeEnum;
 import uz.duol.ecopharmwarehouse.module.crossdocking.dto.CrossDockingDto;
@@ -108,10 +110,10 @@ public class CrossDockingServiceUnitTest extends BaseUnitTest {
         when(crossDockingRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(pageEntity);
         when(crossDockingMapper.toDto(any(CrossDockingEntity.class))).thenReturn(dto);
 
-        Page<CrossDockingDto> actual = crossDockingService.findAll(pageable);
+        DataTableResponse<CrossDockingDto> actual = crossDockingService.findAll(new DataTableRequest());
         assertNotNull(actual);
         assertEquals(1, actual.getTotalElements());
-        assertEquals(dto.toString(), actual.getContent().getFirst().toString());
+        assertEquals(dto.toString(), actual.getData().getFirst().toString());
 
         verify(crossDockingRepository, times(1)).findAll(any(Specification.class), any(Pageable.class));
     }

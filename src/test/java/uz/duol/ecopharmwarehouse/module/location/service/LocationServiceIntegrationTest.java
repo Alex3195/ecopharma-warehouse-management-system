@@ -1,4 +1,4 @@
-package uz.duol.ecopharmwarehouse.module.floor.service;
+package uz.duol.ecopharmwarehouse.module.location.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -6,33 +6,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
-import uz.duol.ecopharmwarehouse.module.cells.dto.CellDTO;
-import uz.duol.ecopharmwarehouse.module.floor.dto.FloorDTO;
-import uz.duol.ecopharmwarehouse.module.floor.exception.FloorNotFoundException;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
+import uz.duol.ecopharmwarehouse.module.location.exception.LocationNotFoundException;
 
-import java.util.List;
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@Transactional
-public class FloorServiceIntegrationTest extends BaseServiceIntegrationTest {
+public class LocationServiceIntegrationTest extends BaseServiceIntegrationTest {
     @Autowired
-    private FloorService service;
-    private FloorDTO dto;
+    private LocationService service;
+    private LocationDTO dto;
 
     @BeforeEach
-    public void setUp() {
-        dto = new FloorDTO();
+    void setUp() {
+        dto = new LocationDTO();
         dto.setId(1L);
-        dto.setLevel(1);
-        dto.setHeight(4.5);
-        dto.setRackId(6001L);
-        CellDTO cell = new CellDTO();
-        cell.setId(1L);
-        cell.setCode("1");
-        dto.setCells(List.of(cell));
+        dto.setName("name");
+        dto.setWarehouseId(20001L);
+        dto.setSector(2001L);
+        dto.setRack(3001L);
+        dto.setFloor(4001L);
+        dto.setCell(5001L);
     }
 
     @Sql(scripts = {
@@ -40,24 +37,24 @@ public class FloorServiceIntegrationTest extends BaseServiceIntegrationTest {
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
-            "classpath:sql/floor/floor_clear.sql",
+            "classpath:sql/location/clear-location.sql",
 
             "classpath:sql/address/address_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/rack/rack_insert.sql",
-            "classpath:sql/floor/floor_insert.sql",
+            "classpath:sql/location/insert-location.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
             "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
-            "classpath:sql/floor/floor_clear.sql",
+            "classpath:sql/location/clear-location.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testCreate() {
-        FloorDTO actual = service.create(dto);
+        LocationDTO actual = service.create(dto);
 
         assertNotNull(actual);
     }
@@ -67,33 +64,27 @@ public class FloorServiceIntegrationTest extends BaseServiceIntegrationTest {
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
-            "classpath:sql/floor/floor_clear.sql",
+            "classpath:sql/location/clear-location.sql",
 
             "classpath:sql/address/address_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/rack/rack_insert.sql",
-            "classpath:sql/floor/floor_insert.sql",
+            "classpath:sql/location/insert-location.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
             "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
-            "classpath:sql/floor/floor_clear.sql",
+            "classpath:sql/location/clear-location.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testUpdate() {
-        FloorDTO actual = service.update(2001L, dto);
+        LocationDTO locationDTO = service.update(3001L, dto);
 
-        dto.setId(actual.getId());
-        assertNotNull(actual);
-    }
-
-    @Test
-    void testUpdate_ThenNotFound() {
-        FloorNotFoundException e = assertThrows(FloorNotFoundException.class, () -> service.update(2001L, dto));
-        assertEquals("Floor not found", e.getMessage());
+        dto.setId(locationDTO.getId());
+        assertNotNull(locationDTO);
     }
 
     @Sql(scripts = {
@@ -101,33 +92,27 @@ public class FloorServiceIntegrationTest extends BaseServiceIntegrationTest {
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
-            "classpath:sql/floor/floor_clear.sql",
+            "classpath:sql/location/clear-location.sql",
 
             "classpath:sql/address/address_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/rack/rack_insert.sql",
-            "classpath:sql/floor/floor_insert.sql",
+            "classpath:sql/location/insert-location.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
             "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
-            "classpath:sql/floor/floor_clear.sql",
+            "classpath:sql/location/clear-location.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testDelete() {
-        service.delete(2001L);
+        service.delete(3001L);
 
-        FloorNotFoundException e = assertThrows(FloorNotFoundException.class, () -> service.delete(2001L));
-        assertEquals("Floor not found", e.getMessage());
-    }
-
-    @Test
-    void testDelete_ThenNotFound() {
-        FloorNotFoundException e = assertThrows(FloorNotFoundException.class, () -> service.delete(2001L));
-        assertEquals("Floor not found", e.getMessage());
+        LocationNotFoundException LocationNotFoundException = assertThrows(LocationNotFoundException.class, () -> service.delete(3001L));
+        assertEquals("Location not found", LocationNotFoundException.getMessage());
     }
 
     @Sql(scripts = {
@@ -135,33 +120,55 @@ public class FloorServiceIntegrationTest extends BaseServiceIntegrationTest {
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
-            "classpath:sql/floor/floor_clear.sql",
+            "classpath:sql/location/clear-location.sql",
 
             "classpath:sql/address/address_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/rack/rack_insert.sql",
-            "classpath:sql/floor/floor_insert.sql",
+            "classpath:sql/location/insert-location.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
             "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
-            "classpath:sql/floor/floor_clear.sql",
+            "classpath:sql/location/clear-location.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindById() {
-        FloorDTO actual = service.findById(2001L);
+        LocationDTO actual = service.findById(3001L);
 
         dto.setId(actual.getId());
         assertNotNull(actual);
     }
 
+    @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
+            "classpath:sql/sector/sector_clear.sql",
+            "classpath:sql/rack/rack_clear.sql",
+            "classpath:sql/location/clear-location.sql",
+
+            "classpath:sql/address/address_insert.sql",
+            "classpath:sql/warehouse/warehouse_insert.sql",
+            "classpath:sql/sector/sector_insert.sql",
+            "classpath:sql/rack/rack_insert.sql",
+            "classpath:sql/location/insert-location.sql",
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = {
+            "classpath:sql/address/address_clear.sql",
+            "classpath:sql/warehouse/warehouse_clear.sql",
+            "classpath:sql/sector/sector_clear.sql",
+            "classpath:sql/rack/rack_clear.sql",
+            "classpath:sql/location/clear-location.sql",
+    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
-    void testFindById_ThenNotFound() {
-        FloorNotFoundException e = assertThrows(FloorNotFoundException.class, () -> service.findById(2001L));
-        assertEquals("Floor not found", e.getMessage());
+    void testFindAll() {
+        var actual = service.findAll(new DataTableRequest());
+
+        assertEquals(20, actual.getTotalElements());
+        assertEquals(2, actual.getTotalPages());
     }
 
     @Sql(scripts = {
@@ -169,26 +176,23 @@ public class FloorServiceIntegrationTest extends BaseServiceIntegrationTest {
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
-            "classpath:sql/floor/floor_clear.sql",
+            "classpath:sql/location/clear-location.sql",
 
             "classpath:sql/address/address_insert.sql",
             "classpath:sql/warehouse/warehouse_insert.sql",
             "classpath:sql/sector/sector_insert.sql",
             "classpath:sql/rack/rack_insert.sql",
-            "classpath:sql/floor/floor_insert.sql",
+            "classpath:sql/location/insert-location.sql",
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
             "classpath:sql/address/address_clear.sql",
             "classpath:sql/warehouse/warehouse_clear.sql",
             "classpath:sql/sector/sector_clear.sql",
             "classpath:sql/rack/rack_clear.sql",
-            "classpath:sql/floor/floor_clear.sql",
+            "classpath:sql/location/clear-location.sql",
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
-    void testFindAll() {
-        Page<FloorDTO> actual = service.findAll(PageRequest.of(0, 10));
+    void testFindByBarcode(){
 
-        assertEquals(10, actual.getNumberOfElements());
-        assertEquals(2, actual.getTotalPages());
     }
 }

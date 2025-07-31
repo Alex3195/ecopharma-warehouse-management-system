@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.entity.LocationEntity;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 import uz.duol.ecopharmwarehouse.module.location.exception.LocationNotFoundException;
@@ -131,10 +132,9 @@ public class LocationServiceUnitTest extends BaseUnitTest {
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(entity)).thenReturn(dto);
 
-        Page<LocationDTO> result = service.findAll("search", pageable);
+        var result = service.findAll(new DataTableRequest());
 
         assertEquals(1, result.getTotalElements());
-        assertEquals(1, result.getNumberOfElements());
         assertEquals(1, result.getTotalPages());
     }
 

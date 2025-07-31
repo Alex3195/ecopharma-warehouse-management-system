@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.address.dto.AddressDTO;
 import uz.duol.ecopharmwarehouse.module.address.exception.AddressNotFoundException;
 
@@ -118,11 +120,12 @@ public class AddressServiceIntegrationTest extends BaseServiceIntegrationTest {
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {
-        Page<AddressDTO> actual = addressService.findAll("", PageRequest.of(0, 10));
+        DataTableResponse<AddressDTO> actual = addressService.findAll(new DataTableRequest());
 
-        assertNotNull(actual.getContent());
+        assertNotNull(actual.getData());
         assertEquals(19, actual.getTotalElements());
-        assertEquals(10, actual.getNumberOfElements());
         assertEquals(2, actual.getTotalPages());
     }
+
+
 }

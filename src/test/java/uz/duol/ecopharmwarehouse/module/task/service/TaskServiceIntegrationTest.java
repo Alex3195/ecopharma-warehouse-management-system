@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.enums.TaskStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.TaskTypeEnum;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
@@ -145,7 +146,7 @@ public class TaskServiceIntegrationTest extends BaseServiceIntegrationTest {
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindByPagination() {
-        var actual = service.findAll("", "", Pageable.ofSize(10));
+        var actual = service.findAll(new DataTableRequest());
         assertNotNull(actual);
     }
 
