@@ -1,5 +1,6 @@
 package uz.duol.ecopharmwarehouse.module.warehouse.service;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -15,6 +16,10 @@ import uz.duol.ecopharmwarehouse.module.warehouse.mapper.WarehouseMapper;
 import uz.duol.ecopharmwarehouse.module.warehouse.specification.WarehouseSpecification;
 import uz.duol.ecopharmwarehouse.repositories.SectorRepository;
 import uz.duol.ecopharmwarehouse.repositories.WarehouseRepository;
+import uz.duol.ecopharmwarehouse.utils.ExcelExportUtil;
+
+import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -59,5 +64,26 @@ public class WarehouseService {
         Pageable pageable = PageUtil.getPageable(request);
         var page = repository.findAll(spec, pageable).map(mapper::toDto);
         return new DataTableResponse<>(page);
+    }
+
+    @Transactional(readOnly = true)
+    public void exportToExcel(HttpServletResponse response, DataTableRequest request, List<String> columnNames, List<String> fieldNames) {
+        Specification<WarehouseEntity> spec = WarehouseSpecification.advancedFilter(request.getFilters());
+
+        List<WarehouseEntity> allData = repository.findAll(spec);
+
+        List<WarehouseDTO> dtos = allData.stream().map(mapper::toDto).toList();
+
+        byte[] excel = ExcelExportUtil.exportToExcel(dtos, fieldNames, columnNames, "warehouse");
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=aggregation.xlsx");
+
+        try {
+            response.getOutputStream().write(excel);
+            response.getOutputStream().flush();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write Excel to response", e);
+        }
     }
 }

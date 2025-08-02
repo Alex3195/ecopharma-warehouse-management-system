@@ -1,6 +1,7 @@
 package uz.duol.ecopharmwarehouse.module.inventory.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,6 +18,10 @@ import uz.duol.ecopharmwarehouse.module.inventory.specification.InventorySpecifi
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 import uz.duol.ecopharmwarehouse.module.location.service.LocationService;
 import uz.duol.ecopharmwarehouse.repositories.InventoryRepository;
+import uz.duol.ecopharmwarehouse.utils.ExcelExportUtil;
+
+import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -65,5 +70,26 @@ public class InventoryService {
         var entity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
         repository.deleteById(entity.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public void exportToExcel(HttpServletResponse response, DataTableRequest request, List<String> columnNames, List<String> fieldNames) {
+        Specification<InventoryEntity> spec = InventorySpecification.advancedFilter(request.getFilters());
+
+        List<InventoryEntity> allData = repository.findAll(spec);
+
+        List<InventoryDto> inventoryDtoList = allData.stream().map(mapper::toDto).toList();
+
+        byte[] excel = ExcelExportUtil.exportToExcel(inventoryDtoList, fieldNames, columnNames, "inventory");
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=aggregation.xlsx");
+
+        try {
+            response.getOutputStream().write(excel);
+            response.getOutputStream().flush();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write Excel to response", e);
+        }
     }
 }

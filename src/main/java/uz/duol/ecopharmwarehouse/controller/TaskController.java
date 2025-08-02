@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.task.dto.TaskDTO;
 import uz.duol.ecopharmwarehouse.module.task.service.TaskService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/wms/task")
@@ -105,5 +108,21 @@ public class TaskController {
     @PostMapping("/list")
     public DataTableResponse<TaskDTO> getAll(@RequestBody DataTableRequest request) {
         return taskService.findAll(request);
+    }
+
+    @Operation(summary = "Get tasks as pageable",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "400", description = "Bad request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - invalid credentials"),
+                    @ApiResponse(responseCode = "403", description = "Access denied - bad role permission"),
+            })
+    @PostMapping("/export")
+    public void exportToExcel(HttpServletResponse response,
+                              @RequestBody DataTableRequest request,
+                              @RequestParam("columnNames") List<String> columnNames,
+                              @RequestParam("fieldNames") List<String> fieldNames) {
+        taskService.exportToExcel(response, request, columnNames, fieldNames);
     }
 }

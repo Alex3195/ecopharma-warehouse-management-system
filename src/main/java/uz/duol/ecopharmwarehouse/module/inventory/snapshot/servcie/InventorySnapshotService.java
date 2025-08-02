@@ -1,6 +1,7 @@
 package uz.duol.ecopharmwarehouse.module.inventory.snapshot.servcie;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,8 +18,10 @@ import uz.duol.ecopharmwarehouse.module.inventory.snapshot.specification.Invento
 import uz.duol.ecopharmwarehouse.repositories.InventoryRepository;
 import uz.duol.ecopharmwarehouse.repositories.InventorySnapshotRepository;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import uz.duol.ecopharmwarehouse.utils.ExcelExportUtil;
 
 @Service
 @RequiredArgsConstructor
@@ -83,5 +86,26 @@ public class InventorySnapshotService {
     public void delete(Long id) {
         var existing = findById(id);
         repository.deleteById(existing.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public void exportToExcel(HttpServletResponse response, DataTableRequest request, List<String> columnNames, List<String> fieldNames) {
+        Specification<InventorySnapshotEntity> spec = InventorySnapshotSpecification.advancedFilter(request.getFilters());
+
+        List<InventorySnapshotEntity> allData = repository.findAll(spec);
+
+        List<InventorySnapshotDto> dtos = allData.stream().map(mapper::toDto).toList();
+
+        byte[] excel = ExcelExportUtil.exportToExcel(dtos, fieldNames, columnNames, "inventory_snapshot");
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=aggregation.xlsx");
+
+        try {
+            response.getOutputStream().write(excel);
+            response.getOutputStream().flush();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write Excel to response", e);
+        }
     }
 }

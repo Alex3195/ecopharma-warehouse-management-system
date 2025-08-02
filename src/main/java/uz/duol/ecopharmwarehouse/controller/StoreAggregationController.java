@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.store.dto.StoreSyncRequest;
 import uz.duol.ecopharmwarehouse.module.store.service.StoreAggregationService;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/wms/store-aggregation")
@@ -85,5 +87,21 @@ public class StoreAggregationController {
     @PutMapping("/{id}")
     public StoreSyncRequest updateStoreSync(@PathVariable Long id, @RequestBody StoreSyncRequest request) {
         return storeAggregationService.update(id, request);
+    }
+
+    @Operation(summary = "Get store aggregation as pageable",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "400", description = "Bad request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - invalid credentials"),
+                    @ApiResponse(responseCode = "403", description = "Access denied - bad role permission"),
+            })
+    @PostMapping("/export")
+    public void exportToExcel(HttpServletResponse response,
+                              @RequestBody DataTableRequest request,
+                              @RequestParam("columnNames") List<String> columnNames,
+                              @RequestParam("fieldNames") List<String> fieldNames) {
+        storeAggregationService.exportToExcel(response, request, columnNames, fieldNames);
     }
 }

@@ -3,6 +3,7 @@ package uz.duol.ecopharmwarehouse.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -121,6 +122,22 @@ public class UnitConversionController {
     public void deleteAll(@RequestParam("ids") List<Long> ids) {
         log.info("Deleting units conversion {}", ids);
         service.deleteAll(ids);
+    }
+
+    @Operation(summary = "Get sector characteristics as pageable",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "400", description = "Bad request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - invalid credentials"),
+                    @ApiResponse(responseCode = "403", description = "Access denied - bad role permission"),
+            })
+    @PostMapping("/export")
+    public void exportToExcel(HttpServletResponse response,
+                              @RequestBody DataTableRequest request,
+                              @RequestParam("columnNames") List<String> columnNames,
+                              @RequestParam("fieldNames") List<String> fieldNames) {
+        service.exportToExcel(response, request, columnNames, fieldNames);
     }
 
 }

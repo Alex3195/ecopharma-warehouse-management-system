@@ -1,5 +1,6 @@
 package uz.duol.ecopharmwarehouse.module.rack.service;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +30,9 @@ import uz.duol.ecopharmwarehouse.module.sector.service.SectorService;
 import uz.duol.ecopharmwarehouse.repositories.CellsRepository;
 import uz.duol.ecopharmwarehouse.repositories.FloorRepository;
 import uz.duol.ecopharmwarehouse.repositories.RackRepository;
+import uz.duol.ecopharmwarehouse.utils.ExcelExportUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -214,5 +217,26 @@ public class RackService {
             floor.setCells(cells.stream().map(cellsMapper::toDto).collect(Collectors.toList()));
         });
         return dto;
+    }
+
+    @Transactional(readOnly = true)
+    public void exportToExcel(HttpServletResponse response, DataTableRequest request, List<String> columnNames, List<String> fieldNames) {
+        Specification<RackEntity> spec = RackSpecification.advancedFilter(request.getFilters());
+
+        List<RackEntity> allData = repository.findAll(spec);
+
+        List<RackDTO> dtos = allData.stream().map(rackMapper::toDto).toList();
+
+        byte[] excel = ExcelExportUtil.exportToExcel(dtos, fieldNames, columnNames, "rack");
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=aggregation.xlsx");
+
+        try {
+            response.getOutputStream().write(excel);
+            response.getOutputStream().flush();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write Excel to response", e);
+        }
     }
 }

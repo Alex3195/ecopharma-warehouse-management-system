@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +13,8 @@ import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.transport.label.dto.TransportLabelDto;
 import uz.duol.ecopharmwarehouse.module.transport.label.service.TransportLabelService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/wms/transport-label")
@@ -91,5 +94,21 @@ public class TransportLabelController {
     @PreAuthorize("hasAuthority('TRANSPORT_LABEL_READ') or hasRole('SUPER_ADMIN')")
     public DataTableResponse<TransportLabelDto> getAll(@RequestBody DataTableRequest request) {
         return transportLabelService.findAll(request);
+    }
+
+    @Operation(summary = "Get transport labels as pageable",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "400", description = "Bad request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - invalid credentials"),
+                    @ApiResponse(responseCode = "403", description = "Access denied - bad role permission"),
+            })
+    @PostMapping("/export")
+    public void exportToExcel(HttpServletResponse response,
+                              @RequestBody DataTableRequest request,
+                              @RequestParam("columnNames") List<String> columnNames,
+                              @RequestParam("fieldNames") List<String> fieldNames) {
+        transportLabelService.exportToExcel(response, request, columnNames, fieldNames);
     }
 }
