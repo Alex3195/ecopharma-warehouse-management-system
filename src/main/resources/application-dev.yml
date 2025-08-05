@@ -40,7 +40,7 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://192.168.7.12:8088/eureka/
+      defaultZone: http://discovery-server:8088/eureka/
     healthcheck:
       enabled: true
     fetch-registry: true
