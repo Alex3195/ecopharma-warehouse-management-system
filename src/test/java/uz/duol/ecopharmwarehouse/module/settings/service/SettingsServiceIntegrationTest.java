@@ -8,8 +8,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.settings.dto.SettingsDTO;
 import uz.duol.ecopharmwarehouse.module.settings.exception.SettingNotFoundException;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -84,10 +88,15 @@ public class SettingsServiceIntegrationTest extends BaseServiceIntegrationTest {
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {
-        Page<SettingsDTO> result = service.findAll("", PageRequest.of(0, 10));
+        DataTableRequest request = new DataTableRequest();
+        request.setFilters(Map.of("name", ""));
+
+        DataTableResponse<SettingsDTO> result = service.findAll(request);
+
+        assertNotNull(result);
         assertEquals(20, result.getTotalElements());
         assertEquals(2, result.getTotalPages());
-        assertEquals(10, result.getNumberOfElements());
+        assertEquals(10, result.getData().size());
     }
 
     @Test

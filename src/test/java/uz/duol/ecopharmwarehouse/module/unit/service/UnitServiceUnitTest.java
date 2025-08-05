@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.entity.UnitsEntity;
 import uz.duol.ecopharmwarehouse.module.unit.dto.UnitsDTO;
 import uz.duol.ecopharmwarehouse.module.unit.exception.UnitNotFoundException;
@@ -117,16 +118,14 @@ public class UnitServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindAll() {
-        Pageable pageable = mock(Pageable.class);
-
         Page<UnitsEntity> page = new PageImpl<>(List.of(entity));
-        when(repository.findAll(any(Specification.class), eq(pageable))).thenReturn(page);
+        when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(entity)).thenReturn(dto);
 
-        Page<UnitsDTO> result = service.findAll("search", pageable);
+        var result = service.findAll(new DataTableRequest());
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
-        assertEquals(dto, result.getContent().getFirst());
+        assertEquals(dto, result.getData().getFirst());
     }
 }

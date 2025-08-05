@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.entity.SettingsEntity;
 import uz.duol.ecopharmwarehouse.module.settings.dto.SettingsDTO;
 import uz.duol.ecopharmwarehouse.module.settings.exception.SettingNotFoundException;
@@ -124,10 +125,9 @@ public class SettingsServiceUnitTest extends BaseUnitTest {
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(entity)).thenReturn(dto);
 
-        Page<SettingsDTO> actual = service.findAll("", PageRequest.of(0, 10));
+        var actual = service.findAll(new DataTableRequest());
 
         assertEquals(1, actual.getTotalElements());
-        assertEquals(1, actual.getNumberOfElements());
         assertEquals(1, actual.getTotalPages());
     }
 }

@@ -115,6 +115,7 @@ dependencies {
     testImplementation "com.github.tomakehurst:wiremock-standalone:${wiremockVersion}"
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    implementation 'org.apache.poi:poi-ooxml:5.4.1'
 }
 
 dependencyManagement {

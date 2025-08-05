@@ -1,5 +1,6 @@
 package uz.duol.ecopharmwarehouse.module.characteristics.service;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,9 @@ import uz.duol.ecopharmwarehouse.module.characteristics.values.dto.Characteristi
 import uz.duol.ecopharmwarehouse.repositories.CharacteristicValuesRepository;
 import uz.duol.ecopharmwarehouse.repositories.CharacteristicsRepository;
 import uz.duol.ecopharmwarehouse.repositories.SectorCharacteristicsRepository;
+import uz.duol.ecopharmwarehouse.utils.ExcelExportUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,22 +50,19 @@ public class CharacteristicsService {
 
     @Transactional(readOnly = true)
     public CharacteristicsDTO findById(Long id) {
-        var e = repository.findById(id)
-                .orElseThrow(() -> new CharacteristicsNotFoundException("Characteristics not found"));
+        var e = repository.findById(id).orElseThrow(() -> new CharacteristicsNotFoundException("Characteristics not found"));
         return mapper.toDto(e);
     }
 
     @Transactional
     public CharacteristicsDTO update(Long id, CharacteristicsDTO dto) {
-        CharacteristicEntity existing = repository.findById(id)
-                .orElseThrow(() -> new CharacteristicsNotFoundException("Characteristics not found"));
+        CharacteristicEntity existing = repository.findById(id).orElseThrow(() -> new CharacteristicsNotFoundException("Characteristics not found"));
 
         existing.setName(dto.getName());
         existing.setDescription(dto.getDescription());
         existing.setType(dto.getType());
 
-        Map<Long, CharacterValuesEntity> existingValuesMap = existing.getValues().stream()
-                .collect(Collectors.toMap(CharacterValuesEntity::getId, Function.identity()));
+        Map<Long, CharacterValuesEntity> existingValuesMap = existing.getValues().stream().collect(Collectors.toMap(CharacterValuesEntity::getId, Function.identity()));
 
         List<CharacterValuesEntity> updatedValues = new ArrayList<>();
 
@@ -79,9 +79,7 @@ public class CharacteristicsService {
             }
         }
 
-        List<CharacterValuesEntity> valuesToRemove = existing.getValues().stream()
-                .filter(v -> !updatedValues.contains(v))
-                .toList();
+        List<CharacterValuesEntity> valuesToRemove = existing.getValues().stream().filter(v -> !updatedValues.contains(v)).toList();
 
         existing.getValues().clear();
 
@@ -115,5 +113,26 @@ public class CharacteristicsService {
         Pageable pageable = PageUtil.getPageable(request);
         var page = repository.findAll(spec, pageable).map(mapper::toDto);
         return new DataTableResponse<>(page);
+    }
+
+    @Transactional(readOnly = true)
+    public void exportToExcel(HttpServletResponse response, DataTableRequest request, List<String> columnNames, List<String> fieldNames) {
+        Specification<CharacteristicEntity> spec = CharacteristicSpecification.advancedFilter(request.getFilters());
+
+        List<CharacteristicEntity> allData = repository.findAll(spec);
+
+        List<CharacteristicsDTO> addressDTOList = allData.stream().map(mapper::toDto).toList();
+
+        byte[] excel = ExcelExportUtil.exportToExcel(addressDTOList, fieldNames, columnNames, "characteristics");
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=aggregation.xlsx");
+
+        try {
+            response.getOutputStream().write(excel);
+            response.getOutputStream().flush();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write Excel to response", e);
+        }
     }
 }

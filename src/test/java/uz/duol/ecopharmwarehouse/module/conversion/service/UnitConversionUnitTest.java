@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.entity.UnitConversionEntity;
 import uz.duol.ecopharmwarehouse.entity.UnitsEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
@@ -179,12 +181,12 @@ class UnitConversionUnitTest extends BaseUnitTest {
         when(mapper.toDto(entity)).thenReturn(dto);
 
         Pageable pageable = Pageable.ofSize(10);
-        Page<UnitConversionDto> result = service.getByMainUnitId(1L, pageable);
+        DataTableResponse<UnitConversionDto> result = service.getByMainUnitId(1L, new DataTableRequest());
 
         assertNotNull(result);
-        assertEquals(1, result.getContent().size());
-        assertEquals("kg", result.getContent().getFirst().getBaseUnitSymbol());
-        assertEquals("g", result.getContent().getFirst().getAlternativeUnitSymbol());
+        assertEquals(1, result.getData().size());
+        assertEquals("kg", result.getData().getFirst().getBaseUnitSymbol());
+        assertEquals("g", result.getData().getFirst().getAlternativeUnitSymbol());
 
         verify(repository, times(1)).findAll(any(Specification.class), eq(pageable));
     }

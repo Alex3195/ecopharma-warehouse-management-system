@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.entity.UnitConversionEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.conversion.dto.UnitConversionDto;
@@ -65,11 +66,11 @@ public class UnitConversionIntegrationTest extends BaseServiceIntegrationTest {
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testGetByMainUnitId() {
-        var result = service.getByMainUnitId(baseUnitId, PageRequest.of(0, 10));
+        var result = service.getByMainUnitId(baseUnitId, new DataTableRequest());
 
         assertNotNull(result);
-        assertFalse(result.isEmpty());
-        assertEquals(baseUnitId, result.getContent().getFirst().getBaseUnitId());
+        assertFalse(result.getTotalElements() < 1);
+        assertEquals(baseUnitId, result.getData().getFirst().getBaseUnitId());
     }
 
     @Sql(scripts = {

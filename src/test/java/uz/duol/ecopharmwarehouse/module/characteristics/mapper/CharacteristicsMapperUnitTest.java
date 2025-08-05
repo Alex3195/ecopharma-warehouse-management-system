@@ -21,13 +21,13 @@ public class CharacteristicsMapperUnitTest extends BaseUnitTest {
         dto.setId(8001L);
         dto.setDescription("description");
         dto.setName("name");
-        dto.setType(CharacteristicType.STRING);
+        dto.setType(CharacteristicType.TEXT);
 
         entity = new CharacteristicEntity();
         entity.setId(8001L);
         entity.setDescription("description");
         entity.setName("name");
-        entity.setType(CharacteristicType.STRING);
+        entity.setType(CharacteristicType.TEXT);
     }
 
     @Test

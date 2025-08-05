@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.entity.StoreAggregationsWithAlternativeUnitEntity;
 import uz.duol.ecopharmwarehouse.module.store.dto.StoreSyncRequest;
 import uz.duol.ecopharmwarehouse.module.store.mapper.StoreAggregationWithAlternativeUnitMapper;
@@ -16,6 +17,7 @@ import uz.duol.ecopharmwarehouse.repositories.StoreAggregationWithAlternativeUni
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -119,17 +121,18 @@ public class StoreAggregationServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindAll() {
-        String search = "test";
-        Pageable pageable = mock(Pageable.class);
         StoreSyncRequest dto = mock(StoreSyncRequest.class);
-        Page<Object> page = new PageImpl<>(Collections.singletonList(entity));
-        when(repository.findAll(any(Specification.class), eq(pageable))).thenReturn(page);
+        Page<StoreAggregationsWithAlternativeUnitEntity> page = new PageImpl<>(Collections.singletonList(entity));
+        when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(entity)).thenReturn(dto);
 
-        Page<StoreSyncRequest> result = service.findAll(search, pageable);
+        DataTableRequest request = new DataTableRequest();
+        request.setFilters(Map.of("barcode", "test"));
+
+        var result = service.findAll(request);
 
         assertEquals(1, result.getTotalElements());
-        assertEquals(dto, result.getContent().getFirst());
+        assertEquals(dto, result.getData().get(0));
     }
 
     @Test

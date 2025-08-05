@@ -7,12 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.enums.RackTypeEnum;
 import uz.duol.ecopharmwarehouse.module.cells.dto.CellDTO;
 import uz.duol.ecopharmwarehouse.module.floor.dto.FloorDTO;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackInfo;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackRequest;
+import uz.duol.ecopharmwarehouse.module.rack.dto.RackUpdateRequest;
 import uz.duol.ecopharmwarehouse.module.rack.exception.RackNotFoundException;
 
 import java.util.List;
@@ -22,18 +24,15 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RackServiceIntegrationTest extends BaseServiceIntegrationTest {
     @Autowired
     private RackService service;
-    private RackDTO dto;
+    private RackUpdateRequest dto;
 
     @BeforeEach
     void setUp() {
-        dto = new RackDTO();
+        dto = new RackUpdateRequest();
         dto.setId(1L);
         dto.setName("Rack 1");
         dto.setType(RackTypeEnum.PALLET_RACKING);
         dto.setSectorId(8001L);
-        dto.setHeight(300.0);
-        dto.setWidth(300.0);
-        dto.setDepth(300.0);
 
         FloorDTO floor = new FloorDTO();
         floor.setId(1L);
@@ -48,8 +47,6 @@ public class RackServiceIntegrationTest extends BaseServiceIntegrationTest {
         cell.setCode("Cell 1");
 
         floor.setCells(List.of(cell));
-
-        dto.setFloors(List.of(floor));
     }
 
     @Sql(scripts = {
@@ -145,9 +142,8 @@ public class RackServiceIntegrationTest extends BaseServiceIntegrationTest {
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {
-        Page<RackInfo> page = service.findAll("", PageRequest.of(0, 10));
+        var page = service.findAll(new DataTableRequest());
         assertNotNull(page);
-        assertEquals(10, page.getNumberOfElements());
         assertEquals(20, page.getTotalElements());
         assertEquals(2, page.getTotalPages());
     }

@@ -33,7 +33,7 @@ public class InboundReceiptControllerIntegrationTest extends BaseControllerInteg
         dto.setSupplierId("4a6b7165-2e61-4b35-9afb-5f576ee13049");
         dto.setAlternateStoreId(70014L);
         dto.setUnitId(70016L);
-        dto.setReceiptType(ReceiptTypeEnum.PRODUCTION_LINE_RETURN);
+        dto.setReceiptType(ReceiptTypeEnum.CUSTOMER_RETURN);
         dto.setReceiptStatus(ReceiptStatusEnum.CREATED);
         dto.setCrossDockType(CrossDockTypeEnum.OPPORTUNISTIC);
         dto.setProcessingTime(LocalDateTime.of(2025, 5, 25, 9, 0, 0));

@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.entity.InventoryEntity;
 import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.inventory.dto.InventoryDto;
@@ -119,10 +120,10 @@ public class InventoryServiceUnitTest extends BaseUnitTest {
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(entity)).thenReturn(dto);
 
-        Page<InventoryDto> actual = service.getProductLocationByItsBarcode(null, PageRequest.of(0, 10));
+        var actual = service.getProductLocationByItsBarcode(new DataTableRequest());
 
         assertEquals(1, actual.getTotalElements());
-        assertEquals(dto.toString(), actual.getContent().getFirst().toString());
+        assertEquals(dto.toString(), actual.getData().getFirst().toString());
     }
 
 }

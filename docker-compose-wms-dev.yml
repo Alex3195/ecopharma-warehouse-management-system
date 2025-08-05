@@ -8,14 +8,14 @@ services:
     restart: always
     environment:
       - SPRING_PROFILES_ACTIVE=dev
+      - TZ=Asia/Tashkent
     ports:
       - "9091:9091"
     networks:
       - ecopharm-data
-
-volumes:
-  pg-data:
-    driver: local
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
 
 networks:
   ecopharm-data:

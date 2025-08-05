@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.entity.CellEntity;
 import uz.duol.ecopharmwarehouse.entity.FloorEntity;
 import uz.duol.ecopharmwarehouse.entity.RackEntity;
@@ -19,6 +20,7 @@ import uz.duol.ecopharmwarehouse.module.location.service.LocationService;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackDTO;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackInfo;
 import uz.duol.ecopharmwarehouse.module.rack.dto.RackRequest;
+import uz.duol.ecopharmwarehouse.module.rack.dto.RackUpdateRequest;
 import uz.duol.ecopharmwarehouse.module.rack.exception.RackNotFoundException;
 import uz.duol.ecopharmwarehouse.module.rack.mapper.RackMapper;
 import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
@@ -54,6 +56,7 @@ public class RackServiceUnitTest extends BaseUnitTest {
 
     private RackEntity entity;
     private RackDTO dto;
+    private RackUpdateRequest updateRequest;
 
     @BeforeEach
     public void setUp() {
@@ -76,6 +79,15 @@ public class RackServiceUnitTest extends BaseUnitTest {
         dto.setWidth(3.0);
         dto.setDepth(3.0);
         dto.setFloors(List.of(new FloorDTO()));
+
+        updateRequest = new RackUpdateRequest();
+        dto.setId(1L);
+        dto.setName("Rack 1");
+        dto.setType(RackTypeEnum.PALLET_RACKING);
+        dto.setSectorId(1L);
+        dto.setHeight(3.0);
+        dto.setWidth(3.0);
+        dto.setDepth(3.0);
     }
 
     @Test
@@ -173,7 +185,7 @@ public class RackServiceUnitTest extends BaseUnitTest {
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(any(RackEntity.class))).thenReturn(dto);
 
-        Page<RackInfo> actual = service.findAll("search", Pageable.unpaged());
+        var actual = service.findAll(new DataTableRequest());
 
         assertNotNull(actual);
         assertEquals(1, actual.getTotalElements());
@@ -186,7 +198,7 @@ public class RackServiceUnitTest extends BaseUnitTest {
         when(repository.save(any(RackEntity.class))).thenReturn(entity);
         when(mapper.toDto(any(RackEntity.class))).thenReturn(dto);
 
-        RackDTO result = service.update(1L, dto);
+        RackDTO result = service.update(1L, updateRequest);
 
         assertNotNull(result);
     }
@@ -195,7 +207,7 @@ public class RackServiceUnitTest extends BaseUnitTest {
     void testUpdateNotFound() {
         when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
-        RackNotFoundException e = assertThrows(RackNotFoundException.class, () -> service.update(1L, dto));
+        RackNotFoundException e = assertThrows(RackNotFoundException.class, () -> service.update(1L, updateRequest));
 
         assertNotNull(e);
         assertEquals("Rack not found", e.getMessage());

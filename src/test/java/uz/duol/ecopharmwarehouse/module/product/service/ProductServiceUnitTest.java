@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.entity.LocationEntity;
 import uz.duol.ecopharmwarehouse.entity.ProductEntity;
 import uz.duol.ecopharmwarehouse.entity.ProductMetadataEntity;
@@ -21,7 +22,9 @@ import uz.duol.ecopharmwarehouse.module.product.metadata.dto.ProductMetadataDTO;
 import uz.duol.ecopharmwarehouse.repositories.ProductRepository;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -141,10 +144,13 @@ public class ProductServiceUnitTest extends BaseUnitTest {
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(any(ProductEntity.class))).thenReturn(dto);
 
-        Page<ProductDTO> actual = service.findAll("Sneakers", pageable);
+        DataTableRequest request = new DataTableRequest();
+        Map<String, Object> filters = new HashMap<>();
+        filters.put("name", "Sneakers");
+        request.setFilters(filters);
+        var actual = service.findAll(request);
 
-        assertNotNull(actual.getContent());
-        assertEquals(1, actual.getNumberOfElements());
+        assertNotNull(actual.getData());
         assertEquals(1, actual.getTotalElements());
         assertEquals(1, actual.getTotalPages());
     }

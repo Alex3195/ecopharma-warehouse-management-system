@@ -9,6 +9,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseControllerIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.module.address.dto.AddressDTO;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -213,12 +214,15 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser(authorities = "ADDRESS_GET")
     void testFindAll() throws Exception {
-        mockMvc.perform(get("/api/v1/wms/address/list")
-                        .param("page", "0")
-                        .param("size", "10"))
+        DataTableRequest request = new DataTableRequest();
+        request.setPage(0);
+        request.setSize(10);
+
+        mockMvc.perform(post("/api/v1/wms/address/list")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
     }
-
     @Test
     void testFindAll_ThenUnauthorized() throws Exception {
         mockMvc.perform(get("/api/v1/wms/address/list")
@@ -230,11 +234,14 @@ public class AddressControllerIntegrationTest extends BaseControllerIntegrationT
     @Test
     @WithMockUser
     void testFindAll_ThenForbidden() throws Exception {
-        mockMvc.perform(get("/api/v1/wms/address/list")
-                        .param("page", "0")
-                        .param("size", "10"))
+        DataTableRequest request = new DataTableRequest();
+        request.setPage(0);
+        request.setSize(10);
+
+        mockMvc.perform(post("/api/v1/wms/address/list")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isForbidden());
     }
-
 
 }

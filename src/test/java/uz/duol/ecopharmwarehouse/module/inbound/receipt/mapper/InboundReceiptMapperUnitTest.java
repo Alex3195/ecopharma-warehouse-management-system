@@ -28,7 +28,7 @@ public class InboundReceiptMapperUnitTest extends BaseUnitTest {
         dto.setSupplierId("4a6b7165-2e61-4b35-9afb-5f576ee13049");
         dto.setAlternateStoreId(70014L);
         dto.setUnitId(70016L);
-        dto.setReceiptType(ReceiptTypeEnum.PRODUCTION_LINE_RETURN);
+        dto.setReceiptType(ReceiptTypeEnum.CUSTOMER_RETURN);
         dto.setReceiptStatus(ReceiptStatusEnum.CREATED);
 
 
@@ -39,7 +39,7 @@ public class InboundReceiptMapperUnitTest extends BaseUnitTest {
         entity.setSupplierId("4a6b7165-2e61-4b35-9afb-5f576ee13049");
         entity.setAlternateStoreId(70014L);
         entity.setUnitId(70016L);
-        entity.setReceiptType(ReceiptTypeEnum.PRODUCTION_LINE_RETURN);
+        entity.setReceiptType(ReceiptTypeEnum.CUSTOMER_RETURN);
         entity.setReceiptStatus(ReceiptStatusEnum.CREATED);
     }
 

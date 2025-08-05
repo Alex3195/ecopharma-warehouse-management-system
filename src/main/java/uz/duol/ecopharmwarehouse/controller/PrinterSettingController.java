@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +13,8 @@ import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.module.printer.setting.dto.PrinterSettingsDto;
 import uz.duol.ecopharmwarehouse.module.printer.setting.service.PrinterSettingsService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -109,5 +112,21 @@ public class PrinterSettingController {
     @PreAuthorize("hasAuthority('WMS_PRINTER_SETTING_READ') or hasRole('SUPER_ADMIN')")
     public PrinterSettingsDto getDefaultPrinterSettings(@RequestParam("departmentId") Long departmentId) {
         return service.getDefaultPrinterSettings(departmentId);
+    }
+
+    @Operation(summary = "Get printer as pageable",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "400", description = "Bad request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - invalid credentials"),
+                    @ApiResponse(responseCode = "403", description = "Access denied - bad role permission"),
+            })
+    @PostMapping("/export")
+    public void exportToExcel(HttpServletResponse response,
+                              @RequestBody DataTableRequest request,
+                              @RequestParam("columnNames") List<String> columnNames,
+                              @RequestParam("fieldNames") List<String> fieldNames) {
+        service.exportToExcel(response, request, columnNames, fieldNames);
     }
 }

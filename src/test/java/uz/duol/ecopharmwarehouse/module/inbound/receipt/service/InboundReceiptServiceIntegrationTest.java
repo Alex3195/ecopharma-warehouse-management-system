@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.enums.CrossDockTypeEnum;
 import uz.duol.ecopharmwarehouse.enums.ReceiptStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ReceiptTypeEnum;
@@ -31,7 +32,7 @@ public class InboundReceiptServiceIntegrationTest extends BaseServiceIntegration
         dto.setSupplierId("4a6b7165-2e61-4b35-9afb-5f576ee13049");
         dto.setAlternateStoreId(70014L);
         dto.setUnitId(70016L);
-        dto.setReceiptType(ReceiptTypeEnum.PRODUCTION_LINE_RETURN);
+        dto.setReceiptType(ReceiptTypeEnum.CUSTOMER_RETURN);
         dto.setReceiptStatus(ReceiptStatusEnum.CREATED);
         dto.setCrossDockType(CrossDockTypeEnum.OPPORTUNISTIC);
         dto.setProcessingTime(LocalDateTime.of(2025, 5, 25, 9, 0, 0));
@@ -179,10 +180,10 @@ public class InboundReceiptServiceIntegrationTest extends BaseServiceIntegration
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {
-        var actual = service.findAll(null, PageRequest.of(0, 10));
+        var actual = service.findAll(new DataTableRequest());
 
         assertNotNull(actual);
-        assertFalse(actual.isEmpty());
+        assertFalse(actual.getTotalElements() > 0);
         assertEquals(10, actual.getTotalElements());
     }
 

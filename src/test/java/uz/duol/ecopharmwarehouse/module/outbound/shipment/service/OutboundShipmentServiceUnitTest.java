@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.entity.OutboundShipmentEntity;
 import uz.duol.ecopharmwarehouse.enums.ShipmentStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ShipmentTypeEnum;
@@ -138,7 +139,7 @@ public class OutboundShipmentServiceUnitTest extends BaseUnitTest {
         when(repository.findAll(any(Specification.class), eq(pageable))).thenReturn(page);
         when(mapper.toDto(entity)).thenReturn(dto);
 
-        Page<OutboundShipmentDto> result = service.findAll("", pageable);
+        var result = service.findAll(new DataTableRequest());
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());

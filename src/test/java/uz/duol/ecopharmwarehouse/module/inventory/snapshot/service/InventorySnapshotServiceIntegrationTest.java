@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.entity.InventorySnapshotEntity;
 import uz.duol.ecopharmwarehouse.module.inventory.snapshot.dto.InventorySnapshotDto;
 import uz.duol.ecopharmwarehouse.module.inventory.snapshot.servcie.InventorySnapshotService;
@@ -299,7 +300,7 @@ public class InventorySnapshotServiceIntegrationTest extends BaseServiceIntegrat
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {
-        Page<InventorySnapshotDto> list = service.findAll(null, PageRequest.of(0, 10));
+        var list = service.findAll(new DataTableRequest());
 
         assertNotNull(list);
         assertEquals(10, list.getTotalElements());

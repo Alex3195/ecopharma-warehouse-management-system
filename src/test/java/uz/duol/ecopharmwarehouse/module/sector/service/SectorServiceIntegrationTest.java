@@ -8,12 +8,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.enums.CharacteristicType;
 import uz.duol.ecopharmwarehouse.module.characteristics.dto.CharacteristicsDTO;
 import uz.duol.ecopharmwarehouse.module.sector.characteristics.dto.SectorCharacteristicDTO;
 import uz.duol.ecopharmwarehouse.module.sector.dto.SectorDTO;
 import uz.duol.ecopharmwarehouse.module.sector.exception.SectorNotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,9 +39,9 @@ public class SectorServiceIntegrationTest extends BaseServiceIntegrationTest {
         CharacteristicsDTO characteristicsDTO = new CharacteristicsDTO();
         characteristicsDTO.setId(1L);
         characteristic.setCharacteristic(characteristicsDTO);
-        characteristicsDTO.setType(CharacteristicType.STRING);
+        characteristicsDTO.setType(CharacteristicType.TEXT);
 
-        characteristic.setValue("Value");
+        characteristic.setValue(new ArrayList<>());
         dto.setCharacteristics(List.of(characteristic));
     }
 
@@ -119,10 +121,9 @@ public class SectorServiceIntegrationTest extends BaseServiceIntegrationTest {
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {
-        Page<SectorDTO> actual = sectorService.findAll("", PageRequest.of(0, 10));
+        var actual = sectorService.findAll(new DataTableRequest());
 
         assertNotNull(actual);
-        assertEquals(10, actual.getNumberOfElements());
         assertEquals(2, actual.getTotalPages());
         assertEquals(20, actual.getTotalElements());
     }

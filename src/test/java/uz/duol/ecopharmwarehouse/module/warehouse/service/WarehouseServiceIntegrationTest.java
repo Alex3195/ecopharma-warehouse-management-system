@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.module.warehouse.dto.WarehouseDTO;
 import uz.duol.ecopharmwarehouse.module.warehouse.exception.WarehouseNotFoundException;
 
@@ -134,10 +135,9 @@ public class WarehouseServiceIntegrationTest extends BaseServiceIntegrationTest 
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {
-        Page<WarehouseDTO> actual = service.findAll("", PageRequest.of(0, 10));
+        var actual = service.findAll(new DataTableRequest());
 
         assertEquals(19, actual.getTotalElements());
-        assertEquals(10, actual.getNumberOfElements());
         assertEquals(2, actual.getTotalPages());
     }
 }

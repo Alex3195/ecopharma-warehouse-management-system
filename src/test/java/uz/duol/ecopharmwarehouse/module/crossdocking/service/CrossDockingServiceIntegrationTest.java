@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.enums.CrossDockTypeEnum;
 import uz.duol.ecopharmwarehouse.module.crossdocking.dto.CrossDockingDto;
 
@@ -138,8 +139,7 @@ public class CrossDockingServiceIntegrationTest extends BaseServiceIntegrationTe
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFidAll() {
-        var pageable = PageRequest.of(0, 10);
-        var actual = crossDockingService.findAll(pageable);
+        var actual = crossDockingService.findAll(new DataTableRequest());
         assertNotNull(actual);
         assertEquals(10, actual.getTotalElements());
     }

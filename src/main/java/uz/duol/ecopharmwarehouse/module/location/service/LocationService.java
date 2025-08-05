@@ -1,9 +1,11 @@
 package uz.duol.ecopharmwarehouse.module.location.service;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.common.PageUtil;
@@ -14,7 +16,10 @@ import uz.duol.ecopharmwarehouse.module.location.exception.LocationNotFoundExcep
 import uz.duol.ecopharmwarehouse.module.location.mapper.LocationMapper;
 import uz.duol.ecopharmwarehouse.module.location.specification.LocationSpecification;
 import uz.duol.ecopharmwarehouse.repositories.LocationRepository;
+import uz.duol.ecopharmwarehouse.utils.ExcelExportUtil;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -66,12 +71,33 @@ public class LocationService {
         Specification<LocationEntity> spec = LocationSpecification.advancedFilter(request.getFilters());
         Pageable pageable = PageUtil.getPageable(request);
         var page = repository.findAll(spec, pageable).map(mapper::toDto);
-        return new  DataTableResponse<>(page);
+        return new DataTableResponse<>(page);
     }
 
     public LocationDTO findByBarcode(String locationBarcode) {
         var entity = repository.findByBarcodeAndStatusIsNot(locationBarcode, Status.DELETED)
                 .orElseThrow(() -> new LocationNotFoundException("Location not found"));
         return mapper.toDto(entity);
+    }
+
+    @Transactional(readOnly = true)
+    public void exportToExcel(HttpServletResponse response, DataTableRequest request, List<String> columnNames, List<String> fieldNames) {
+        Specification<LocationEntity> spec = LocationSpecification.advancedFilter(request.getFilters());
+
+        List<LocationEntity> allData = repository.findAll(spec);
+
+        List<LocationDTO> dtos = allData.stream().map(mapper::toDto).toList();
+
+        byte[] excel = ExcelExportUtil.exportToExcel(dtos, fieldNames, columnNames, "location");
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=aggregation.xlsx");
+
+        try {
+            response.getOutputStream().write(excel);
+            response.getOutputStream().flush();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write Excel to response", e);
+        }
     }
 }

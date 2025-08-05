@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.entity.TransportLabelEntity;
 import uz.duol.ecopharmwarehouse.module.transport.label.dto.TransportLabelDto;
 import uz.duol.ecopharmwarehouse.module.transport.label.mapper.TransportLabelMapper;
@@ -101,10 +102,10 @@ public class TransportLabelServiceUnitTest extends BaseUnitTest {
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(any(TransportLabelEntity.class))).thenReturn(dto);
 
-        Page<TransportLabelDto> result = service.findAll("search", pageable);
+        var result = service.findAll(new DataTableRequest());
 
         assertEquals(1, result.getTotalElements());
-        assertEquals(dto, result.getContent().getFirst());
+        assertEquals(dto, result.getData().getFirst());
 
     }
 }

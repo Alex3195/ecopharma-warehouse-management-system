@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.BaseServiceIntegrationTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.module.location.dto.LocationDTO;
 import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
 import uz.duol.ecopharmwarehouse.module.product.exception.ProductNotFundException;
@@ -184,11 +185,10 @@ public class ProductServiceIntegrationTest extends BaseServiceIntegrationTest {
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void testFindAll() {
-        Page<ProductDTO> result = service.findAll("", PageRequest.of(0, 10));
+        var result = service.findAll(new DataTableRequest());
 
         assertNotNull(result);
         assertEquals(20, result.getTotalElements());
-        assertEquals(10, result.getNumberOfElements());
         assertEquals(2, result.getTotalPages());
     }
 

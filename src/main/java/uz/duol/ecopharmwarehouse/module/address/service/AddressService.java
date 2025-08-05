@@ -1,10 +1,12 @@
 package uz.duol.ecopharmwarehouse.module.address.service;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.common.PageUtil;
@@ -15,6 +17,10 @@ import uz.duol.ecopharmwarehouse.module.address.mapper.AddressMapper;
 import uz.duol.ecopharmwarehouse.module.address.specification.AddressSpecification;
 import uz.duol.ecopharmwarehouse.repositories.AddressRepository;
 import uz.duol.ecopharmwarehouse.repositories.WarehouseRepository;
+import uz.duol.ecopharmwarehouse.utils.ExcelExportUtil;
+
+import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -55,5 +61,28 @@ public class AddressService {
         Pageable pageable = PageUtil.getPageable(request);
         var page = repository.findAll(spec, pageable).map(mapper::toDto);
         return new DataTableResponse<>(page);
+    }
+
+    @Transactional(readOnly = true)
+    public void exportToExcel(HttpServletResponse response, DataTableRequest request, List<String> columnNames, List<String> fieldNames) {
+        Specification<AddressEntity> spec = AddressSpecification.advancedFilter(request.getFilters());
+
+        List<AddressEntity> allData = repository.findAll(spec);
+
+        List<AddressDTO> addressDTOList = allData.stream()
+                .map(mapper::toDto)
+                .toList();
+
+        byte[] excel = ExcelExportUtil.exportToExcel(addressDTOList, fieldNames, columnNames, "address");
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=aggregation.xlsx");
+
+        try {
+            response.getOutputStream().write(excel);
+            response.getOutputStream().flush();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write Excel to response", e);
+        }
     }
 }

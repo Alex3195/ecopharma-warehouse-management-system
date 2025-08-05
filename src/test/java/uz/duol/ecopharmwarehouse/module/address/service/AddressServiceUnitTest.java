@@ -9,11 +9,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
+import uz.duol.ecopharmwarehouse.common.DataTableRequest;
+import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.entity.AddressEntity;
 import uz.duol.ecopharmwarehouse.module.address.dto.AddressDTO;
 import uz.duol.ecopharmwarehouse.module.address.exception.AddressNotFoundException;
 import uz.duol.ecopharmwarehouse.module.address.mapper.AddressMapper;
 import uz.duol.ecopharmwarehouse.repositories.AddressRepository;
+import uz.duol.ecopharmwarehouse.repositories.WarehouseRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +33,8 @@ public class AddressServiceUnitTest extends BaseUnitTest {
     private AddressMapper addressMapper;
     @Mock
     private AddressRepository addressRepository;
+    @Mock
+    private WarehouseRepository warehouseRepository;
 
     private AddressEntity entity;
     private AddressDTO dto;
@@ -118,6 +123,7 @@ public class AddressServiceUnitTest extends BaseUnitTest {
     void testDelete() {
         when(addressRepository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(addressMapper.toDto(any(AddressEntity.class))).thenReturn(dto);
+        when(warehouseRepository.existsByAddressId(anyLong())).thenReturn(false);
 
         addressService.delete(1L);
 
@@ -133,16 +139,15 @@ public class AddressServiceUnitTest extends BaseUnitTest {
 
     @Test
     void testFindAll() {
-        Pageable pageable = mock(Pageable.class);
-
         Page<AddressEntity> page = new PageImpl<>(List.of(entity));
         when(addressRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(addressMapper.toDto(any(AddressEntity.class))).thenReturn(dto);
 
-        Page<AddressDTO> result = addressService.findAll("search", pageable);
+        DataTableResponse<AddressDTO> result = addressService.findAll(new DataTableRequest());
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
-        assertEquals(dto.toString(), result.getContent().getFirst().toString());
+        assertEquals(1, result.getData().size());
+        assertEquals(dto.toString(), result.getData().get(0).toString());
     }
 }

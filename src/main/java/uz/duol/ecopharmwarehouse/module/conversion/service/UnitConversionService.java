@@ -1,6 +1,7 @@
 package uz.duol.ecopharmwarehouse.module.conversion.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,9 @@ import uz.duol.ecopharmwarehouse.module.conversion.dto.UnitConversionDto;
 import uz.duol.ecopharmwarehouse.module.conversion.mapper.ConversionMapper;
 import uz.duol.ecopharmwarehouse.module.conversion.specification.ConversionSpecification;
 import uz.duol.ecopharmwarehouse.repositories.UnitsConversionRepository;
+import uz.duol.ecopharmwarehouse.utils.ExcelExportUtil;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -95,6 +98,27 @@ public class UnitConversionService {
         var entities = repository.findAllById(ids);
         entities.forEach(entity -> entity.setStatus(Status.DELETED));
         repository.saveAll(entities);
+    }
+
+    @Transactional(readOnly = true)
+    public void exportToExcel(HttpServletResponse response, DataTableRequest request, List<String> columnNames, List<String> fieldNames) {
+        Specification<UnitConversionEntity> spec = ConversionSpecification.advancedFilter(request.getFilters());
+
+        List<UnitConversionEntity> allData = repository.findAll(spec);
+
+        List<UnitConversionDto> dtos = allData.stream().map(mapper::toDto).toList();
+
+        byte[] excel = ExcelExportUtil.exportToExcel(dtos, fieldNames, columnNames, "unit_conversion");
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=aggregation.xlsx");
+
+        try {
+            response.getOutputStream().write(excel);
+            response.getOutputStream().flush();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write Excel to response", e);
+        }
     }
 }
 

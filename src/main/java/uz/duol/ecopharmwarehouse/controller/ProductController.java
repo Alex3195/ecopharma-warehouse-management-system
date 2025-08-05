@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
 import uz.duol.ecopharmwarehouse.module.product.metadata.dto.ProductMetadataDTO;
 import uz.duol.ecopharmwarehouse.module.product.metadata.service.ProductMetaDataService;
 import uz.duol.ecopharmwarehouse.module.product.service.ProductService;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/wms/product")
@@ -179,4 +181,19 @@ public class ProductController {
         productMetaDataService.delete(id);
     }
 
+    @Operation(summary = "Get products as pageable",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Success"),
+                    @ApiResponse(responseCode = "400", description = "Bad request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - invalid credentials"),
+                    @ApiResponse(responseCode = "403", description = "Access denied - bad role permission"),
+            })
+    @PostMapping("/export")
+    public void exportToExcel(HttpServletResponse response,
+                              @RequestBody DataTableRequest request,
+                              @RequestParam("columnNames") List<String> columnNames,
+                              @RequestParam("fieldNames") List<String> fieldNames) {
+        service.exportToExcel(response, request, columnNames, fieldNames);
+    }
 }
