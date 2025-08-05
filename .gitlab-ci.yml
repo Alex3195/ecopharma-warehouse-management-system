@@ -92,6 +92,7 @@ gradle-test:
   before_script:
     - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
   script:
+    - unset DOCKER_HOST
     - |
       docker buildx build \
        --build-arg SPRING_PROFILE=$SPRING_PROFILE \
