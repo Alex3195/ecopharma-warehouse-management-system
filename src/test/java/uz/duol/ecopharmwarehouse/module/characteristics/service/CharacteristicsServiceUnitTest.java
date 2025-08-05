@@ -6,7 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import uz.duol.ecopharmwarehouse.common.BaseUnitTest;
@@ -14,10 +13,12 @@ import uz.duol.ecopharmwarehouse.common.DataTableRequest;
 import uz.duol.ecopharmwarehouse.common.DataTableResponse;
 import uz.duol.ecopharmwarehouse.entity.CharacteristicEntity;
 import uz.duol.ecopharmwarehouse.enums.CharacteristicType;
+import uz.duol.ecopharmwarehouse.enums.Status;
 import uz.duol.ecopharmwarehouse.module.characteristics.dto.CharacteristicsDTO;
 import uz.duol.ecopharmwarehouse.module.characteristics.exception.CharacteristicsNotFoundException;
 import uz.duol.ecopharmwarehouse.module.characteristics.mapper.CharacteristicsMapper;
 import uz.duol.ecopharmwarehouse.repositories.CharacteristicsRepository;
+import uz.duol.ecopharmwarehouse.repositories.SectorCharacteristicsRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,8 @@ public class CharacteristicsServiceUnitTest extends BaseUnitTest {
     private CharacteristicsMapper mapper;
     @Mock
     private CharacteristicsRepository repository;
+    @Mock
+    private SectorCharacteristicsRepository characteristicValuesRepository;
 
     private CharacteristicEntity entity;
     private CharacteristicsDTO dto;
@@ -87,11 +90,12 @@ public class CharacteristicsServiceUnitTest extends BaseUnitTest {
     @Test
     void testDelete() {
         when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
-        when(mapper.toDto(any(CharacteristicEntity.class))).thenReturn(dto);
+        when(characteristicValuesRepository.existsByCharacteristicId(anyLong())).thenReturn(false);
 
-        service.delete(1L);
+        service.delete(8001L);
 
-        verify(repository, times(1)).deleteById(anyLong());
+        assertEquals(Status.DELETED, entity.getStatus());
+        verify(repository, times(1)).save(entity);
     }
 
     @Test

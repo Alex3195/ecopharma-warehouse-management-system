@@ -6,9 +6,9 @@ import lombok.Data;
 import uz.duol.ecopharmwarehouse.enums.CrossDockTypeEnum;
 import uz.duol.ecopharmwarehouse.enums.ReceiptStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ReceiptTypeEnum;
+import uz.duol.ecopharmwarehouse.module.customersupplier.dto.CustomerSupplierDto;
 import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
 import uz.duol.ecopharmwarehouse.module.unit.dto.UnitsDTO;
-import uz.duol.ecopharmwarehouse.module.users.dto.UserDTO;
 
 import java.time.LocalDateTime;
 
@@ -26,7 +26,7 @@ public class InboundReceiptDto {
     private Integer quantity;
     @NotBlank
     private String supplierId;
-    private UserDTO supplier; // Assuming a Supplier entity exists
+    private CustomerSupplierDto supplier; // Assuming a Supplier entity exists
     @NotNull
     private ReceiptStatusEnum receiptStatus;
     @NotNull

@@ -3,12 +3,12 @@ package uz.duol.ecopharmwarehouse.module.inbound.receipt.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import uz.duol.ecopharmwarehouse.entity.InboundReceiptEntity;
+import uz.duol.ecopharmwarehouse.module.customersupplier.mapper.CustomerSupplierMapper;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.dto.InboundReceiptDto;
 import uz.duol.ecopharmwarehouse.module.product.mapper.ProductMapper;
 import uz.duol.ecopharmwarehouse.module.unit.mapper.UnitMapper;
-import uz.duol.ecopharmwarehouse.module.users.mapper.UserMapper;
 
-@Mapper(componentModel = "spring", uses = {UnitMapper.class, ProductMapper.class, UserMapper.class}, unmappedTargetPolicy = org.mapstruct.ReportingPolicy.ERROR)
+@Mapper(componentModel = "spring", uses = {UnitMapper.class, ProductMapper.class, CustomerSupplierMapper.class}, unmappedTargetPolicy = org.mapstruct.ReportingPolicy.ERROR)
 public interface InboundReceiptMapper {
     @Mapping(target = "processingTime", ignore = true)
     @Mapping(target = "crossDockType", ignore = true)

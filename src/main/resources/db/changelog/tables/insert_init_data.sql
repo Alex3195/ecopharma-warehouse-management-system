@@ -1,5 +1,5 @@
 insert into users(id, created_at, updated_at, status, username, first_name, last_name)
-values ('36071de8-5aba-4045-9dc2-9c5007b44c73', now(), now(), 'CREATED', 'bingo', 'admin', 'admin');
+values ('4a6b7165-2e61-4b35-9afb-5f576ee13049', now(), now(), 'CREATED', 'bingo', 'admin', 'admin');
 
 truncate table default_permission cascade;
 INSERT INTO default_permission(name, description)
@@ -135,7 +135,13 @@ VALUES
 ('WMS_DEPARTMENT_CREATE', 'Create department permission'),
 ('WMS_DEPARTMENT_READ', 'Read department permission'),
 ('WMS_DEPARTMENT_UPDATE', 'Update department permission'),
-('WMS_DEPARTMENT_DELETE', 'Delete department permission');
+('WMS_DEPARTMENT_DELETE', 'Delete department permission'),
+
+-- Customer Supplier
+('CUSTOMER_SUPPLIER_GET', 'Read customer-supplier'),
+('CUSTOMER_SUPPLIER_CREATE', 'Create customer-supplier'),
+('CUSTOMER_SUPPLIER_UPDATE', 'Update customer-supplier'),
+('CUSTOMER_SUPPLIER_DELETE', 'Delete customer-supplier');
 
 truncate table user_permissions cascade;
 insert into user_permissions (id, created_at, updated_at, status, created_by, updated_by, user_id, permission)
@@ -145,7 +151,7 @@ select row_number() over (),
        'CREATED',
        1,
        1,
-       '36071de8-5aba-4045-9dc2-9c5007b44c73',
+       '4a6b7165-2e61-4b35-9afb-5f576ee13049',
        name
 from default_permission;
 

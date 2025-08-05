@@ -594,6 +594,22 @@ CREATE TABLE warehouse
     CONSTRAINT pk_warehouse PRIMARY KEY (id)
 );
 
+CREATE TABLE customer_supplier
+(
+    id VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    status VARCHAR(255) NOT NULL,
+    created_by VARCHAR(255),
+    updated_by VARCHAR(255),
+    username VARCHAR(100) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255),
+    phone VARCHAR(255),
+    user_type VARCHAR(255),
+    partner_category VARCHAR(255), CONSTRAINT pk_customer_supplier PRIMARY KEY (id)
+);
+
 ALTER TABLE department
     ADD CONSTRAINT UC_DEPARTMENT_NAME UNIQUE (name);
 
@@ -700,3 +716,6 @@ ALTER TABLE unit_conversion
 
 ALTER TABLE warehouse
     ADD CONSTRAINT FK_WAREHOUSE_ON_ADDRESS FOREIGN KEY (address_id) REFERENCES address (id);
+
+ALTER TABLE customer_supplier
+    ADD CONSTRAINT UC_CUSTOMER_SUPPLIER_USERNAME UNIQUE (username);

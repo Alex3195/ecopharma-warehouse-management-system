@@ -49,7 +49,7 @@ public class OutboundShipmentEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ToString.Exclude
-    private UserEntity customer; // Assuming a Customer entity exists
+    private CustomerSupplierEntity customer; // Assuming a Customer entity exists
 
     @Column(name = "scheduled_for")
     private LocalDateTime scheduledFor;

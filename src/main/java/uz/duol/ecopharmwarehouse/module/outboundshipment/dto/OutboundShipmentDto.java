@@ -3,9 +3,9 @@ package uz.duol.ecopharmwarehouse.module.outboundshipment.dto;
 import lombok.Data;
 import uz.duol.ecopharmwarehouse.enums.ShipmentStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ShipmentTypeEnum;
+import uz.duol.ecopharmwarehouse.module.customersupplier.dto.CustomerSupplierDto;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.dto.InboundReceiptDto;
 import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
-import uz.duol.ecopharmwarehouse.module.users.dto.UserDTO;
 
 import java.time.LocalDateTime;
 
@@ -24,7 +24,7 @@ public class OutboundShipmentDto {
 
     private String customerId;
 
-    private UserDTO customer; // Assuming a Customer entity exists
+    private CustomerSupplierDto customer; // Assuming a Customer entity exists
 
     private LocalDateTime scheduledFor;
 

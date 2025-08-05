@@ -47,7 +47,7 @@ public class InboundReceiptEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "supplier_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ToString.Exclude
-    private UserEntity supplier; // Assuming a Supplier entity exists
+    private CustomerSupplierEntity supplier; // Assuming a Supplier entity exists
 
     @Column(name = "receipt_status")
     @Enumerated(EnumType.STRING)

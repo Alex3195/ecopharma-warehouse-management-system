@@ -3,13 +3,13 @@ package uz.duol.ecopharmwarehouse.module.outboundshipment.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import uz.duol.ecopharmwarehouse.entity.OutboundShipmentEntity;
+import uz.duol.ecopharmwarehouse.module.customersupplier.mapper.CustomerSupplierMapper;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.mapper.InboundReceiptMapper;
 import uz.duol.ecopharmwarehouse.module.outboundshipment.dto.OutboundShipmentDto;
 import uz.duol.ecopharmwarehouse.module.product.mapper.ProductMapper;
 import uz.duol.ecopharmwarehouse.module.product.metadata.mapper.ProductMetadataMapper;
-import uz.duol.ecopharmwarehouse.module.users.mapper.UserMapper;
 
-@Mapper(componentModel = "spring", uses = {ProductMapper.class, UserMapper.class, ProductMetadataMapper.class, InboundReceiptMapper.class}, unmappedTargetPolicy = org.mapstruct.ReportingPolicy.ERROR)
+@Mapper(componentModel = "spring", uses = {ProductMapper.class, CustomerSupplierMapper.class, ProductMetadataMapper.class, InboundReceiptMapper.class}, unmappedTargetPolicy = org.mapstruct.ReportingPolicy.ERROR)
 public interface OutboundShipmentMapper {
 
     @Mapping(target = "updatedBy", ignore = true)
