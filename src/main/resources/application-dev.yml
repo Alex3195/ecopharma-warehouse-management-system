@@ -6,6 +6,8 @@ spring:
     url: jdbc:postgresql://192.168.7.12:5430/postgres
     username: postgres
     password: postgres
+    hikari:
+      connection-timeout: 30000  # Increase timeout for debugging
   jpa:
     show-sql: true
   liquibase:
