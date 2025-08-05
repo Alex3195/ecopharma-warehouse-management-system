@@ -17,10 +17,16 @@ spring:
           issuer-uri: https://keycloak.duol.uz/realms/eco-pharma
           jwk-set-uri: https://keycloak.duol.uz/realms/eco-pharma/protocol/openid-connect/certs
   rabbitmq:
-    host: 192.168.7.12
+    host: rabbitmq
     port: 5672
     username: admin
     password: Dev@2552!
+    template:
+      retry:
+        enabled: true
+        initial-interval: 2000
+        max-interval: 10000
+        max-attempts: 15
 
 keycloak:
   realm: eco-pharma
