@@ -81,8 +81,6 @@ backup:
 
 logging:
   config: classpath:log4j2-dev.xml
-  threshold:
-    console: error
 
 logstash:
   host:

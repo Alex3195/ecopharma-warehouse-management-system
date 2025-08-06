@@ -7,8 +7,6 @@ variables:
   SPRING_PROFILES_ACTIVE_PROD: prod # Use prod for main branch
   SERVER_PORT: 9091
   DEBUG_PORT: 9092
-  SPRING_DB_URL_DEV: jdbc:postgresql://192.168.7.12:5432/postgres
-  SPRING_DB_URL_STAGE: jdbc:postgresql://192.168.7.133:5432/postgres
   SPRING_DB_USERNAME: postgres
   SPRING_DB_PASSWORD: postgres
   DOCKER_IMAGE_NAME: $CI_REGISTRY/$DOCKER_USERNAME/eco-pharma-warehouse
