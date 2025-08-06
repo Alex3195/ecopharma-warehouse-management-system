@@ -19,6 +19,7 @@ variables:
   SERVER_SSH_PORT_DEV: 22
   SERVER_SSH_PORT_STAGE: 2222
   SERVER_SSH_PORT_PROD: 2221
+  BUILDER_NAME: "tempbuilder-$CI_PIPELINE_ID"
 
 stages:
   - gradle-build
@@ -83,33 +84,30 @@ gradle-test:
 .publish_template: &publish_template
   stage: publish
   image: docker:latest
-  variables:
-    BUILDER_NAME: "tempbuilder-$CI_PIPELINE_ID"  # ✅ Add this
   before_script:
     - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
   script:
-    - docker buildx create --use --name $BUILDER_NAME
+    - docker buildx create --use --name "$BUILDER_NAME"
     - docker buildx inspect --bootstrap
     - |
       docker buildx build \
-        --builder $BUILDER_NAME \
+        --builder "$BUILDER_NAME" \
         --build-arg SPRING_PROFILE=$SPRING_PROFILE \
         --build-arg SERVER_PORT=$SERVER_PORT \
         --build-arg DEBUG_PORT=$DEBUG_PORT \
         --build-arg JAVA_OPTS="-Xms128m -Xmx512m" \
         --build-arg EXTRA_ARGS="" \
         -t $DOCKER_IMAGE_NAME:$DOCKER_TAG \
-        -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA . \
-        --push
+        -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA \
+        --push .
   after_script:
     - echo "Cleaning up builder and Docker resources..."
-    - docker buildx stop $BUILDER_NAME || echo "Builder already stopped or not running"
-    - docker buildx rm $BUILDER_NAME || echo "Builder already removed or not found"
+    - docker buildx stop "$BUILDER_NAME" || echo "Builder already stopped or not running"
+    - docker buildx rm "$BUILDER_NAME" || echo "Builder already removed or not found"
     - docker container prune -f
     - docker image prune -af
     - docker volume prune -f
     - docker builder prune -af --filter until=1h || true
-
 
 
 
