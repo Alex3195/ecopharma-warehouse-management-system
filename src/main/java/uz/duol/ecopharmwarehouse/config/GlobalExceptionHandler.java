@@ -33,7 +33,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, WebRequest request) {
-        log.error("Unexpected error: {}", ex.getMessage(), ex);
         String localizedErrorMessage = messageSource.getMessage("error.internal_server_error", null, request.getLocale());
         ErrorResponse errorResponse = new ErrorResponse(localizedErrorMessage, ex);
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -42,7 +41,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException ex, WebRequest request) {
-        log.error("NullPointerException: {}", ex.getMessage(), ex);
         String localizedErrorMessage = messageSource.getMessage("error.internal_server_error", null, request.getLocale());
         ErrorResponse errorResponse = new ErrorResponse(localizedErrorMessage, ex);
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -51,7 +49,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException ex, WebRequest request) {
-        log.warn("ConstraintViolationException: {}", ex.getMessage(), ex);
         String localizedErrorMessage = messageSource.getMessage("error.bad_request", null, request.getLocale());
         ErrorResponse errorResponse = new ErrorResponse(localizedErrorMessage, ex);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -70,7 +67,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                         error.getRejectedValue(),
                         error.getDefaultMessage()))
                 .collect(Collectors.toList());
-        log.warn("Validation failed: {}", validationErrors);
         String localizedErrorMessage = messageSource.getMessage("error.validation_failed", null, request.getLocale());
         ErrorResponse errorResponse = new ErrorResponse(localizedErrorMessage, validationErrors, ex);
 
@@ -80,7 +76,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex, WebRequest request) {
-        log.warn("EntityNotFoundException: {}", ex.getMessage(), ex);
         String localizedErrorMessage = messageSource.getMessage("error.entity_not_found", null, request.getLocale());
         ErrorResponse errorResponse = new ErrorResponse(localizedErrorMessage, ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
@@ -89,7 +84,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
-        log.warn("AccessDeniedException: {}", ex.getMessage(), ex);
         String localizedErrorMessage = messageSource.getMessage("error.access_denied", null, request.getLocale());
         ErrorResponse errorResponse = new ErrorResponse(localizedErrorMessage, ex);
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);

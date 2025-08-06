@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,6 @@ import uz.duol.ecopharmwarehouse.module.conversion.service.UnitConversionService
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/wms/unit-conversion")
@@ -37,7 +35,6 @@ public class UnitConversionController {
     @PreAuthorize("hasAuthority('CONVERSION_GET_BY_FROM_ID_AND_TO_ID') or hasRole('SUPER_ADMIN')")
     @GetMapping("/{baseUnitId}/{alternativeUnitId}")
     public List<UnitConversionDto> getUnitConversion(@PathVariable Long baseUnitId, @PathVariable Long alternativeUnitId) {
-        log.info("Getting units conversion for from {} to {}", baseUnitId, alternativeUnitId);
         return service.get(baseUnitId, alternativeUnitId);
     }
 
@@ -54,7 +51,6 @@ public class UnitConversionController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public UnitConversionDto saveUnitConversion(@RequestBody @Valid UnitConversionDto unitConversionDto) {
-        log.info("Saving units conversion {}", unitConversionDto);
         return service.create(unitConversionDto);
     }
 
@@ -70,7 +66,6 @@ public class UnitConversionController {
     @PreAuthorize("hasAuthority('CONVERSION_UPDATE') or hasRole('SUPER_ADMIN')")
     @PutMapping("/{id}")
     public UnitConversionDto updateUnitConversion(@PathVariable Long id, @RequestBody @Valid UnitConversionDto unitConversionDto) {
-        log.info("Updating units conversion with id:{}, body:{}", id, unitConversionDto);
         return service.update(id, unitConversionDto);
     }
 
@@ -87,7 +82,6 @@ public class UnitConversionController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUnitConversion(@PathVariable Long id) {
-        log.info("Deleting units conversion {}", id);
         service.delete(id);
     }
 
@@ -120,7 +114,6 @@ public class UnitConversionController {
     @DeleteMapping("/delete-all")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAll(@RequestParam("ids") List<Long> ids) {
-        log.info("Deleting units conversion {}", ids);
         service.deleteAll(ids);
     }
 

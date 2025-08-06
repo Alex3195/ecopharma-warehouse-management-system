@@ -21,26 +21,22 @@ public class PermissionController {
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER') or hasRole('SUPER_ADMIN')")
     @GetMapping("/list")
     public List<PermissionResponseGroupBy> allRolePermissions(Locale locale) {
-        log.info("Request to get all Permissions enum");
         return service.getPermissionsGroupBy(locale);
     }
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER') or hasRole('SUPER_ADMIN')")
     @PostMapping("/add-permission")
     @ResponseStatus(HttpStatus.CREATED)
     public void addPermissionToUser(@RequestBody UserPermissionCreateRequest request) {
-        log.info("Request to add permission: {}", request);
         service.addPermissionToUser(request);
     }
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER') or hasRole('SUPER_ADMIN')")
     @GetMapping("/user-permissions/{userId}")
     public List<PermissionResponseGroupBy> userPermissions(@PathVariable String userId, Locale locale) {
-        log.info("Request to get user permissions: {}", userId);
         return service.getUserPermissions(userId, locale);
     }
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER') or hasRole('SUPER_ADMIN')")
     @GetMapping("/role-default-permissions")
     public List<PermissionResponseGroupBy> roleDefaultPermissions(@RequestParam(value = "role", required = false) String name, Locale locale) {
-        log.info("Request to get role default permissions: {}", name);
         return service.getRoleDefaultPermissions(name, locale);
     }
 }

@@ -3,7 +3,6 @@ package uz.duol.ecopharmwarehouse.jobs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,6 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.zip.GZIPOutputStream;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DatabaseBackupScheduler {
@@ -95,11 +93,9 @@ public class DatabaseBackupScheduler {
             if (exitCode == 0) {
                 job.setJobStatus("Completed");
                 repository.save(job);
-                log.info("{} backup complete: {}", type, objectPath);
             } else {
                 job.setJobStatus("Failed");
                 repository.save(job);
-                log.error("pg_dump failed with exit code {}", exitCode);
                 try (InputStream errorStream = process.getErrorStream()) {
                     errorStream.transferTo(System.err);
                 }
@@ -108,7 +104,6 @@ public class DatabaseBackupScheduler {
         } catch (Exception e) {
             job.setJobStatus("Failed");
             repository.save(job);
-            log.error("{} backup failed", type, e);
         }
     }
 

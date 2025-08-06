@@ -27,12 +27,10 @@ public class EventListener {
 
     @RabbitListener(queues = RabbitMQConfig.USER_CREATED_QUEUE)
     public void handleUserCreated(UserCreatedEvent event) {
-        log.info("Received user created event: {}", event);
         UserDTO user = getUserDto(event);
         try {
             userService.create(user);
-        } catch (Exception e) {
-            log.error("Error occurred while saving user:{} ", e.getMessage());
+        } catch (Exception ignored) {
         }
     }
 
@@ -52,12 +50,10 @@ public class EventListener {
 
     @RabbitListener(queues = RabbitMQConfig.USER_UPDATED_QUEUE)
     public void handleUserUpdated(UserUpdatedEvent event) {
-        log.info("Received user created event: {}", event);
         UserUpdateDto user = getUserUpdateDto(event);
         try {
             userService.update(event.getId(), user);
-        } catch (Exception e) {
-            log.error("Error occurred while updating user:{} ", e.getMessage());
+        } catch (Exception ignored) {
         }
     }
 
@@ -77,23 +73,19 @@ public class EventListener {
 
     @RabbitListener(queues = RabbitMQConfig.USER_DELETED_QUEUE)
     public void handleUserDeleted(UserDeleteEvent event) {
-        log.info("Received user deleted event: {}", event);
         try {
             userService.delete(event.getUserId(), event.getPerformedBy());
-        } catch (Exception e) {
-            log.error("Error occurred while deleting user:{} ", e.getMessage());
+        } catch (Exception ignored) {
         }
     }
 
 
     @RabbitListener(queues = RabbitMQConfig.PRODUCT_CREATED_QUEUE)
     public void handleProductCreated(ProductCreateEvent event) {
-        log.info("Received user created event: {}", event);
         ProductDTO product = getProductDto(event);
         try {
             productService.create(product);
-        } catch (Exception e) {
-            log.error("Error occurred while saving product :{} ", e.getMessage());
+        } catch (Exception ignored) {
         }
     }
 
@@ -110,12 +102,10 @@ public class EventListener {
 
     @RabbitListener(queues = RabbitMQConfig.UNIT_CREATED_QUEUE)
     public void handleUnitCreated(UnitCreateEvent event) {
-        log.info("Received user created event: {}", event);
         UnitsDTO unit = getUnitDto(event);
         try {
             unitsService.create(unit);
-        } catch (Exception e) {
-            log.error("Error occurred while saving unit :{} ", e.getMessage());
+        } catch (Exception ignored) {
         }
     }
 
@@ -132,12 +122,10 @@ public class EventListener {
 
     @RabbitListener(queues = RabbitMQConfig.UNIT_CONVERSION_CREATED_QUEUE)
     public void handleUnitConversionCreated(UnitConversionCreateEvent event) {
-        log.info("Received user created event: {}", event);
         UnitConversionDto dto = getUnitConversion(event);
         try {
             unitConversionService.create(dto);
-        } catch (Exception e) {
-            log.error("Error occurred while saving unit :{} ", e.getMessage());
+        } catch (Exception ignored) {
         }
     }
 
