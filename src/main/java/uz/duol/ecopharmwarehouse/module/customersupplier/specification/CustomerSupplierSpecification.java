@@ -26,9 +26,13 @@ public class CustomerSupplierSpecification {
                 criteriaBuilder.like(criteriaBuilder.lower(root.get("phone")), "%" + phone.toLowerCase().trim() + "%");
     }
 
+    public static Specification<CustomerSupplierEntity> hasUserType(String userType) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.like(criteriaBuilder.upper(root.get("userType")), "%" + userType.toUpperCase().trim() + "%");
+    }
 
     public static Specification<CustomerSupplierEntity> advancedFilter(Map<String, Object> filters) {
-        Specification<CustomerSupplierEntity> spec = isActive();
+        Specification<CustomerSupplierEntity> spec = Specification.where(null);
 
         if (filters.containsKey("firstName")) {
             spec = spec.and(hasFirstname((String) filters.get("firstName")));
@@ -40,6 +44,10 @@ public class CustomerSupplierSpecification {
 
         if (filters.containsKey("phone")) {
             spec = spec.and(hasPhone((String) filters.get("phone")));
+        }
+
+        if (filters.containsKey("userType")) {
+            spec = spec.and(hasUserType((String) filters.get("userType")));
         }
         return spec;
     }
