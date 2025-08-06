@@ -15,9 +15,7 @@ variables:
   DOCKER_TAG_DEV: latest-dev
   DOCKER_TAG_STAGE: latest-stage
   DOCKER_TAG_PROD: latest
-  DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""  # Required for Docker-in-Docker
-  DOCKER_HOST: tcp://docker:2375/
   SERVER_SSH_PORT_DEV: 22
   SERVER_SSH_PORT_STAGE: 2222
   SERVER_SSH_PORT_PROD: 2221
@@ -91,8 +89,6 @@ gradle-test:
     - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
 
   script:
-    - unset DOCKER_HOST
-
     # Create temporary builder and use it
     - docker buildx create --use --name $BUILDER_NAME
 
