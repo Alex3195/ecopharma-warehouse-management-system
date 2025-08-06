@@ -84,15 +84,13 @@ gradle-test:
   stage: publish
   image: docker:latest
   variables:
-    BUILDER_NAME: tempbuilder-$CI_PIPELINE_ID
+    BUILDER_NAME: "tempbuilder-$CI_PIPELINE_ID"  # ✅ Add this
   before_script:
     - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
-
   script:
-    # Create temporary builder and use it
+    - unset DOCKER_HOST
     - docker buildx create --use --name $BUILDER_NAME
-
-    # Build Docker image
+    - docker buildx inspect --bootstrap
     - |
       docker buildx build \
         --builder $BUILDER_NAME \
@@ -102,26 +100,17 @@ gradle-test:
         --build-arg JAVA_OPTS="-Xms128m -Xmx512m" \
         --build-arg EXTRA_ARGS="" \
         -t $DOCKER_IMAGE_NAME:$DOCKER_TAG \
-        -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA \
-        .
-
-    # Push Docker images
-    - docker push $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA
-    - docker push $DOCKER_IMAGE_NAME:$DOCKER_TAG
-
+        -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA . \
+        --push
   after_script:
-    # Stop and remove the temporary builder
     - echo "Cleaning up builder and Docker resources..."
     - docker buildx stop $BUILDER_NAME || echo "Builder already stopped or not running"
     - docker buildx rm $BUILDER_NAME || echo "Builder already removed or not found"
-
-    # Prune containers, images, volumes
     - docker container prune -f
     - docker image prune -af
     - docker volume prune -f
-
-    # Prune builder cache (safely ignore errors)
     - docker builder prune -af --filter until=1h || true
+
 
 
 
