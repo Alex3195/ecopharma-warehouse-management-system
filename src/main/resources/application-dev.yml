@@ -75,6 +75,10 @@ minio:
 postgres:
   container:
     name: eco-pharma-warehouse-postgres
+  reconnect:
+    delays: 5000
+  polling:
+    intervals: 200
 
 backup:
   useShell: false
