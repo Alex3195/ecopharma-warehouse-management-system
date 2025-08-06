@@ -88,7 +88,6 @@ gradle-test:
   before_script:
     - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
   script:
-    - unset DOCKER_HOST
     - docker buildx create --use --name $BUILDER_NAME
     - docker buildx inspect --bootstrap
     - |
