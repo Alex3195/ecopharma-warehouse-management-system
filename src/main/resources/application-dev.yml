@@ -7,11 +7,17 @@ spring:
     username: postgres
     password: postgres
     hikari:
-      connection-timeout: 30000  # Increase timeout for debugging
+      connection-timeout: 30000
+      initialization-fail-timeout: 60000  # Wait 60s before failing
+      maximum-pool-size: 5
   jpa:
     show-sql: true
   liquibase:
     default-schema: public
+    enabled: true
+    parameters:
+      retryAttempts: 5
+      retryDelay: 3000
   security:
     oauth2:
       resourceserver:
