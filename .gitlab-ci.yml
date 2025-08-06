@@ -7,7 +7,8 @@ variables:
   SPRING_PROFILES_ACTIVE_PROD: prod # Use prod for main branch
   SERVER_PORT: 9091
   DEBUG_PORT: 9092
-  SPRING_DB_URL: jdbc:postgresql://192.168.7.12:5432/wms
+  SPRING_DB_URL_DEV: jdbc:postgresql://192.168.7.12:5432/postgres
+  SPRING_DB_URL_STAGE: jdbc:postgresql://192.168.7.133:5432/postgres
   SPRING_DB_USERNAME: postgres
   SPRING_DB_PASSWORD: postgres
   DOCKER_IMAGE_NAME: $CI_REGISTRY/$DOCKER_USERNAME/eco-pharma-warehouse
@@ -84,25 +85,48 @@ gradle-test:
 .publish_template: &publish_template
   stage: publish
   image: docker:latest
-  services:
-    - name: docker:dind
   variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""  # Required to disable TLS inside DinD
+    BUILDER_NAME: tempbuilder-$CI_PIPELINE_ID
   before_script:
     - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
+
   script:
     - unset DOCKER_HOST
+
+    # Create temporary builder and use it
+    - docker buildx create --use --name $BUILDER_NAME
+
+    # Build Docker image
     - |
       docker buildx build \
-       --build-arg SPRING_PROFILE=$SPRING_PROFILE \
-       --build-arg SERVER_PORT=$SERVER_PORT \
-       --build-arg DEBUG_PORT=$DEBUG_PORT \
-       --build-arg JAVA_OPTS="-Xms128m -Xmx512m" \
-       --build-arg EXTRA_ARGS="" \
-       -t $DOCKER_IMAGE_NAME:$DOCKER_TAG \
-       -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA . \
-       --push
+        --builder $BUILDER_NAME \
+        --build-arg SPRING_PROFILE=$SPRING_PROFILE \
+        --build-arg SERVER_PORT=$SERVER_PORT \
+        --build-arg DEBUG_PORT=$DEBUG_PORT \
+        --build-arg JAVA_OPTS="-Xms128m -Xmx512m" \
+        --build-arg EXTRA_ARGS="" \
+        -t $DOCKER_IMAGE_NAME:$DOCKER_TAG \
+        -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA \
+        .
+
+    # Push Docker images
+    - docker push $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA
+    - docker push $DOCKER_IMAGE_NAME:$DOCKER_TAG
+
+  after_script:
+    # Stop and remove the temporary builder
+    - echo "Cleaning up builder and Docker resources..."
+    - docker buildx stop $BUILDER_NAME || echo "Builder already stopped or not running"
+    - docker buildx rm $BUILDER_NAME || echo "Builder already removed or not found"
+
+    # Prune containers, images, volumes
+    - docker container prune -f
+    - docker image prune -af
+    - docker volume prune -f
+
+    # Prune builder cache (safely ignore errors)
+    - docker builder prune -af --filter until=1h || true
+
 
 
 publish-dev:
