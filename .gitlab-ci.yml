@@ -93,7 +93,7 @@ gradle-test:
         --build-arg SPRING_PROFILE=$SPRING_PROFILE \
         --build-arg SERVER_PORT=$SERVER_PORT \
         --build-arg DEBUG_PORT=$DEBUG_PORT \
-        --build-arg JAVA_OPTS="-Xms128m -Xmx512m" \
+        --build-arg JAVA_OPTS="-Xms1g -Xmx2g" \
         --build-arg EXTRA_ARGS="" \
         -t $DOCKER_IMAGE_NAME:$DOCKER_TAG \
         -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA \
