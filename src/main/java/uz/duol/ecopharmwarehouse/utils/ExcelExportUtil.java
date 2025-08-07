@@ -1,6 +1,9 @@
 package uz.duol.ecopharmwarehouse.utils;
 
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.ByteArrayOutputStream;
@@ -47,7 +50,24 @@ public class ExcelExportUtil {
                     String fieldName = fieldNames.get(j);
                     Cell cell = dataRow.createCell(j);
 
+                    if (fieldName.contains(".")) {
+                        String[] nestedFields = fieldName.split("\\.");
+                        Object nestedValue = item;
+                        for (String nf : nestedFields) {
+                            if (nestedValue == null) {
+                                cell.setCellValue("");
+                                break;
+                            }
+                            Field nestedField = nestedValue.getClass().getDeclaredField(nf);
+                            nestedField.setAccessible(true);
+                            nestedValue = nestedField.get(nestedValue);
+                        }
+                        cell.setCellValue(nestedValue != null ? nestedValue.toString() : "");
+                        continue;
+                    }
+
                     Field field = fieldMap.get(fieldName);
+
                     if (field != null) {
                         Object value = field.get(item);
                         cell.setCellValue(value != null ? value.toString() : "");
@@ -61,6 +81,8 @@ public class ExcelExportUtil {
             return out.toByteArray();
         } catch (IOException | IllegalAccessException e) {
             throw new RuntimeException("Failed to export Excel", e);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException("Failed to export Excel because you are trying to get wrong field name. " + e);
         }
     }
 }
