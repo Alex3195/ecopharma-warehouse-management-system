@@ -51,12 +51,23 @@ public class LoggingAspect {
         Map<String, Object> paramsMap = new HashMap<>();
         for (int i = 0; i < paramNames.length; i++) {
             Object val = paramValues[i];
+
+            if (val instanceof jakarta.servlet.ServletResponse ||
+                    val instanceof jakarta.servlet.ServletRequest ||
+                    val instanceof org.springframework.web.multipart.MultipartFile ||
+                    val instanceof java.io.InputStream ||
+                    val instanceof java.io.OutputStream) {
+                paramsMap.put(paramNames[i], val.getClass().getSimpleName());
+                continue;
+            }
+
             try {
                 paramsMap.put(paramNames[i], objectMapper.writeValueAsString(val));
             } catch (Exception e) {
                 paramsMap.put(paramNames[i], String.valueOf(val));
             }
         }
+
 
         long start = System.currentTimeMillis();
 
