@@ -15,7 +15,6 @@ variables:
   DOCKER_TAG_DEV: latest-dev
   DOCKER_TAG_STAGE: latest-stage
   DOCKER_TAG_PROD: latest
-  DOCKER_TLS_CERTDIR: ""  # Required for Docker-in-Docker
   SERVER_SSH_PORT_DEV: 22
   SERVER_SSH_PORT_TEST: 2222
   SERVER_SSH_PORT_STAGE: 2222
@@ -89,31 +88,24 @@ gradle-test:
 # Stage 2: Publish Docker image
 .publish_template: &publish_template
   stage: publish
-  image: docker:latest
+  image: docker:24.0
+  variables:
+    DOCKER_HOST: unix:///var/run/docker.sock
+    DOCKER_TLS_CERTDIR: ""
   before_script:
+    - docker version
+    - docker info
     - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
   script:
-    - docker buildx create --use --name "$BUILDER"
+    - docker buildx create --use --name "$BUILDER_NAME"
     - docker buildx inspect --bootstrap
-    - |
-      docker buildx build \
-        --builder "$BUILDER" \
-        --build-arg SPRING_PROFILE=$SPRING_PROFILE \
-        --build-arg SERVER_PORT=$SERVER_PORT \
-        --build-arg DEBUG_PORT=$DEBUG_PORT \
-        --build-arg JAVA_OPTS="-Xms1g -Xmx2g" \
-        --build-arg EXTRA_ARGS="" \
-        -t $DOCKER_IMAGE:$DOCKER_TAG \
-        -t $DOCKER_IMAGE:$CI_COMMIT_SHA \
-        --push .
+    - docker buildx build --builder "$BUILDER_NAME" --build-arg SPRING_PROFILE=$SPRING_PROFILE --build-arg SERVER_PORT=$SERVER_PORT --build-arg DEBUG_PORT=$DEBUG_PORT --build-arg JAVA_OPTS="-Xms1g -Xmx2g" --build-arg EXTRA_ARGS="" -t $DOCKER_IMAGE_NAME:$DOCKER_TAG -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA --push .
   after_script:
-    - echo "Cleaning up builder and Docker resources..."
-    - docker buildx stop "$BUILDER" || echo "Builder already stopped or not running"
-    - docker buildx rm "$BUILDER" || echo "Builder already removed or not found"
-    - docker container prune -f
-    - docker image prune -af
-    - docker volume prune -f
-    - docker builder prune -af --filter until=1h || true
+    - docker buildx stop "$BUILDER_NAME" || true
+    - docker buildx rm "$BUILDER_NAME" || true
+    - docker container prune -f || true
+    - docker image prune -af || true
+    - docker volume prune -f || true
 
 
 
@@ -153,35 +145,34 @@ publish-prod:
   stage: deploy
   image: alpine:latest
   before_script:
-    - apk add --no-cache openssh
+    - set -euxo pipefail
+    - apk add --no-cache openssh-client netcat-openbsd
+    - test -n "$SERVER_IP"
+    - test -n "$SERVER_USER"
+    - test -n "$SERVER_SSH_PORT"
+    - test -n "$PRIVATE_KEY"
+    - test -n "$COMPOSE_FILE"
     - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
     - echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-
-    # Debugging values before SSH
-    - echo "Connecting with USER=$USER, SERVER_IP=$SERVER_IP, SERVER_PORT=$SERVER_PORT"
-    - '[ -z "$USER" ] && echo "ERROR: USER is empty!" && exit 1'
-    - '[ -z "$SERVER_IP" ] && echo "ERROR: SERVER_IP is empty!" && exit 1'
-    - '[ -z "$SERVER_PORT" ] && echo "ERROR: SERVER_PORT is empty!" && exit 1'
-
-    # Add remote host to known_hosts
-    - ssh-keyscan -p "$SERVER_PORT" "$SERVER_IP" >> ~/.ssh/known_hosts
+    - timeout 10 nc -z -v "$SERVER_IP" "$SERVER_SSH_PORT"
+    - ssh-keyscan -p "$SERVER_SSH_PORT" "$SERVER_IP" >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - ssh -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes -p "$SERVER_SSH_PORT" "$SERVER_USER@$SERVER_IP" 'echo SSH connection OK'
   script:
-    - export SSH="ssh -p $SERVER_PORT $USER@$SERVER_IP"
-    - $SSH "mkdir -p gitlab-runner-api/wms-service && chmod 755 gitlab-runner-api/wms-service"
-    - scp -P "$SERVER_PORT" "$COMPOSE_FILE" "$USER@$SERVER_IP:gitlab-runner-api/wms-service"
-    - $SSH "cd gitlab-runner-api/wms-service && docker compose -f $COMPOSE_FILE down || true"
-    - $SSH "cd gitlab-runner-api/wms-service && docker compose -f $COMPOSE_FILE pull"
-    - $SSH "cd gitlab-runner-api/wms-service && docker compose -f $COMPOSE_FILE up -d"
-    - $SSH "docker image prune -f --filter 'until=24h' || true"
-    - $SSH "docker container prune -f || true"
-    - $SSH "docker system prune -f --volumes --filter 'label!=keep=true' || true"
+    - export SSH_CMD="ssh -o StrictHostKeyChecking=yes -p $SERVER_SSH_PORT $SERVER_USER@$SERVER_IP"
+    - $SSH_CMD "mkdir -p gitlab-runner-api/wms-service && chmod 755 gitlab-runner-api/wms-service"
+    - scp -P $SERVER_SSH_PORT -o StrictHostKeyChecking=yes $COMPOSE_FILE $SERVER_USER@$SERVER_IP:gitlab-runner-api/wms-service/
+    - $SSH_CMD "cd gitlab-runner-api/wms-service && docker compose -f $COMPOSE_FILE down || true"
+    - $SSH_CMD "cd gitlab-runner-api/wms-service && docker compose -f $COMPOSE_FILE pull"
+    - $SSH_CMD "cd gitlab-runner-api/wms-service && docker compose -f $COMPOSE_FILE up -d"
+    - $SSH_CMD "docker system prune -af --filter 'until=24h' || true"
 
 
 deploy-test:
   <<: *deploy_template
   variables:
-    USER: $SERVER_USER_TEST
     SERVER_IP: $SERVER_IP_TEST
     PRIVATE_KEY: $SSH_PRIVATE_KEY_TEST
     SERVER_PORT: $SERVER_SSH_PORT_TEST
@@ -193,7 +184,6 @@ deploy-test:
 deploy-dev:
   <<: *deploy_template
   variables:
-    USER: $SERVER_USER_DEV
     SERVER_IP: $SERVER_IP_DEV
     PRIVATE_KEY: $SSH_PRIVATE_KEY
     SERVER_PORT: $SERVER_SSH_PORT_DEV
@@ -205,7 +195,6 @@ deploy-dev:
 deploy-stage:
   <<: *deploy_template
   variables:
-    USER: $SERVER_USER_STAGE
     SERVER_IP: $SERVER_IP_STAGE
     PRIVATE_KEY: $SSH_PRIVATE_KEY_STAGE
     SERVER_PORT: $SERVER_SSH_PORT_STAGE
@@ -217,7 +206,6 @@ deploy-stage:
 deploy-prod:
   <<: *deploy_template
   variables:
-    USER: $SERVER_USER_PROD
     SERVER_IP: $SERVER_IP_PROD
     PRIVATE_KEY: $SSH_PRIVATE_KEY_PROD
     SERVER_PORT: $SERVER_SSH_PORT_PROD
