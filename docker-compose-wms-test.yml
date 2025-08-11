@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  # Spring Boot Application
+  wms-service-test:
+    image: duoluz/eco-pharma-warehouse:latest-test # Use the latest tag if TAG is not provided
+    container_name: wms-service-test
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=test
+      - TZ=Asia/Tashkent
+    ports:
+      - "9095:9095"
+    networks:
+      - ecopharm-data
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+networks:
+  ecopharm-data:
+    driver: bridge
