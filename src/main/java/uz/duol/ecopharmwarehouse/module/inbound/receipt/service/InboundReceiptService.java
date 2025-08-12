@@ -17,6 +17,7 @@ import uz.duol.ecopharmwarehouse.module.crossdocking.service.CrossDockingService
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.dto.InboundReceiptDto;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.mapper.InboundReceiptMapper;
 import uz.duol.ecopharmwarehouse.module.inbound.receipt.specification.InboundReceiptSpecification;
+import uz.duol.ecopharmwarehouse.module.inboundreceiptmetadata.mapper.InboundReceiptMetadataMapper;
 import uz.duol.ecopharmwarehouse.repositories.InboundReceiptRepository;
 import uz.duol.ecopharmwarehouse.utils.ExcelExportUtil;
 
@@ -30,17 +31,27 @@ public class InboundReceiptService {
     @Qualifier("inboundReceiptMapper")
     private final InboundReceiptMapper mapper;
     private final CrossDockingService crossDockingService;
+    private final InboundReceiptMetadataMapper metadataMapper;
 
     @Transactional
     public InboundReceiptDto create(InboundReceiptDto receipt) {
         var e = mapper.toEntity(receipt);
-        repository.save(e);
-        if (receipt.getCrossDockType() != null) {
-            var crossDockingEntity = crossDockingEntityFromRequest(receipt);
-            crossDockingService.create(crossDockingEntity);
+
+        if (e.getInboundReceiptMetadata() != null) {
+            e.getInboundReceiptMetadata().forEach((m) -> {
+                m.setInboundReceipt(e);
+            });
         }
+
+        repository.save(e);
+
+        if (receipt.getCrossDockType() != null) {
+            crossDockingService.create(crossDockingEntityFromRequest(receipt));
+        }
+
         return mapper.toDto(e);
     }
+
 
     private CrossDockingDto crossDockingEntityFromRequest(InboundReceiptDto request) {
         CrossDockingDto crossDocking = new CrossDockingDto();

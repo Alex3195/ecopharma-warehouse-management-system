@@ -7,10 +7,12 @@ import uz.duol.ecopharmwarehouse.enums.CrossDockTypeEnum;
 import uz.duol.ecopharmwarehouse.enums.ReceiptStatusEnum;
 import uz.duol.ecopharmwarehouse.enums.ReceiptTypeEnum;
 import uz.duol.ecopharmwarehouse.module.customersupplier.dto.CustomerSupplierDto;
+import uz.duol.ecopharmwarehouse.module.inboundreceiptmetadata.dto.InboundReceiptMetadataDto;
 import uz.duol.ecopharmwarehouse.module.product.dto.ProductDTO;
 import uz.duol.ecopharmwarehouse.module.unit.dto.UnitsDTO;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static uz.duol.ecopharmwarehouse.enums.CrossDockTypeEnum.OPPORTUNISTIC;
 
@@ -38,4 +40,6 @@ public class InboundReceiptDto {
     private CrossDockTypeEnum crossDockType = OPPORTUNISTIC; // Assuming a CrossDockTypeEnum exists
 
     private LocalDateTime processingTime;
+
+    private List<InboundReceiptMetadataDto> inboundReceiptMetadata;
 }

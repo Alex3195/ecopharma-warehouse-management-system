@@ -23,6 +23,7 @@ public class TableNamesConstant {
         public static final String AUDIT_TRAIL = "audit_trail";
         public static final String USER = "users";
         public static final String CUSTOMER_SUPPLIER = "customer_supplier";
+        public static final String INBOUND_RECEIPT_METADATA = "inbound_receipt_meta_data";
 
         public static final String SECTOR = "sector";
         public static final String UNIT = "unit";

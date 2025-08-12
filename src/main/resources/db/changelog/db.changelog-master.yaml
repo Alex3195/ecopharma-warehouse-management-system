@@ -22,3 +22,11 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: db/changelog/tables/insert_init_data.sql
+
+  # Schema creation update
+  - changeSet:
+      id: create_schema_v2
+      author: DAVRON
+      changes:
+        - sqlFile:
+            path: db/changelog/tables/v2_0__create_tables.sql

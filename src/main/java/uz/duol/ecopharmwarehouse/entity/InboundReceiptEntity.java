@@ -11,6 +11,9 @@ import uz.duol.ecopharmwarehouse.enums.ReceiptTypeEnum;
 import uz.duol.ecopharmwarehouse.entity.utils.TableNamesConstant;
 import uz.duol.ecopharmwarehouse.listener.AuditTrailListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = TableNamesConstant.Tables.INBOUND_RECEIPT)
 @Getter
@@ -52,6 +55,9 @@ public class InboundReceiptEntity extends BaseEntity {
     @Column(name = "receipt_status")
     @Enumerated(EnumType.STRING)
     private ReceiptStatusEnum receiptStatus;
+
+    @OneToMany(mappedBy = "inboundReceipt", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<InboundReceiptMetadataEntity> inboundReceiptMetadata = new ArrayList<>();
 
     @Column(name = "unit_id")
     private Long unitId;
