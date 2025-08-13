@@ -55,7 +55,7 @@ eureka:
     instance-id: ${spring.application.name}:${server.port}
   client:
     service-url:
-      defaultZone: http://eco-pharma-discovery-server:8088/eureka/
+      defaultZone: http://192.168.7.12:8088/eureka/
     healthcheck:
       enabled: true
     fetch-registry: true
