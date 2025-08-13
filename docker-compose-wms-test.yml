@@ -16,6 +16,10 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      - wm-service-test-logs:/opt/app/logs
+volumes:
+  wm-service-test-logs:
+    driver: local
 
 networks:
   ecopharm-data:

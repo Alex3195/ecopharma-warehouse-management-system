@@ -6,8 +6,6 @@ variables:
   SPRING_PROFILES_ACTIVE_DEV: dev # Use prod for main branch
   SPRING_PROFILES_ACTIVE_STAGE: stage # Use prod for main branch
   SPRING_PROFILES_ACTIVE_PROD: prod # Use prod for main branch
-  SERVER_PORT: 9091
-  DEBUG_PORT: 9092
   SPRING_DB_USERNAME: postgres
   SPRING_DB_PASSWORD: postgres
   DOCKER_IMAGE: $CI_REGISTRY/$DOCKER_USERNAME/eco-pharma-warehouse
@@ -114,6 +112,8 @@ publish-test:
     variables:
         SPRING_PROFILE: $SPRING_PROFILES_ACTIVE_TEST
         DOCKER_TAG: $DOCKER_TAG_TEST
+        SERVER_PORT: 1091
+        DEBUG_PORT: 1092
     only:
         - test
 
@@ -122,6 +122,8 @@ publish-dev:
   variables:
     SPRING_PROFILE: $SPRING_PROFILES_ACTIVE_DEV
     DOCKER_TAG: $DOCKER_TAG_DEV
+    SERVER_PORT: 9091
+    DEBUG_PORT: 9092
   only:
     - dev
 
@@ -130,6 +132,8 @@ publish-stage:
     variables:
         SPRING_PROFILE: $SPRING_PROFILES_ACTIVE_STAGE
         DOCKER_TAG: $DOCKER_TAG_STAGE
+        SERVER_PORT: 9091
+        DEBUG_PORT: 9092
     only:
         - stage
 
@@ -138,6 +142,8 @@ publish-prod:
   variables:
     SPRING_PROFILE: $SPRING_PROFILES_ACTIVE_PROD
     DOCKER_TAG: $DOCKER_TAG_PROD
+    SERVER_PORT: 9091
+    DEBUG_PORT: 9092
   only:
     - main
 
