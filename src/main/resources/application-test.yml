@@ -21,10 +21,6 @@ spring:
     port: 5671
     username: admin
     password: admin!123
-    ssl:
-      enabled: true
-      algorithm: TLSv1.2
-      validate-server-certificate: false
 
 keycloak:
   realm: eco-pharma
