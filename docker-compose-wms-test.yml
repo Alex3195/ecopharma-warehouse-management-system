@@ -10,7 +10,7 @@ services:
       - SPRING_PROFILES_ACTIVE=test
       - TZ=Asia/Tashkent
     ports:
-      - "9095:9095"
+      - "1091:1091"
     networks:
       - ecopharm-data
     volumes:
