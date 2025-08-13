@@ -17,7 +17,7 @@ variables:
   SERVER_SSH_PORT_TEST: 2222
   SERVER_SSH_PORT_STAGE: 2222
   SERVER_SSH_PORT_PROD: 2221
-  BUILDER: "tempbuilder-$CI_PIPELINE_ID"
+  BUILDER_NAME: "tempbuilder-$CI_PIPELINE_ID"
 
 stages:
   - build
@@ -97,7 +97,7 @@ gradle-test:
   script:
     - docker buildx create --use --name "$BUILDER_NAME"
     - docker buildx inspect --bootstrap
-    - docker buildx build --builder "$BUILDER_NAME" --build-arg SPRING_PROFILE=$SPRING_PROFILE --build-arg SERVER_PORT=$SERVER_PORT --build-arg DEBUG_PORT=$DEBUG_PORT --build-arg JAVA_OPTS="-Xms1g -Xmx2g" --build-arg EXTRA_ARGS="" -t $DOCKER_IMAGE_NAME:$DOCKER_TAG -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA --push .
+    - docker buildx build --builder "$BUILDER_NAME" --build-arg SPRING_PROFILE=$SPRING_PROFILE --build-arg SERVER_PORT=$SERVER_PORT --build-arg DEBUG_PORT=$DEBUG_PORT --build-arg JAVA_OPTS="-Xms1g -Xmx2g" --build-arg EXTRA_ARGS="" -t $DOCKER_IMAGE:$DOCKER_TAG -t $DOCKER_IMAGE:$CI_COMMIT_SHA --push .
   after_script:
     - docker buildx stop "$BUILDER_NAME" || true
     - docker buildx rm "$BUILDER_NAME" || true
