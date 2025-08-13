@@ -2,6 +2,7 @@ package uz.duol.ecopharmwarehouse.module.sector.characteristics.service;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,8 @@ public class SectorCharacteristicsService {
     @Transactional
     public SectorCharacteristicDTO update(Long id, SectorCharacteristicDTO dto) {
         var existing = repository.findById(id).orElseThrow(() -> new SectorCharacteristicsNotFoundException("Sector characteristic not found"));
-        mapper.updateExistingEntity(existing,dto);
+        Hibernate.initialize(existing);
+        mapper.updateExistingEntity(existing, dto);
         return mapper.toDto(repository.save(existing));
     }
 

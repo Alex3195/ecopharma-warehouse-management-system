@@ -18,6 +18,7 @@ public interface SectorCharacteristicsMapper {
     @Mapping(target = "sector", ignore = true)
     SectorCharacteristicEntity toEntity(SectorCharacteristicDTO dto);
 
+    @Mapping(target = "characteristicId", source = "characteristic.id")
     SectorCharacteristicDTO toDto(SectorCharacteristicEntity entity);
 
     @Mapping(target = "updatedBy", ignore = true)
