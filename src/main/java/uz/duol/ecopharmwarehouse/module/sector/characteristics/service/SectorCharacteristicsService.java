@@ -32,7 +32,7 @@ public class SectorCharacteristicsService {
         return mapper.toDto(repository.save(e));
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public SectorCharacteristicDTO findById(Long id) {
         SectorCharacteristicEntity entity = repository.findById(id)
                 .orElseThrow(() -> new SectorCharacteristicsNotFoundException("Sector characteristic not found"));
@@ -41,17 +41,18 @@ public class SectorCharacteristicsService {
 
     @Transactional
     public SectorCharacteristicDTO update(Long id, SectorCharacteristicDTO dto) {
-        findById(id);
-        var entity = mapper.toEntity(dto);
-        entity.setId(id);
-        return mapper.toDto(repository.save(entity));
+        var existing = repository.findById(id).orElseThrow(() -> new SectorCharacteristicsNotFoundException("Sector characteristic not found"));
+        mapper.updateExistingEntity(existing,dto);
+        return mapper.toDto(repository.save(existing));
     }
 
+    @Transactional
     public void delete(Long id) {
         SectorCharacteristicDTO dto = findById(id);
         repository.deleteById(dto.getId());
     }
 
+    @Transactional(readOnly = true)
     public DataTableResponse<SectorCharacteristicDTO> findAll(DataTableRequest request) {
         Specification<SectorCharacteristicEntity> spec = SectorCharacteristicsSpecification.advancedFilter(request.getFilters());
         Pageable pageable = PageUtil.getPageable(request);

@@ -2,6 +2,7 @@ package uz.duol.ecopharmwarehouse.module.sector.characteristics.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import uz.duol.ecopharmwarehouse.entity.SectorCharacteristicEntity;
 import uz.duol.ecopharmwarehouse.module.characteristics.mapper.CharacteristicsMapper;
@@ -19,4 +20,11 @@ public interface SectorCharacteristicsMapper {
 
     SectorCharacteristicDTO toDto(SectorCharacteristicEntity entity);
 
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "sector", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    void updateExistingEntity(@MappingTarget SectorCharacteristicEntity existing, SectorCharacteristicDTO dto);
 }
