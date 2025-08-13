@@ -84,15 +84,17 @@ gradle-test:
   only:
     - main
 # Stage 2: Publish Docker image
-.publish_template: &publish_template
+..publish_template: &publish_template
   stage: publish
   image: docker:24.0
+  services:
+    - docker:24.0-dind
   variables:
-    DOCKER_HOST: unix:///var/run/docker.sock
+    DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
   before_script:
-    - docker version
-    - docker info
+    - until docker info; do echo "Waiting for Docker daemon..."; sleep 1; done
     - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
   script:
     - docker buildx create --use --name "$BUILDER_NAME"
