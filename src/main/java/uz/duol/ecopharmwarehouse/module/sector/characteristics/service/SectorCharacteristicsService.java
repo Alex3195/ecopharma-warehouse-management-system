@@ -26,17 +26,20 @@ public class SectorCharacteristicsService {
     private final SectorCharacteristicsRepository repository;
     private final SectorCharacteristicsMapper mapper;
 
+    @Transactional
     public SectorCharacteristicDTO create(SectorCharacteristicDTO dto) {
         var e = mapper.toEntity(dto);
         return mapper.toDto(repository.save(e));
     }
 
+    @Transactional(readOnly=true)
     public SectorCharacteristicDTO findById(Long id) {
         SectorCharacteristicEntity entity = repository.findById(id)
                 .orElseThrow(() -> new SectorCharacteristicsNotFoundException("Sector characteristic not found"));
         return mapper.toDto(entity);
     }
 
+    @Transactional
     public SectorCharacteristicDTO update(Long id, SectorCharacteristicDTO dto) {
         findById(id);
         var entity = mapper.toEntity(dto);

@@ -19,4 +19,6 @@ public class InboundReceiptMetadataDto {
     private LocalDate expiryDate;
 
     private String serialNumber;
+
+    private Long quantity;
 }

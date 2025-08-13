@@ -6,4 +6,5 @@ public enum TaskTypeEnum {
     PICK, // Pick task
     PACK, // Pack task
     SHIP, // Ship task
+    RESERVE_LOCATION
 }

@@ -39,4 +39,7 @@ public class InboundReceiptMetadataEntity extends BaseEntity {
 
     @Column(name = "serial_number")
     private String serialNumber;
+
+    @Column(name = "quantity")
+    private Long quantity;
 }

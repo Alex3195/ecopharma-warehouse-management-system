@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS inbound_receipt_meta_data (id BIGINT NOT NULL,
                                         manufacture_date date,
                                         expiry_date date,
                                         serial_number VARCHAR(255),
+                                        quantity BIGINT,
                                         CONSTRAINT pk_inbound_receipt_meta_data
                                         PRIMARY KEY (id));
 
