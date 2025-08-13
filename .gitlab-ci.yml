@@ -183,7 +183,7 @@ deploy-test:
   variables:
     SERVER_IP: $SERVER_IP_TEST
     PRIVATE_KEY: $SSH_PRIVATE_KEY_TEST
-    SERVER_PORT: $SERVER_SSH_PORT_TEST
+    SERVER_SSH_PORT: $SERVER_SSH_PORT_TEST
     SERVER_USER: $SERVER_USER_TEST
     COMPOSE_FILE: docker-compose-wms-test.yml
   only:
@@ -194,7 +194,7 @@ deploy-dev:
   variables:
     SERVER_IP: $SERVER_IP_DEV
     PRIVATE_KEY: $SSH_PRIVATE_KEY
-    SERVER_PORT: $SERVER_SSH_PORT_DEV
+    SERVER_SSH_PORT: $SERVER_SSH_PORT_DEV
     SERVER_USER: $SERVER_USER_DEV
     COMPOSE_FILE: docker-compose-wms-dev.yml
   only:
@@ -205,7 +205,7 @@ deploy-stage:
   variables:
     SERVER_IP: $SERVER_IP_STAGE
     PRIVATE_KEY: $SSH_PRIVATE_KEY_STAGE
-    SERVER_PORT: $SERVER_SSH_PORT_STAGE
+    SERVER_SSH_PORT: $SERVER_SSH_PORT_STAGE
     SERVER_USER: $SERVER_USER_STAGE
     COMPOSE_FILE: docker-compose-wms-stage.yml
   only:
@@ -216,7 +216,7 @@ deploy-prod:
   variables:
     SERVER_IP: $SERVER_IP_PROD
     PRIVATE_KEY: $SSH_PRIVATE_KEY_PROD
-    SERVER_PORT: $SERVER_SSH_PORT_PROD
+    SERVER_SSH_PORT: $SERVER_SSH_PORT_PROD
     SERVER_USER: $SERVER_USER_PROD
     COMPOSE_FILE: docker-compose-wms-prod.yml
   only:
