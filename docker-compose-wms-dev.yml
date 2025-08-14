@@ -12,7 +12,7 @@ services:
     ports:
       - "9091:9091"
     networks:
-      - ecopharm-data
+      - shared-network-pharm
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -22,5 +22,6 @@ volumes:
     driver: local
 
 networks:
-  ecopharm-data:
-    driver: bridge
+  shared-network-pharm:
+    external: true
+    name: shared-network-pharm

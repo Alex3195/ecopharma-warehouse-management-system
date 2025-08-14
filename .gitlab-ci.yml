@@ -17,7 +17,6 @@ variables:
   SERVER_SSH_PORT_TEST: 2222
   SERVER_SSH_PORT_STAGE: 2222
   SERVER_SSH_PORT_PROD: 2221
-  BUILDER_NAME: "tempbuilder-$CI_PIPELINE_ID"
 
 stages:
   - build
@@ -84,7 +83,7 @@ gradle-test:
   only:
     - main
 # Stage 2: Publish Docker image
-..publish_template: &publish_template
+.publish_template: &publish_template
   stage: publish
   image: docker:24.0
   services:
@@ -97,15 +96,22 @@ gradle-test:
     - until docker info; do echo "Waiting for Docker daemon..."; sleep 1; done
     - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
   script:
-    - docker buildx create --use --name "$BUILDER_NAME"
-    - docker buildx inspect --bootstrap
-    - docker buildx build --builder "$BUILDER_NAME" --build-arg SPRING_PROFILE=$SPRING_PROFILE --build-arg SERVER_PORT=$SERVER_PORT --build-arg DEBUG_PORT=$DEBUG_PORT --build-arg JAVA_OPTS="-Xms1g -Xmx2g" --build-arg EXTRA_ARGS="" -t $DOCKER_IMAGE:$DOCKER_TAG -t $DOCKER_IMAGE:$CI_COMMIT_SHA --push .
+    - |
+      echo "Building image: $DOCKER_IMAGE:$DOCKER_TAG"
+      docker build \
+        --build-arg "SPRING_PROFILE=$SPRING_PROFILE" \
+        --build-arg "SERVER_PORT=$SERVER_PORT" \
+        --build-arg "DEBUG_PORT=$DEBUG_PORT" \
+        --build-arg "JAVA_OPTS=-Xms1g -Xmx2g" \
+        --build-arg "EXTRA_ARGS=" \
+        -t "$DOCKER_IMAGE:$DOCKER_TAG" \
+        -t "$DOCKER_IMAGE:$CI_COMMIT_SHA" \
+        .
+    - docker push "$DOCKER_IMAGE:$DOCKER_TAG"
+    - docker push "$DOCKER_IMAGE:$CI_COMMIT_SHA"
   after_script:
-    - docker buildx stop "$BUILDER_NAME" || true
-    - docker buildx rm "$BUILDER_NAME" || true
-    - docker container prune -f || true
-    - docker image prune -af || true
-    - docker volume prune -f || true
+    - docker logout "$CI_REGISTRY"
+    - docker system prune -af || true
 
 
 
