@@ -105,8 +105,6 @@ gradle-test:
   after_script:
     - docker logout "$CI_REGISTRY"
 
-
-
 publish-test:
     <<: *publish_template
     variables:

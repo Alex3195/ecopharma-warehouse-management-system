@@ -11,8 +11,9 @@ services:
       - TZ=Asia/Tashkent
     ports:
       - "1091:1091"
+      - "1092:1092"
     networks:
-      - ecopharm-data
+      - shared-network-pharm-test
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -22,5 +23,6 @@ volumes:
     driver: local
 
 networks:
-  ecopharm-data:
-    driver: bridge
+  shared-network-pharm-test:
+    external: true
+    name: shared-network-pharm-test
