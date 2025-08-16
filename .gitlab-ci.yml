@@ -86,15 +86,11 @@ gradle-test:
 .publish_template: &publish_template
   stage: publish
   image: docker:24.0
-  services:
-    - docker:24.0-dind
   variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
-    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: unix:///var/run/docker.sock
   before_script:
-    - until docker info; do echo "Waiting for Docker daemon..."; sleep 1; done
-    - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $CI_REGISTRY
+    - unset DOCKER_HOST
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin "$CI_REGISTRY"
   script:
     - |
       echo "Building image: $DOCKER_IMAGE:$DOCKER_TAG"
@@ -111,7 +107,6 @@ gradle-test:
     - docker push "$DOCKER_IMAGE:$CI_COMMIT_SHA"
   after_script:
     - docker logout "$CI_REGISTRY"
-    - docker system prune -af || true
 
 
 
