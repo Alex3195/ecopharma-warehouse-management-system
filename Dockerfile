@@ -47,4 +47,4 @@ ENV SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE} \
     EXTRA_ARGS=${EXTRA_ARGS}
 
 # Entrypoint to run Spring Boot app with remote debug enabled
-ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar app-auth-service.jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$DEBUG_PORT --spring.profiles.active=$SPRING_PROFILES_ACTIVE $EXTRA_ARGS"]
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar app-wms.jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$DEBUG_PORT --spring.profiles.active=$SPRING_PROFILES_ACTIVE $EXTRA_ARGS"]
