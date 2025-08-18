@@ -37,7 +37,7 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://192.168.100.193:8098/eureka/
+      defaultZone: http://192.168.100.193:1088/eureka/
     healthcheck:
       enabled: true
     fetch-registry: true
@@ -70,8 +70,6 @@ backup:
 
 logging:
   config: classpath:log4j2-stage.xml
-  threshold:
-    console: error
 
 logstash:
   host: 192.168.100.141
