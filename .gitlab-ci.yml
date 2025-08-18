@@ -13,10 +13,6 @@ variables:
   DOCKER_TAG_DEV: latest-dev
   DOCKER_TAG_STAGE: latest-stage
   DOCKER_TAG_PROD: latest
-  SERVER_SSH_PORT_DEV: 22
-  SERVER_SSH_PORT_TEST: 2222
-  SERVER_SSH_PORT_STAGE: 2222
-  SERVER_SSH_PORT_PROD: 2221
 
 stages:
   - build
@@ -40,21 +36,29 @@ cache:
 
 build-test:
   <<: *build_template
+  tags:
+    - wms-service-runner
   only:
     - test
 
 build-dev:
   <<: *build_template
+  tags:
+    - wms-service-runner
   only:
     - dev
 
 build-stage:
   <<: *build_template
+  tags:
+    - wms-service-runner
   only:
     - stage
 
 build-prod:
   <<: *build_template
+  tags:
+    - wms-service-runner
   only:
     - main
 
@@ -93,7 +97,7 @@ gradle-test:
     - |
       echo "Building image: $DOCKER_IMAGE:$DOCKER_TAG"
       docker build \
-        --build-arg "SPRING_PROFILE=$SPRING_PROFILE" \
+        --build-arg "SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE" \
         --build-arg "SERVER_PORT=$SERVER_PORT" \
         --build-arg "DEBUG_PORT=$DEBUG_PORT" \
         --build-arg "JAVA_OPTS=-Xms1g -Xmx2g" \
@@ -108,8 +112,10 @@ gradle-test:
 
 publish-test:
     <<: *publish_template
+    tags:
+      - wms-service-runner
     variables:
-        SPRING_PROFILE: $SPRING_PROFILES_ACTIVE_TEST
+        SPRING_PROFILES_ACTIVE: $SPRING_PROFILES_ACTIVE_TEST
         DOCKER_TAG: $DOCKER_TAG_TEST
         SERVER_PORT: 1091
         DEBUG_PORT: 1092
@@ -118,8 +124,10 @@ publish-test:
 
 publish-dev:
   <<: *publish_template
+  tags:
+    - wms-service-runner
   variables:
-    SPRING_PROFILE: $SPRING_PROFILES_ACTIVE_DEV
+    SPRING_PROFILES_ACTIVE: $SPRING_PROFILES_ACTIVE_DEV
     DOCKER_TAG: $DOCKER_TAG_DEV
     SERVER_PORT: 9091
     DEBUG_PORT: 9092
@@ -128,8 +136,10 @@ publish-dev:
 
 publish-stage:
     <<: *publish_template
+    tags:
+      - wms-service-runner
     variables:
-        SPRING_PROFILE: $SPRING_PROFILES_ACTIVE_STAGE
+        SPRING_PROFILES_ACTIVE: $SPRING_PROFILES_ACTIVE_STAGE
         DOCKER_TAG: $DOCKER_TAG_STAGE
         SERVER_PORT: 9091
         DEBUG_PORT: 9092
@@ -138,8 +148,10 @@ publish-stage:
 
 publish-prod:
   <<: *publish_template
+  tags:
+    - wms-service-runner
   variables:
-    SPRING_PROFILE: $SPRING_PROFILES_ACTIVE_PROD
+    SPRING_PROFILES_ACTIVE: $SPRING_PROFILES_ACTIVE_PROD
     DOCKER_TAG: $DOCKER_TAG_PROD
     SERVER_PORT: 9091
     DEBUG_PORT: 9092
@@ -154,21 +166,19 @@ publish-prod:
     - apk add --no-cache openssh-client netcat-openbsd
     - test -n "$SERVER_IP"
     - test -n "$SERVER_USER"
-    - test -n "$SERVER_SSH_PORT"
     - test -n "$PRIVATE_KEY"
     - test -n "$COMPOSE_FILE"
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    - timeout 10 nc -z -v "$SERVER_IP" "$SERVER_SSH_PORT"
-    - ssh-keyscan -p "$SERVER_SSH_PORT" "$SERVER_IP" >> ~/.ssh/known_hosts
+    - ssh-keyscan "$SERVER_IP" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - ssh -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes -p "$SERVER_SSH_PORT" "$SERVER_USER@$SERVER_IP" 'echo SSH connection OK'
+    - ssh -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes "$SERVER_USER@$SERVER_IP" 'echo SSH connection OK'
   script:
-    - export SSH_CMD="ssh -o StrictHostKeyChecking=yes -p $SERVER_SSH_PORT $SERVER_USER@$SERVER_IP"
+    - export SSH_CMD="ssh -o StrictHostKeyChecking=yes $SERVER_USER@$SERVER_IP"
     - $SSH_CMD "mkdir -p gitlab-runner-api/wms-service && chmod 755 gitlab-runner-api/wms-service"
-    - scp -P $SERVER_SSH_PORT -o StrictHostKeyChecking=yes $COMPOSE_FILE $SERVER_USER@$SERVER_IP:gitlab-runner-api/wms-service/
+    - scp -o StrictHostKeyChecking=yes $COMPOSE_FILE $SERVER_USER@$SERVER_IP:gitlab-runner-api/wms-service/
     - $SSH_CMD "cd gitlab-runner-api/wms-service && docker compose -f $COMPOSE_FILE down || true"
     - $SSH_CMD "cd gitlab-runner-api/wms-service && docker compose -f $COMPOSE_FILE pull"
     - $SSH_CMD "cd gitlab-runner-api/wms-service && docker compose -f $COMPOSE_FILE up -d"
@@ -177,10 +187,11 @@ publish-prod:
 
 deploy-test:
   <<: *deploy_template
+  tags:
+    - wms-service-runner
   variables:
     SERVER_IP: $SERVER_IP_TEST
     PRIVATE_KEY: $SSH_PRIVATE_KEY_TEST
-    SERVER_SSH_PORT: $SERVER_SSH_PORT_TEST
     SERVER_USER: $SERVER_USER_TEST
     COMPOSE_FILE: docker-compose-wms-test.yml
   only:
@@ -188,10 +199,11 @@ deploy-test:
 
 deploy-dev:
   <<: *deploy_template
+  tags:
+    - wms-service-runner
   variables:
     SERVER_IP: $SERVER_IP_DEV
-    PRIVATE_KEY: $SSH_PRIVATE_KEY
-    SERVER_SSH_PORT: $SERVER_SSH_PORT_DEV
+    PRIVATE_KEY: $SSH_PRIVATE_KEY_DEV
     SERVER_USER: $SERVER_USER_DEV
     COMPOSE_FILE: docker-compose-wms-dev.yml
   only:
@@ -199,10 +211,11 @@ deploy-dev:
 
 deploy-stage:
   <<: *deploy_template
+  tags:
+    - wms-service-runner
   variables:
     SERVER_IP: $SERVER_IP_STAGE
     PRIVATE_KEY: $SSH_PRIVATE_KEY_STAGE
-    SERVER_SSH_PORT: $SERVER_SSH_PORT_STAGE
     SERVER_USER: $SERVER_USER_STAGE
     COMPOSE_FILE: docker-compose-wms-stage.yml
   only:
@@ -210,10 +223,11 @@ deploy-stage:
 
 deploy-prod:
   <<: *deploy_template
+  tags:
+    - wms-service-runner
   variables:
     SERVER_IP: $SERVER_IP_PROD
     PRIVATE_KEY: $SSH_PRIVATE_KEY_PROD
-    SERVER_SSH_PORT: $SERVER_SSH_PORT_PROD
     SERVER_USER: $SERVER_USER_PROD
     COMPOSE_FILE: docker-compose-wms-prod.yml
   only:
